@@ -1,4 +1,4 @@
-package com.example.finalprojectcoffee.entities;
+package com.finalprojectcoffee.entities;
 
 import jakarta.persistence.*;
 
@@ -6,10 +6,10 @@ import java.util.Objects;
 
 @Entity
 @Table(name = "employees")
-public class Employee extends User{
+public class Employee extends User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id",nullable = false)
+    @Column(name = "id", nullable = false)
     private int id;
 
     @OneToOne
@@ -26,8 +26,8 @@ public class Employee extends User{
 
     }
 
-    public Employee(int id, String username, String password, String email, String image, String token, int id1, User user, float salary, float fine) {
-        super(id, username, password, email, image, token);
+    public Employee(int id, String username, String password, String phoneNumber, String email, String image, String token, int id1, User user, float salary, float fine) {
+        super(id, username, password, phoneNumber, email, image, token);
         this.id = id1;
         this.user = user;
         this.salary = salary;

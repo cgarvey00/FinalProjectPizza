@@ -1,4 +1,4 @@
-package com.example.finalprojectcoffee.entities;
+package com.finalprojectcoffee.entities;
 
 import jakarta.persistence.*;
 
@@ -19,6 +19,9 @@ public class User {
     @Column(name = "password")
     private String password;
 
+    @Column(name = "phone_number")
+    private String phoneNumber;
+
     @Column(name = "email")
     private String email;
 
@@ -31,10 +34,11 @@ public class User {
     public User() {
     }
 
-    public User(int id, String username, String password, String email, String image, String token) {
+    public User(int id, String username, String password, String phoneNumber, String email, String image, String token) {
         this.id = id;
         this.username = username;
         this.password = password;
+        this.phoneNumber = phoneNumber;
         this.email = email;
         this.image = image;
         this.token = token;
@@ -62,6 +66,14 @@ public class User {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
     }
 
     public String getEmail() {
@@ -94,6 +106,7 @@ public class User {
                 "id=" + id +
                 ", username='" + username + '\'' +
                 ", password='" + password + '\'' +
+                ", phoneNumber='" + phoneNumber + '\'' +
                 ", email='" + email + '\'' +
                 ", image='" + image + '\'' +
                 ", token='" + token + '\'' +
@@ -113,4 +126,3 @@ public class User {
         return Objects.hash(id);
     }
 }
-

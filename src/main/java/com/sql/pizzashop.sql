@@ -6,6 +6,7 @@ CREATE TABLE `users` (
                          `id` INT(11) NOT NULL PRIMARY KEY AUTO_INCREMENT,
                          `username` VARCHAR(255) NOT NULL,
                          `password` VARCHAR(255) NOT NULL,
+                         `phone_number` VARCHAR(255) NOT NULL,
                          `email` VARCHAR(255) NOT NULL,
                          `image` VARCHAR(255) NOT NULL,
                          `token` VARCHAR(255) NOT NULL
@@ -70,4 +71,3 @@ CREATE TABLE `orders` (
                           FOREIGN KEY (`customer_id`) REFERENCES `customers`(`id`),
                           FOREIGN KEY (`emp_id`) REFERENCES `employees`(`id`)
 );
-
