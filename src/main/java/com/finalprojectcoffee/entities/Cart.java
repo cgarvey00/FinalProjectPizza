@@ -1,7 +1,5 @@
 package com.finalprojectcoffee.entities;
 
-import jakarta.persistence.Table;
-
 import jakarta.persistence.*;
 
 @Entity
@@ -16,8 +14,8 @@ public class Cart {
     @Column(name = "user_id", nullable = false)
     private Long userId;
 
-    @Column(name = "order_id", nullable = false)
-    private Long orderId;
+    @Column(name = "product_id", nullable = false)
+    private Long productId;
 
     @Column(name = "cost", nullable = false)
     private Double cost;
@@ -25,14 +23,12 @@ public class Cart {
     @Column(name = "quantity", nullable = false)
     private Integer quantity;
 
-
-
     public Cart() {
     }
 
-    public Cart(Long userId, Long orderId, Double cost, Integer quantity) {
+    public Cart(Long userId, Long productId, Double cost, Integer quantity) {
         this.userId = userId;
-        this.orderId = orderId;
+        this.productId = productId;
         this.cost = cost;
         this.quantity = quantity;
     }
@@ -53,12 +49,12 @@ public class Cart {
         this.userId = userId;
     }
 
-    public Long getOrderId() {
-        return orderId;
+    public Long getProductId() {
+        return productId;
     }
 
-    public void setOrderId(Long orderId) {
-        this.orderId = orderId;
+    public void setProductId(Long productId) {
+        this.productId = productId;
     }
 
     public Double getCost() {
@@ -77,5 +73,3 @@ public class Cart {
         this.quantity = quantity;
     }
 }
-
-
