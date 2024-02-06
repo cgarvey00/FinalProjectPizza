@@ -7,7 +7,7 @@ import jakarta.persistence.*;
 import java.util.List;
 
 public class ProductRepositories implements ProductRepositoriesInterface {
-    private final EntityManagerFactory factory;
+    private EntityManagerFactory factory;
 
     public ProductRepositories(EntityManagerFactory factory) {
         this.factory = factory;
