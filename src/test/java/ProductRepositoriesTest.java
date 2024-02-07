@@ -61,7 +61,7 @@ public class ProductRepositoriesTest {
     }
 
     @Test
-    public void addProduct() {
+    public void testaddProductWhereisSuccessful() {
         Product product1 = sampleProduct1();
 
         assertTrue(productRep.addProduct(product1));
@@ -81,6 +81,8 @@ public class ProductRepositoriesTest {
         productRep.resetAutoIncrement("products", 2);
     }
 
+
+
     @Test
     void test_findProductsByKeywordWhereKeywordIsValid() {
         List<Product> products = productRep.findProductsByKeyword("Pepperoni");
@@ -93,13 +95,13 @@ public class ProductRepositoriesTest {
     }
 
     @Test
-    void test_findProductsByKeywordWhereKeywordIsValid2() {
+   public void test_findProductsByKeywordWhereKeywordIsValid2() {
         productRep.addProduct(sampleProduct2());
-        List<Product> products = productRep.findProductsByKeyword("Ice Cream");
+        List<Product> products = productRep.findProductsByKeyword("P");
         assertNotNull(products);
         assertFalse(products.isEmpty());
         for (Product p : products) {
-            assertTrue(p.getName().toLowerCase().contains("ice cream"));
+            assertTrue(p.getDetails().toLowerCase().contains("p"));
         }
 
         productRep.deleteProduct(3);
@@ -107,5 +109,43 @@ public class ProductRepositoriesTest {
 
     }
 
+    @Test
+    public void test_findProductsByKeywordWhereKeywordIsInValid() {
+        List<Product> products = productRep.findProductsByKeyword("#");
+        assertTrue(products.isEmpty());
+    }
 
+    @Test
+    public void testUpdateProductWhereItIsSuccessful() {
+        productRep.addProduct(sampleProduct2());
+        assertTrue(productRep.updateProduct(3,"Update",ProductCategory.Desserts,"New Product",10.4,32,"image.png"));
+
+        productRep.deleteProduct(3);
+        productRep.resetAutoIncrement("products", 2);
+    }
+
+
+
+    /**
+     * Testing if the deleteProduct method works
+     */
+    @Test
+    void deleteProductIfPresent() {
+        //Adding the Product
+        productRep.addProduct(sampleProduct2());
+        assertTrue(productRep.deleteProduct(3));
+        productRep.resetAutoIncrement("products", 2);
+    }
+
+    @Test
+    void deleteProductIfNotPresent() {
+        // expected that is not to be deleted
+        //No Product Present
+
+        boolean deletionResult = productRep.deleteProduct(-11);
+
+        // Check that the deletion was not successful
+        assertFalse(deletionResult, "Deletion should not be successful if the product is not present");
+
+    }
 }
