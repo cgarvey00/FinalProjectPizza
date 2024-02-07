@@ -5,6 +5,7 @@ import com.finalprojectcoffee.entities.ProductCategory;
 import jakarta.persistence.*;
 
 import java.util.List;
+
 /**
  * @author cgarvey00
  */
@@ -64,7 +65,7 @@ public class ProductRepositories implements ProductRepositoriesInterface {
     public List<Product> findProductsByKeyword(String keyword) {
         EntityManager entityManager = factory.createEntityManager();
         try {
-            Query q = entityManager.createQuery("SELECT p FROM Product p WHERE LOWER(p.name)LIKE LOWER(:keyword)");
+            Query q = entityManager.createQuery("SELECT p FROM Product p WHERE LOWER(p.name)LIKE LOWER(:keyword) OR LOWER(p.details)LIKE LOWER(:keyword) ");
             q.setParameter("keyword", "%" + keyword + "%");
             return q.getResultList();
         } catch (Exception e) {
@@ -143,4 +144,23 @@ public class ProductRepositories implements ProductRepositoriesInterface {
             entityManager.close();
         }
     }
+
+    public void resetAutoIncrement(String tableName, int value) {
+        EntityManager entityManager = factory.createEntityManager();
+        EntityTransaction transaction = entityManager.getTransaction();
+        try {
+            transaction.begin();
+            entityManager.createNativeQuery("ALTER TABLE " + tableName + " AUTO_INCREMENT=:value")
+                    .setParameter("value", value).executeUpdate();
+            transaction.commit();
+
+        } catch (PersistenceException e) {
+            System.err.println(e.getMessage());
+            System.err.println("A Persistence Exception occurred while Updating the Product ID Generation \n\t" + e);
+            transaction.rollback();
+        } finally {
+            entityManager.close();
+        }
+    }
+
 }

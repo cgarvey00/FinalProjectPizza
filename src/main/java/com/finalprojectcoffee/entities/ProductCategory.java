@@ -1,9 +1,9 @@
 package com.finalprojectcoffee.entities;
 
 public enum ProductCategory {
-    SIDES,
-    PIZZAS,
-    DRINKS,
-    MEAL_DEALS,
-    DESSERTS
+    Sides,
+    Pizzas,
+    Drinks,
+    Meal_Deals,
+    Desserts
 }
