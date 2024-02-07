@@ -19,6 +19,9 @@ public class CommandFactory {
                 case "Register":
                     command = new Register(request,response,factory);
                     break;
+                case "SearchKeyword":
+                    command = new SearchKeyword(request,response,factory);
+                    break;
                 default:
                     break;
             }
