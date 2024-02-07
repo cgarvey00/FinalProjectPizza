@@ -5,6 +5,9 @@ import com.finalprojectcoffee.entities.ProductCategory;
 
 import java.util.List;
 
+/**
+ * @author cgarvey00
+ */
 public interface ProductRepositoriesInterface {
     Product findProductByID(int productID);
     List<Product> getAllProducts();

@@ -1,6 +1,7 @@
 package com.finalprojectcoffee.repositories;
 
 import com.finalprojectcoffee.entities.User;
+import com.finalprojectcoffee.utils.JwtUtil;
 import jakarta.persistence.*;
 
 import java.util.List;

@@ -40,10 +40,12 @@ CREATE TABLE `products` (
 CREATE TABLE `cart` (
                         `id` INT(100) NOT NULL PRIMARY KEY AUTO_INCREMENT,
                         `user_id` INT(100) NOT NULL,
+                        `product_id` INT(100) NOT NULL,
                         `order_id` INT(100) NOT NULL,
                         `cost` FLOAT DEFAULT 0.0,
                         `quantity` INT(100) DEFAULT 0,
-                        FOREIGN KEY (`user_id`) REFERENCES `users`(`id`)
+                        FOREIGN KEY (`user_id`) REFERENCES `users`(`id`),
+                        FOREIGN KEY (`product_id`) REFERENCES `products`(`id`)
 );
 
 CREATE TABLE `review` (

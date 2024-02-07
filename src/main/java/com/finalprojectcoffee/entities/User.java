@@ -28,20 +28,16 @@ public class User {
     @Column(name = "image")
     private String image;
 
-    @Column(name = "token")
-    private String token;
-
     public User() {
     }
 
-    public User(int id, String username, String password, String phoneNumber, String email, String image, String token) {
+    public User(int id, String username, String password, String phoneNumber, String email, String image) {
         this.id = id;
         this.username = username;
         this.password = password;
         this.phoneNumber = phoneNumber;
         this.email = email;
         this.image = image;
-        this.token = token;
     }
 
     public int getId() {
@@ -92,14 +88,6 @@ public class User {
         this.image = image;
     }
 
-    public String getToken() {
-        return token;
-    }
-
-    public void setToken(String token) {
-        this.token = token;
-    }
-
     @Override
     public String toString() {
         return "User{" +
@@ -109,7 +97,6 @@ public class User {
                 ", phoneNumber='" + phoneNumber + '\'' +
                 ", email='" + email + '\'' +
                 ", image='" + image + '\'' +
-                ", token='" + token + '\'' +
                 '}';
     }
 

@@ -5,7 +5,9 @@ import com.finalprojectcoffee.entities.ProductCategory;
 import jakarta.persistence.*;
 
 import java.util.List;
-
+/**
+ * @author cgarvey00
+ */
 public class ProductRepositories implements ProductRepositoriesInterface {
     private EntityManagerFactory factory;
 
