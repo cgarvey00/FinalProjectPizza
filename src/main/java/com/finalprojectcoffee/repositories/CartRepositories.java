@@ -3,6 +3,7 @@ package com.finalprojectcoffee.repositories;
 import com.finalprojectcoffee.entities.Cart;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
+import jakarta.persistence.EntityTransaction;
 import jakarta.persistence.Query;
 
 import java.util.List;
@@ -15,16 +16,17 @@ public class CartRepositories implements CartRepositoriesInterface {
         this.factory = factory;
     }
 
-    @Override
-    public void addToCart(int userId, int productId, int quantity) {
-        EntityManager entityManager = factory.createEntityManager();
-        try {
-            entityManager.getTransaction().begin();
 
+    @Override
+    public boolean addToCart(int userId, int productId, int quantity) {
+        EntityManager entityManager = factory.createEntityManager();
+        EntityTransaction transaction = entityManager.getTransaction();
+        try {
+            transaction.begin();
             Cart existingCartItem = findByUserIdAndProductId(userId, productId);
-            if (existingCartItem != null) {
-                updateQuantity(existingCartItem.getId(), existingCartItem.getQuantity() + quantity);
-            } else {
+            if(existingCartItem !=null){
+                return false;
+            }else {
                 Cart cartItem = new Cart();
                 cartItem.setUserId(userId);
                 cartItem.setProductId(productId);
@@ -32,14 +34,17 @@ public class CartRepositories implements CartRepositoriesInterface {
                 entityManager.persist(cartItem);
             }
 
-            entityManager.getTransaction().commit();
+            transaction.commit();
+            return true;
         } catch (Exception e) {
             entityManager.getTransaction().rollback();
             System.err.println("An Exception has occurred when adding item to cart: " + e.getMessage());
+            return false;
         } finally {
             entityManager.close();
         }
     }
+
 
     @Override
     public void removeFromCart(int cartId) {

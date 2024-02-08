@@ -8,19 +8,28 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 
 public class CommandFactory {
-    public static Command getCommand(String action, HttpServletRequest request, HttpServletResponse response, EntityManagerFactory factory){
+    public static Command getCommand(String action, HttpServletRequest request, HttpServletResponse response, EntityManagerFactory factory) {
         Command command = null;
 
-        if(action != null){
-            switch (action){
+        if (action != null) {
+            switch (action) {
                 case "login":
-                    command = new Login(request,response,factory);
+                    command = new Login(request, response, factory);
                     break;
-                case "Register":
-                    command = new Register(request,response,factory);
+                case "register":
+                    command = new Register(request, response, factory);
                     break;
                 case "SearchKeyword":
-                    command = new SearchKeyword(request,response,factory);
+                    command = new SearchKeyword(request, response, factory);
+                    break;
+                case "view-register":
+                    command = new ViewRegister(request, response, factory);
+                    break;
+                case "view-login":
+                    command = new ViewLogin(request, response, factory);
+                    break;
+                case "view-menu":
+                    command = new ViewMenu(request, response, factory);
                     break;
                 default:
                     break;

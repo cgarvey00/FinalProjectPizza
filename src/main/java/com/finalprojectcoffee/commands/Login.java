@@ -37,7 +37,7 @@ public class Login implements Command{
                 if(user != null){
                     if(JBCriptUtil.checkPw(user.getPassword(),password)){
                         session.setAttribute("loggedInUser",user);
-                        terminus = "home.jsp";
+                        terminus = "customer-home.jsp";
                     } else {
                            String errorMessage = "Wrong password";
                            session.setAttribute("errorMessage",errorMessage);

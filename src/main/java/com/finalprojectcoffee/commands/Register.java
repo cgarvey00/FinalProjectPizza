@@ -1,7 +1,5 @@
 package com.finalprojectcoffee.commands;
 
-import com.finalprojectcoffee.entities.Customer;
-import com.finalprojectcoffee.entities.Employee;
 import com.finalprojectcoffee.entities.User;
 import com.finalprojectcoffee.repositories.UserRepositories;
 import com.finalprojectcoffee.utils.EmailUtil;
@@ -33,7 +31,6 @@ public class Register implements Command{
         String passwordConfirmation = request.getParameter("passwordConfirmation");
         String email = request.getParameter("email");
         String phoneNumber = request.getParameter("phoneNumber");
-        String userType = request.getParameter("userType");
 
         if(username != null && !username.isEmpty() && password != null && !password.isEmpty() && passwordConfirmation != null && !passwordConfirmation.isEmpty() && email != null && !email.isEmpty() && phoneNumber != null && !phoneNumber.isEmpty()){
             EntityManager entityManager = factory.createEntityManager();
@@ -47,33 +44,13 @@ public class Register implements Command{
                         if(password.equals(passwordConfirmation)){
                             if(EmailUtil.validateEmail(email)){
                                 if(PhoneNumberUtil.validationPhoneNumber(phoneNumber)){
-                                    if("Customer".equals(userType)){
-                                        Customer newCustomer = new Customer();
-                                        newCustomer.setUsername(username);
-                                        newCustomer.setPassword(JBCriptUtil.getHashedPw(password));
-                                        newCustomer.setEmail(email);
-                                        newCustomer.setPhoneNumber(phoneNumber);
-                                        if(userRep.addUser(newCustomer)){
-                                            terminus = "login.jsp";
-                                        }
-                                    } else if("Employee".equals(userType)){
-                                        Employee newEmployee = new Employee();
-                                        newEmployee.setUsername(username);
-                                        newEmployee.setPassword(JBCriptUtil.getHashedPw(password));
-                                        newEmployee.setEmail(email);
-                                        newEmployee.setPhoneNumber(phoneNumber);
-                                        if(userRep.addUser(newEmployee)){
-                                            terminus = "login.jsp";
-                                        }
-                                    } else {
-                                        User newUser = new User();
-                                        newUser.setUsername(username);
-                                        newUser.setPassword(JBCriptUtil.getHashedPw(password));
-                                        newUser.setEmail(email);
-                                        newUser.setPhoneNumber(phoneNumber);
-                                        if(userRep.addUser(newUser)){
-                                            terminus = "login.jsp";
-                                        }
+                                    User newUser = new User();
+                                    newUser.setUsername(username);
+                                    newUser.setPassword(JBCriptUtil.getHashedPw(password));
+                                    newUser.setEmail(email);
+                                    newUser.setPhoneNumber(phoneNumber);
+                                    if(userRep.addUser(newUser)){
+                                        terminus = "login.jsp";
                                     }
                                 } else {
                                     session.setAttribute("pnmsg", "Phone number format error");

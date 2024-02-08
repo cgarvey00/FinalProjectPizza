@@ -12,7 +12,7 @@ import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
 
-@WebServlet(name = "Controller", value = "/pizzashop")
+@WebServlet(name = "Controller",urlPatterns = {"/controller"})
 public class Controller extends HttpServlet {
     private EntityManagerFactory factory;
     public void init(){factory = Persistence.createEntityManagerFactory("pizzashop");}

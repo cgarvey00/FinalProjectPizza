@@ -82,9 +82,20 @@ public class ProductRepositories implements ProductRepositoriesInterface {
         EntityTransaction transaction = entityManager.getTransaction();
         try {
             transaction.begin();
-            entityManager.persist(p);
-            transaction.commit();
-            return true;
+
+            TypedQuery<Long> query = entityManager.createQuery("SELECT COUNT(p) FROM Product p WHERE p.name=:name", Long.class);
+            query.setParameter("name", p.getName());
+
+            long productCount = query.getSingleResult();
+
+            if (productCount == 0) {
+                entityManager.persist(p);
+                transaction.commit();
+                return true;
+
+            } else {
+                return false;
+            }
         } catch (PersistenceException pe) {
             System.err.println(pe.getMessage());
             System.err.println("A Persistence Exception occurred while Adding the Product\n\t" + p);
@@ -132,9 +143,14 @@ public class ProductRepositories implements ProductRepositoriesInterface {
         try {
             transaction.begin();
             Product p = entityManager.find(Product.class, pID);
-            entityManager.remove(p);
-            transaction.commit();
-            return true;
+
+            if (p != null) {
+                entityManager.remove(p);
+                transaction.commit();
+                return true;
+            } else {
+                return false;
+            }
         } catch (PersistenceException e) {
             System.err.println(e.getMessage());
             System.err.println("A Persistence Exception occurred while Deleting the Product\n\t" + e);

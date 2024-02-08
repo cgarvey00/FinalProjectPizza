@@ -1,16 +1,65 @@
-<%--
-  Created by IntelliJ IDEA.
-  User: conor
-  Date: 05/02/2024
-  Time: 20:41
-  To change this template use File | Settings | File Templates.
---%>
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<html>
+<%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+<html lang="en">
 <head>
-    <title>Title</title>
-</head>
-<body>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home</title>
 
-</body>
-</html>
+    <!-- font awesome cdn link  -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css">
+
+    <!-- bootstrap cdn link  -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/4.6.1/css/bootstrap.min.css">
+    <!-- styles css link  -->
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/stylesheets/styles2.css">
+</head>
+<style>
+    .home {
+        background: -webkit-gradient(linear, left top, left bottom, from(rgba(0, 0, 0, 0.7)), to(rgba(0, 0, 0, 0.7))), url('${pageContext.request.contextPath}/images/homebg.jpg') no-repeat;
+        background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('${pageContext.request.contextPath}/images/homebg.jpg') no-repeat;
+        background-size: cover;
+        background-position: center;
+        background-attachment: fixed;
+    }
+</style>
+<body>
+<header class="header fixed-top">
+    <div class="container">
+
+        <div class="row align-items-center">
+
+            <a href="#" class="logo mr-auto"> <i class="fa-solid fa-pizza-slice"></i> Pizza Shop </a>
+
+            <nav class="nav">
+                <a href="controller?action=home">Home</a>
+                <a href="controller?action=login">Login</a>
+                <a href="controller?action=view-menu">View Menu</a>
+            </nav>
+
+            <div class="icons">
+                <div class="fas fa-bars" id="menu-btn"></div>
+
+            </div>
+
+        </div>
+
+    </div>
+</header>
+<!-- home section starts  -->
+
+<section class="home" id="home">
+
+    <div class="container">
+
+        <div class="row align-items-center text-center text-md-left min-vh-100">
+            <div class="col-md-6">
+                <span>Welcome to the Pizza Shop</span>
+                <h3>Browse Our Menu </h3>
+                <a href="#" class="link-btn">Get Started</a>
+            </div>
+        </div>
+
+    </div>
+
+</section>

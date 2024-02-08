@@ -5,7 +5,7 @@ import java.util.List;
 public interface CartRepositoriesInterface {
 
     // Add a product to the cart
-    void addToCart(int userId, int productId, int quantity);
+    boolean addToCart(int userId, int productId, int quantity);
 
     // Remove a product from the cart
     void removeFromCart(int cartId);

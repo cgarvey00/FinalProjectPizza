@@ -1,4 +1,4 @@
-<%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+<%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" language="java" %>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -32,9 +32,9 @@
             <a href="#" class="logo mr-auto"> <i class="fa-solid fa-pizza-slice"></i> Pizza Shop </a>
 
             <nav class="nav">
-                <a href="controller?action=home">Home</a>
-                <a href="controller?action=login">Login</a>
-                <a href="controller?action=register">Register</a>
+                <a href="#">Home</a>
+                <a href="controller?action=view-login">Login</a>
+                <a href="controller?action=view-register">Register</a>
             </nav>
 
             <div class="icons">
@@ -56,7 +56,7 @@
             <div class="col-md-6">
                 <span>Welcome to the Pizza Shop</span>
                 <h3>Browse Our Menu </h3>
-                <a href="#" class="link-btn">Get Started</a>
+                <a href="controller?action=view-menu" class="link-btn">Get Started</a>
             </div>
         </div>
 
