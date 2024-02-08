@@ -24,9 +24,8 @@ public class Customer extends User{
         super(username, password, phoneNumber, email);
     }
 
-    public Customer(int id, String username, String password, String phoneNumber, String email, String image, int id1, Integer loyaltyPoints) {
+    public Customer(int id, String username, String password, String phoneNumber, String email, String image, Integer loyaltyPoints) {
         super(id, username, password, phoneNumber, email, image);
-        this.id = id1;
         this.loyaltyPoints = loyaltyPoints;
     }
 

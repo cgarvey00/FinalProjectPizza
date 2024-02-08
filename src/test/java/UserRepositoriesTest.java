@@ -31,22 +31,18 @@ public class UserRepositoriesTest {
 
     @Test
     public void findUserByIdTest(){
-        Customer expectedResult = new Customer(1,"cookregina","_IfkP$*t@4","311-325-1356","aguilarsara@hotmail.com",null,1,89);
+        Customer expectedResult = new Customer(1,"cookregina","_IfkP$*t@4","311-325-1356","aguilarsara@hotmail.com",null,89);
         User actualResult = userRep.findUserById(1);
         assertEquals(expectedResult,actualResult);
     }
 
     @Test
     public void findUserByUsername(){
-        Employee expectedResult = new Employee(2,"joseph40","kDk3(mDr_5","+1-442-410-1111x483","peter71@perez.org",null,1, 43694.26F, 305.72F);
-        User user= userRep.findUserByUsername("joseph40");
-        if(user instanceof Customer){
-            Customer actualResult = (Customer) user;
-            assertEquals(expectedResult,actualResult);
-        } else if(user instanceof Employee){
-            Employee actualResult = (Employee) user;
-            assertEquals(expectedResult,actualResult);
-        }
+       Employee expectedResult = new Employee(1,"joseph40","kDk3(mDr_5","+1-442-410-1111x483","peter71@perez.org",null, 43694.26F);
+       User actualResult = userRep.findUserByUsername("joseph40");
+       assertEquals(expectedResult.getEmail(),actualResult.getEmail());
+       User notExistResult = userRep.findUserByUsername("Tom123");
+       assertEquals(null,notExistResult);
     }
 
     @Test

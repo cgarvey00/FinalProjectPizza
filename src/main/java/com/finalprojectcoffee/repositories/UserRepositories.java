@@ -38,7 +38,11 @@ public class UserRepositories implements UserRepositoryInterfaces {
             Query query =entityManager.createQuery("SELECT u From User u Where u.username = :username");
             query.setParameter("username",username);
             User user = (User) query.getSingleResult();
-            return user;
+            if(user != null){
+                return user;
+            } else {
+                return null;
+            }
         } catch (Exception e) {
             System.err.println("An Exception occurred while searching " + e.getMessage());
             return null;
@@ -70,7 +74,11 @@ public class UserRepositories implements UserRepositoryInterfaces {
             query.setParameter("username",username);
             query.setParameter("password",password);
             User user = (User)query.getSingleResult();
-            return user;
+            if(user != null){
+                return user;
+            } else {
+                return null;
+            }
         } catch (Exception e) {
             System.err.println("An Exception occurred while searching " + e.getMessage());
             return null;

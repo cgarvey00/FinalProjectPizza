@@ -16,9 +16,6 @@ public class Employee extends User {
     @Column(name = "salary")
     private Float salary;
 
-    @Column(name = "fine")
-    private Float fine;
-
     public Employee() {
 
     }
@@ -27,11 +24,9 @@ public class Employee extends User {
         super(username, password, phoneNumber, email);
     }
 
-    public Employee(int id, String username, String password, String phoneNumber, String email, String image, int id1, Float salary, Float fine) {
+    public Employee(int id, String username, String password, String phoneNumber, String email, String image, Float salary) {
         super(id, username, password, phoneNumber, email, image);
-        this.id = id1;
         this.salary = salary;
-        this.fine = fine;
     }
 
     @Override
@@ -52,20 +47,11 @@ public class Employee extends User {
         this.salary = salary;
     }
 
-    public Float getFine() {
-        return fine;
-    }
-
-    public void setFine(Float fine) {
-        this.fine = fine;
-    }
-
     @Override
     public String toString() {
         return "Employee{" +
                 "id=" + id +
                 ", salary=" + salary +
-                ", fine=" + fine +
                 "} " + super.toString();
     }
 
