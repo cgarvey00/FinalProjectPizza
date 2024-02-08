@@ -1,0 +1,29 @@
+USE testpizzashop;
+
+INSERT INTO `users` (`id`, `username`, `password`, `phone_number`, `email`, `image`,`user_type`) VALUES
+(1, 'cookregina', '_IfkP$*t@4', '311-325-1356', 'aguilarsara@hotmail.com', NULL, 'Customer'),
+(2, 'joseph40', 'kDk3(mDr_5', '+1-442-410-1111x483', 'peter71@perez.org', NULL, 'Employee'),
+(3, 'sherriryan', '$8Ma7AGyZj', '(842)795-0469', 'longkyle@smith-white.org', NULL, 'Customer'),
+(4, 'joshua59', '(@V$^kKi38', '+1-991-783-5926x612', 'gcooper@hotmail.com', NULL, 'Employee'),
+(5, 'cgarza', '9%5DtVupi&', '+1-026-380-7135x026', 'snyderjames@mays.info', NULL, 'Customer'),
+(6, 'jeremy56', 'Om3JQGKd!U', '485.559.3441', 'jackhenderson@foster.info', NULL, 'Employee'),
+(7, 'davismary', 'RWz2HABr$1', '001-646-753-6484', 'bennettmolly@yahoo.com', NULL, 'Customer'),
+(8, 'kanestacy', 't$@j6GJlRa', '+1-628-261-8054x372', 'whitejessica@christensen.com', NULL, 'Employee'),
+(9, 'chase96', '+LXO9Vf+A0', '467.778.7273', 'debbie44@williams-mann.com', NULL, 'Customer'),
+(10, 'oknapp', '8xs3aL@l)6', '320.589.0644x186', 'olivia36@hotmail.com', NULL, 'Employee');
+
+
+
+INSERT INTO `customers` (`id`, `user_id`, `loyalty_points`) VALUES
+(1, 1, 89),
+(2, 3, 786),
+(3, 5, 317),
+(4, 7, 763),
+(5, 9, 589);
+
+INSERT INTO `employees` (`id`, `user_id`, `salary`, `fine`) VALUES
+(1, 2, 43694.26, 305.72),
+(2, 4, 32659.36, 470.78),
+(3, 6, 52066.96, 434.37),
+(4, 8, 53275.26, 269.07),
+(5, 10, 34917.29, 316.91);
