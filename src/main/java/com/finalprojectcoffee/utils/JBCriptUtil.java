@@ -3,7 +3,7 @@ package com.finalprojectcoffee.utils;
 import org.mindrot.jbcrypt.BCrypt;
 
 public class JBCriptUtil {
-    private static final String passwordPattern = "^(?=.[a-z])(?=.[A-Z])(?=.\\d)(?=.[@$!%?&])[A-Za-z\\d@$!%?&]{8,}$";
+    private static final String passwordPattern = "^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$";
 
     public  static boolean validatePassword(String password){
         return password.matches(passwordPattern);

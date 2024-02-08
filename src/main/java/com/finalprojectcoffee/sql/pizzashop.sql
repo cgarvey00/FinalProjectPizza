@@ -29,18 +29,23 @@ CREATE TABLE `employees` (
 CREATE TABLE `products` (
                             `id` INT(100) NOT NULL PRIMARY KEY AUTO_INCREMENT,
                             `name` VARCHAR(100) NOT NULL,
-                            `category` ENUM('Sides','Pizzas','Drinks','Meal Deals','Desserts'),
+                            `category` ENUM('Sides','Pizzas','Drinks','Meal_Deals','Desserts'),
                             `details` VARCHAR(500),
                             `price` FLOAT DEFAULT 0.0,
                             `stock` INT(100) DEFAULT 0,
                             `image` VARCHAR(255)
 );
 
+INSERT INTO `products` (`id`, `name`, `category`, `details`, `price`, `stock`, `image`)
+VALUES (1, 'Pepperoni Deluxe', 'Pizzas', 'Pepperoni and Cheese 10`', 5.99, 100, 'pizza1.jpg'),
+       (2, 'Fanta', 'Drinks', '300ML Fanta Soda', 1.00, 100, 'fanta.png'),
+       (3, 'Chocolate Sundae', 'Desserts', 'Snickers Sundae', 2.99, 300, 'sundae.jpg'),
+       (4, 'Pepperoni Family Meal Deal', 'Meal_Deals', '5 Pizzas and Kids Meal Included', 18, 100, 'mealdeal.png');
+
 CREATE TABLE `cart` (
                         `id` INT(100) NOT NULL PRIMARY KEY AUTO_INCREMENT,
                         `user_id` INT(100) NOT NULL,
                         `product_id` INT(100) NOT NULL,
-                        `order_id` INT(100) NOT NULL,
                         `cost` FLOAT DEFAULT 0.0,
                         `quantity` INT(100) DEFAULT 0,
                         FOREIGN KEY (`user_id`) REFERENCES `users`(`id`),

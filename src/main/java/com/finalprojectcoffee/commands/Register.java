@@ -49,6 +49,7 @@ public class Register implements Command{
                                     newUser.setPassword(JBCriptUtil.getHashedPw(password));
                                     newUser.setEmail(email);
                                     newUser.setPhoneNumber(phoneNumber);
+                                    newUser.setImage("sampleimage.png");
                                     if(userRep.addUser(newUser)){
                                         terminus = "login.jsp";
                                     }

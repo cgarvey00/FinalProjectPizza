@@ -39,7 +39,6 @@ public class User {
         this.email = email;
         this.image = image;
     }
-
     public int getId() {
         return id;
     }
