@@ -6,30 +6,30 @@ import java.util.Objects;
 
 @Entity
 @Table(name = "employees")
+@DiscriminatorValue("Employee")
 public class Employee extends User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
     private int id;
 
-    @OneToOne
-    @JoinColumn(name = "id", referencedColumnName = "user_id")
-    private User user;
-
     @Column(name = "salary")
-    private float salary;
+    private Float salary;
 
     @Column(name = "fine")
-    private float fine;
+    private Float fine;
 
     public Employee() {
 
     }
 
-    public Employee(int id, String username, String password, String phoneNumber, String email, String image, int id1, User user, float salary, float fine) {
+    public Employee(String username, String password, String phoneNumber, String email) {
+        super(username, password, phoneNumber, email);
+    }
+
+    public Employee(int id, String username, String password, String phoneNumber, String email, String image, int id1, Float salary, Float fine) {
         super(id, username, password, phoneNumber, email, image);
         this.id = id1;
-        this.user = user;
         this.salary = salary;
         this.fine = fine;
     }
@@ -44,27 +44,19 @@ public class Employee extends User {
         this.id = id;
     }
 
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
-    }
-
-    public float getSalary() {
+    public Float getSalary() {
         return salary;
     }
 
-    public void setSalary(float salary) {
+    public void setSalary(Float salary) {
         this.salary = salary;
     }
 
-    public float getFine() {
+    public Float getFine() {
         return fine;
     }
 
-    public void setFine(float fine) {
+    public void setFine(Float fine) {
         this.fine = fine;
     }
 
@@ -72,10 +64,9 @@ public class Employee extends User {
     public String toString() {
         return "Employee{" +
                 "id=" + id +
-                ", user=" + user +
                 ", salary=" + salary +
                 ", fine=" + fine +
-                '}';
+                "} " + super.toString();
     }
 
     @Override

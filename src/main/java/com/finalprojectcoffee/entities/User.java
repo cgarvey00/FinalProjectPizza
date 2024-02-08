@@ -7,6 +7,7 @@ import java.util.Objects;
 @Entity
 @Table(name = "users")
 @Inheritance(strategy = InheritanceType.JOINED)
+@DiscriminatorColumn(name = "user_type", discriminatorType = DiscriminatorType.STRING)
 public class User {
     @Id
     @Column(name = "id", nullable = false)
@@ -27,8 +28,14 @@ public class User {
 
     @Column(name = "image")
     private String image;
-
     public User() {
+    }
+
+    public User(String username, String password, String phoneNumber, String email) {
+        this.username = username;
+        this.password = password;
+        this.phoneNumber = phoneNumber;
+        this.email = email;
     }
 
     public User(int id, String username, String password, String phoneNumber, String email, String image) {
@@ -86,6 +93,7 @@ public class User {
     public void setImage(String image) {
         this.image = image;
     }
+
 
     @Override
     public String toString() {

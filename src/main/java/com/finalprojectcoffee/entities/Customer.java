@@ -6,27 +6,27 @@ import java.util.Objects;
 
 @Entity
 @Table(name = "customers")
+@DiscriminatorValue("Customer")
 public class Customer extends User{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
     private int id;
 
-    @OneToOne
-    @JoinColumn(name = "user_id", referencedColumnName = "id")
-    private User user;
-
     @Column(name = "loyalty_points")
-    private int loyaltyPoints;
+    private Integer loyaltyPoints;
 
     public Customer() {
 
     }
 
-    public Customer(int id, String username, String password, String phoneNumber, String email, String image, int id1, User user, int loyaltyPoints) {
+    public Customer(String username, String password, String phoneNumber, String email) {
+        super(username, password, phoneNumber, email);
+    }
+
+    public Customer(int id, String username, String password, String phoneNumber, String email, String image, int id1, Integer loyaltyPoints) {
         super(id, username, password, phoneNumber, email, image);
         this.id = id1;
-        this.user = user;
         this.loyaltyPoints = loyaltyPoints;
     }
 
@@ -40,19 +40,11 @@ public class Customer extends User{
         this.id = id;
     }
 
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
-    }
-
-    public int getLoyaltyPoints() {
+    public Integer getLoyaltyPoints() {
         return loyaltyPoints;
     }
 
-    public void setLoyaltyPoints(int loyaltyPoints) {
+    public void setLoyaltyPoints(Integer loyaltyPoints) {
         this.loyaltyPoints = loyaltyPoints;
     }
 
@@ -60,9 +52,8 @@ public class Customer extends User{
     public String toString() {
         return "Customer{" +
                 "id=" + id +
-                ", user=" + user +
                 ", loyaltyPoints=" + loyaltyPoints +
-                '}';
+                "} " + super.toString();
     }
 
     @Override

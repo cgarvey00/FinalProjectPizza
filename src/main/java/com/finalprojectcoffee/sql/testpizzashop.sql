@@ -11,14 +11,15 @@ CREATE TABLE `users`
     `password`     VARCHAR(255) NOT NULL,
     `phone_number` VARCHAR(255) NOT NULL,
     `email`        VARCHAR(255) NOT NULL,
-    `image`        VARCHAR(255) NOT NULL
+    `image`        VARCHAR(255),
+    `user_type`    VARBINARY(255) NOT NULL
 );
 
 CREATE TABLE `customers`
 (
     `id`             INT(11) NOT NULL PRIMARY KEY AUTO_INCREMENT,
     `user_id`        INT(100) NOT NULL,
-    `loyalty_points` INT(11) DEFAULT 0,
+    `loyalty_points` INT(11) NOT NULL DEFAULT 0,
     FOREIGN KEY (`user_id`) REFERENCES `users` (`id`)
 );
 
@@ -26,8 +27,8 @@ CREATE TABLE `employees`
 (
     `id`      INT(11) NOT NULL PRIMARY KEY AUTO_INCREMENT,
     `user_id` INT(100) NOT NULL,
-    `salary`  FLOAT(10) DEFAULT 0.0,
-    `fine`    FLOAT(10) DEFAULT 0.0,
+    `salary`  FLOAT(10) NOT NULL DEFAULT 0.0,
+    `fine`    FLOAT(10) NOT NULL DEFAULT 0.0,
     FOREIGN KEY (`user_id`) REFERENCES `users` (`id`)
 );
 

@@ -1,9 +1,9 @@
 package com.finalprojectcoffee.repositories;
 
 import com.finalprojectcoffee.entities.User;
-import com.finalprojectcoffee.utils.JwtUtil;
 import jakarta.persistence.*;
 
+import java.util.Collections;
 import java.util.List;
 
 public class UserRepositories implements UserRepositoryInterfaces {
@@ -48,15 +48,15 @@ public class UserRepositories implements UserRepositoryInterfaces {
     }
 
     @Override
-    public List<User> findAllUsersByIds() {
+    public List<User> getAllUsers() {
         EntityManager entityManager = factory.createEntityManager();
         try {
-            Query query = entityManager.createQuery("SELECT u FROM User u");
+            TypedQuery<User> query = entityManager.createQuery("SELECT u FROM User u", User.class);
             List<User> users = query.getResultList();
             return users;
         } catch (Exception e) {
             System.err.println("An Exception occurred while searching " + e.getMessage());
-            return null;
+            return Collections.emptyList();
         } finally {
             entityManager.close();
         }
@@ -113,6 +113,7 @@ public class UserRepositories implements UserRepositoryInterfaces {
             return true;
         } catch (PersistenceException e) {
             System.err.println("An PersistenceException occurred while merging " + e.getMessage());
+            transaction.rollback();
             return false;
         } finally {
             entityManager.close();
