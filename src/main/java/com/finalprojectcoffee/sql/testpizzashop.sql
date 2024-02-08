@@ -10,24 +10,23 @@ CREATE TABLE `users`
     `username`     VARCHAR(255) NOT NULL,
     `password`     VARCHAR(255) NOT NULL,
     `phone_number` VARCHAR(255) NOT NULL,
-    `email`        VARCHAR(255) NOT NULL
+    `email`        VARCHAR(255) NOT NULL,
+    `image`        VARCHAR(255),
+    `user_type`    VARCHAR(255) NOT NULL
 );
 
 CREATE TABLE `customers`
 (
-    `id`             INT(11) NOT NULL PRIMARY KEY AUTO_INCREMENT,
-    `user_id`        INT(100) NOT NULL,
+    `id`             INT(100) NOT NULL,
     `loyalty_points` INT(11) DEFAULT 0,
-    FOREIGN KEY (`user_id`) REFERENCES `users` (`id`)
+    FOREIGN KEY (`id`) REFERENCES `users` (`id`)
 );
 
 CREATE TABLE `employees`
 (
-    `id`      INT(11) NOT NULL PRIMARY KEY AUTO_INCREMENT,
-    `user_id` INT(100) NOT NULL,
+    `id`      INT(11) NOT NULL,
     `salary`  FLOAT(10) DEFAULT 0.0,
-    `fine`    FLOAT(10) DEFAULT 0.0,
-    FOREIGN KEY (`user_id`) REFERENCES `users` (`id`)
+    FOREIGN KEY (`id`) REFERENCES `users` (`id`)
 );
 
 CREATE TABLE `products`
@@ -40,10 +39,6 @@ CREATE TABLE `products`
     `stock`    INT(100) DEFAULT 0,
     `image`    VARCHAR(255)
 );
-
-INSERT INTO `products` (`id`, `name`, `category`, `details`, `price`, `stock`, `image`)
-VALUES (1, 'Pepperoni Deluxe', 'Pizzas', 'Pepperoni and Cheese 10`', 5.99, 100, 'pizza1.jpg'),
-       (2, 'Pepperoni Family Meal Deal', 'Meal_Deals', '5 Pizzas and Kids Meal Included', 18, 100, 'mealdeal.png');
 
 CREATE TABLE `cart` (
                         `id` INT(100) NOT NULL PRIMARY KEY AUTO_INCREMENT,
@@ -80,3 +75,16 @@ CREATE TABLE `orders` (
                           FOREIGN KEY (`customer_id`) REFERENCES `customers`(`id`),
                           FOREIGN KEY (`emp_id`) REFERENCES `employees`(`id`)
 );
+
+CREATE TABLE `address`(
+                          `id` INT(100) NOT NULL PRIMARY KEY AUTO_INCREMENT,
+                          `user_id` INT(100) NOT NULL,
+                          `street` VARCHAR(255),
+                          `town` VARCHAR(255),
+                          `county` VARCHAR(255),
+                          `eircode` VARCHAR(255),
+                          `create_time` DATE,
+                          `update_time` DATE,
+                          FOREIGN KEY (`user_id`) REFERENCES `users`(`id`)
+);
+

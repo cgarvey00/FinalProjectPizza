@@ -93,9 +93,14 @@ public class UserRepositories implements UserRepositoryInterfaces {
         EntityTransaction transaction = entityManager.getTransaction();
         try {
             transaction.begin();
-            entityManager.persist(user);
-            transaction.commit();
-            return true;
+            if(user != null){
+                entityManager.persist(user);
+                transaction.commit();
+                return true;
+            } else {
+                transaction.rollback();
+                return false;
+            }
         } catch (PersistenceException e) {
             System.err.println("A PersistenceException occurred while persisting " + e.getMessage());
             transaction.rollback();
@@ -120,7 +125,32 @@ public class UserRepositories implements UserRepositoryInterfaces {
             transaction.commit();
             return true;
         } catch (PersistenceException e) {
-            System.err.println("An PersistenceException occurred while merging " + e.getMessage());
+            System.err.println("A PersistenceException occurred while merging " + e.getMessage());
+            transaction.rollback();
+            return false;
+        } finally {
+            entityManager.close();
+        }
+    }
+
+    @Override
+    public Boolean deleteUser(int userId) {
+        EntityManager entityManager = factory.createEntityManager();
+        EntityTransaction transaction = entityManager.getTransaction();
+
+        try {
+            transaction.begin();
+            User user = entityManager.find(User.class,userId);
+            if(user != null){
+                entityManager.remove(user);
+                transaction.commit();
+                return true;
+            } else {
+                transaction.rollback();
+                return false;
+            }
+        } catch (PersistenceException e) {
+            System.err.println("A PersistenceException occurred while removing" + e.getMessage());
             transaction.rollback();
             return false;
         } finally {

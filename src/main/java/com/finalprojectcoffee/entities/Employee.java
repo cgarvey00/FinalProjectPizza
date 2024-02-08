@@ -8,11 +8,6 @@ import java.util.Objects;
 @Table(name = "employees")
 @DiscriminatorValue("Employee")
 public class Employee extends User {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id", nullable = false)
-    private int id;
-
     @Column(name = "salary")
     private Float salary;
 
@@ -24,19 +19,9 @@ public class Employee extends User {
         super(username, password, phoneNumber, email);
     }
 
-    public Employee(int id, String username, String password, String phoneNumber, String email, String image, Float salary) {
-        super(id, username, password, phoneNumber, email, image);
+    public Employee(String username, String password, String phoneNumber, String email, String image, Float salary) {
+        super(username, password, phoneNumber, email, image);
         this.salary = salary;
-    }
-
-    @Override
-    public int getId() {
-        return id;
-    }
-
-    @Override
-    public void setId(int id) {
-        this.id = id;
     }
 
     public Float getSalary() {
@@ -50,22 +35,8 @@ public class Employee extends User {
     @Override
     public String toString() {
         return "Employee{" +
-                "id=" + id +
-                ", salary=" + salary +
+                "salary=" + salary +
                 "} " + super.toString();
     }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        if (!super.equals(o)) return false;
-        Employee employee = (Employee) o;
-        return id == employee.id;
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(super.hashCode(), id);
-    }
 }
+
