@@ -1,6 +1,5 @@
-package com.finalprojectcoffee.repositories;
-
 import com.finalprojectcoffee.entities.Cart;
+import com.finalprojectcoffee.repositories.CartRepositories;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.Persistence;
 import org.junit.After;
@@ -24,22 +23,28 @@ public class CartRepositoriesTest {
 
     @After
     public void tearDown() {
+        cartRepositories.removeFromCart(1);
         if (factory != null && factory.isOpen()) {
             factory.close();
         }
     }
 
-//    @Test
-//    public void testAddToCart_AddingItemToEmptyCart() {
-//        assertTrue(cartRepositories.addToCart(1,1,2));
-//        List<Cart> cartItems = cartRepositories.getCartItems(1);
-//        assertEquals(1,cartItems.size());
-//        assertEquals(2,cartItems.get(0).getQuantity());
-//    }
+    @Test
+    public void testAddToCart_AddingItemToEmptyCart() {
+        assertTrue(cartRepositories.addToCart(1,1,2));
+        List<Cart> cartItems = cartRepositories.getCartItems(1);
+        assertEquals(1,cartItems.size());
+        assertEquals(2,cartItems.get(0).getQuantity());
+
+        double expectedCost = 5.99*2;
+        assertEquals(expectedCost, cartItems.get(0).getCost(), 0.01);
+
+
+    }
 
     @Test
     public void testClearCart_ClearCartForUser() {
-        // Test clearing cart for a user
+
         cartRepositories.addToCart(7, 1, 1);
         cartRepositories.addToCart(7, 2, 2);
         cartRepositories.clearCart(7);

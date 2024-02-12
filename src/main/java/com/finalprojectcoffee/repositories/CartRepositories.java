@@ -1,6 +1,7 @@
 package com.finalprojectcoffee.repositories;
 
 import com.finalprojectcoffee.entities.Cart;
+import com.finalprojectcoffee.entities.Product;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.EntityTransaction;
@@ -24,13 +25,19 @@ public class CartRepositories implements CartRepositoriesInterface {
         try {
             transaction.begin();
             Cart existingCartItem = findByUserIdAndProductId(userId, productId);
-            if(existingCartItem !=null){
+            if(existingCartItem != null){
                 return false;
-            }else {
+            } else {
+                Product product = entityManager.find(Product.class, productId);
+                if (product == null) {
+                    return false;
+                }
+                double cost = product.getPrice() * quantity;
                 Cart cartItem = new Cart();
                 cartItem.setUserId(userId);
                 cartItem.setProductId(productId);
                 cartItem.setQuantity(quantity);
+                cartItem.setCost(cost);
                 entityManager.persist(cartItem);
             }
 
@@ -44,6 +51,7 @@ public class CartRepositories implements CartRepositoriesInterface {
             entityManager.close();
         }
     }
+
 
 
     @Override
