@@ -1,82 +1,102 @@
+/* 
+    Created on : 21 Feb 2023, 10:04:33
+    Author     : conor
+*/
+
+
 @import url('https://fonts.googleapis.com/css?family=Numans');
-
-:root {
-    --orange: #f39c12;
-    --book-shelf: #7d6447;
-    --black: #444;
-    --white: rgb(255, 255, 255);
-    --light-color: #777;
-    --light-bg: #f5f5f5;
-    --border: .2rem solid var(--black);
-    --box-shadow: 0 .5rem 1rem rgba(0, 0, 0, .1);
+* {
+    padding:0;
+    margin:0;
+    box-sizing: border-box;
 }
 
-.card {
-    height: 650px;
-    margin-top: 20px;
-    margin-bottom: 30px;
-    width: 700px;
-    background-color: rgba(0, 0, 0, 0.5) ;
+#register-form {
+    width:400px;
+    padding:20px;
+    text-transform: uppercase;
+    background-color: #000000;
 }
 
-.social_icon span {
-    font-size: 60px;
-    margin-left: 10px;
-    color:var(--book-shelf);
+.title {
+    color: #fff;
+    margin-bottom: 20px;
 }
 
-.social_icon span:hover {
-    color: var(--white);
-    cursor: pointer;
+.input-group {
+    margin:20px 0;
+    position:relative;
 }
 
-.card-header h3 {
-    color: white;
+
+
+.input-group label {
+    color: #fff;
+    display:block;
+    margin-bottom: 5px;
 }
 
-.social_icon {
-    position: absolute;
-    right: 20px;
-    top: -65px;
+.input-group input {
+    display:block;
+    width:100%;
+    padding:10px;
+    margin-bottom:10px;
 }
 
-.input-group-prepend span {
-    width: 50px;
-    background-color: var(--book-shelf);
-    color: black;
-    border: 0 ;
+.error input {
+    border:3px red solid;
 }
 
-input:focus {
-    box-shadow: 0 0 0 0 ;
+.success input {
+    border:3px green solid;
 }
 
-.remember {
-    color: white;
+.input-group i {
+    position:absolute;
+    right:10px;
+    top:50px;
+    transform:translateY(-50%);
+    visibility: hidden;
 }
 
-.remember input {
-    width: 20px;
-    height: 20px;
-    margin-left: 15px;
-    margin-right: 5px;
+.success i.fa-check-circle{
+    visibility: visible;
+    color:green;
 }
 
-.login_btn {
-    color: black;
-    background-color: #ffffff;
-    width: 100px;
+.error i.fa-exclamation-circle {
+    visibility: visible;
+    color:red;
 }
 
-.login_btn:hover {
-    color: black;
-    background-color: white;
+
+.input-group p {
+    font-size: 15px;
+    color:red;
+    visibility: hidden;
 }
 
-.links {
-    color: white;
+.error p {
+    visibility: visible;
 }
 
-.links a {
-    margin-left: 4px;
+.btn {
+    width:100%;
+    padding:10px;
+    font-size: 20px;
+    background-color: rgb(95, 18, 18);
+    color:#fff;
+    text-transform: uppercase;
+    border:none;
 }
+
+
+
+
+
+
+
+
+
+
+

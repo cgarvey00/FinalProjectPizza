@@ -4,12 +4,12 @@ USE `pizzashop`;
 
 CREATE TABLE `users` (
                          `id` INT(11) NOT NULL PRIMARY KEY AUTO_INCREMENT,
-                         `username` VARCHAR(255) NOT NULL,
+                         `username` VARCHAR(100) NOT NULL,
                          `password` VARCHAR(255) NOT NULL,
-                         `phone_number` VARCHAR(255) NOT NULL,
-                         `email` VARCHAR(255) NOT NULL,
+                         `phone_number` VARCHAR(100) NOT NULL,
+                         `email` VARCHAR(100) NOT NULL,
                          `image` VARCHAR(255) NOT NULL,
-                         `user_type` VARBINARY(255) NOT NULL
+                         `user_type` VARCHAR(100) NOT NULL
 );
 
 CREATE TABLE `customers` (
@@ -52,7 +52,7 @@ CREATE TABLE `cart` (
 CREATE TABLE `review` (
                           `id` INT(11) NOT NULL PRIMARY KEY AUTO_INCREMENT,
                           `user_id` INT(11) NOT NULL,
-                          `comment` VARBINARY(255),
+                          `comment` VARCHAR(255),
                           `comment_date` DATE,
                           FOREIGN KEY (`user_id`) REFERENCES `users`(`id`)
 ) ;

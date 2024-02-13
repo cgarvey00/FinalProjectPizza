@@ -45,9 +45,9 @@ public class Register implements Command{
                 if(user == null){
                     if(JBCriptUtil.validatePassword(password)){
                         if(password.equals(passwordConfirmation)){
-                            if(EmailUtil.validateEmail(email)){
+                            if(EmailUtil.isValid(email)){
                                 if(PhoneNumberUtil.validationPhoneNumber(phoneNumber)){
-                                    if("Customer".equals(userType)){
+                                    if("customers".equals(userType)){
                                         Customer newCustomer = new Customer();
                                         newCustomer.setUsername(username);
                                         newCustomer.setPassword(JBCriptUtil.getHashedPw(password));
@@ -56,7 +56,7 @@ public class Register implements Command{
                                         if(userRep.addUser(newCustomer)){
                                             terminus = "login.jsp";
                                         }
-                                    } else if("Employee".equals(userType)){
+                                    } else if("employees".equals(userType)){
                                         Employee newEmployee = new Employee();
                                         newEmployee.setUsername(username);
                                         newEmployee.setPassword(JBCriptUtil.getHashedPw(password));
