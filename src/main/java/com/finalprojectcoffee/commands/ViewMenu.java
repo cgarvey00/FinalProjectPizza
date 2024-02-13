@@ -31,7 +31,7 @@ public class ViewMenu implements Command {
             ProductRepositories productRepos = new ProductRepositories(factory);
             List<Product> productList = productRepos.getAllProducts();
 
-            request.setAttribute("productList", productList);
+            session.setAttribute("productList", productList);
 
         } finally {
             entityManager.close();
