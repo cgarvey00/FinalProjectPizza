@@ -1,44 +1,43 @@
-CREATE
-DATABASE `pizzashop`;
+CREATE DATABASE `pizzashop`;
 
-USE
-`pizzashop`;
+USE `pizzashop`;
 
-CREATE TABLE `users`
-(
-    `id`           INT(11) NOT NULL PRIMARY KEY AUTO_INCREMENT,
-    `username`     VARCHAR(255) NOT NULL,
-    `password`     VARCHAR(255) NOT NULL,
-    `phone_number` VARCHAR(255) NOT NULL,
-    `email`        VARCHAR(255) NOT NULL,
-    `image`        VARCHAR(255),
-    `user_type`    VARCHAR(255) NOT NULL
+CREATE TABLE `users` (
+                         `id` INT(11) NOT NULL PRIMARY KEY AUTO_INCREMENT,
+                         `username` VARCHAR(255) NOT NULL,
+                         `password` VARCHAR(255) NOT NULL,
+                         `phone_number` VARCHAR(255) NOT NULL,
+                         `email` VARCHAR(255) NOT NULL,
+                         `image` VARCHAR(255) NOT NULL,
+                         `user_type` VARBINARY(255) NOT NULL
 );
 
-CREATE TABLE `customers`
-(
-    `id`             INT(100) NOT NULL,
-    `loyalty_points` INT(11) DEFAULT 0,
-    FOREIGN KEY (`id`) REFERENCES `users` (`id`)
+CREATE TABLE `customers` (
+                             `id` INT(11) NOT NULL PRIMARY KEY AUTO_INCREMENT,
+                             `loyalty_points` INT(11) DEFAULT 0
 );
 
-CREATE TABLE `employees`
-(
-    `id`      INT(11) NOT NULL,
-    `salary`  FLOAT(10) DEFAULT 0.0,
-    FOREIGN KEY (`id`) REFERENCES `users` (`id`)
+CREATE TABLE `employees` (
+                             `id` INT(11) NOT NULL PRIMARY KEY AUTO_INCREMENT,
+                             `salary` FLOAT(10) DEFAULT 0.0,
+                             `fine` FLOAT(10) DEFAULT 0.0
 );
 
-CREATE TABLE `products`
-(
-    `id`       INT(100) NOT NULL PRIMARY KEY AUTO_INCREMENT,
-    `name`     VARCHAR(100) NOT NULL,
-    `category` ENUM('Sides','Pizzas','Drinks','Meal_Deals','Desserts'),
-    `details`  VARCHAR(500),
-    `price`    FLOAT DEFAULT 0.0,
-    `stock`    INT(100) DEFAULT 0,
-    `image`    VARCHAR(255)
+CREATE TABLE `products` (
+                            `id` INT(100) NOT NULL PRIMARY KEY AUTO_INCREMENT,
+                            `name` VARCHAR(100) NOT NULL,
+                            `category` ENUM('Sides','Pizzas','Drinks','Meal_Deals','Desserts'),
+                            `details` VARCHAR(500),
+                            `price` FLOAT DEFAULT 0.0,
+                            `stock` INT(100) DEFAULT 0,
+                            `image` VARCHAR(255)
 );
+
+INSERT INTO `products` (`id`, `name`, `category`, `details`, `price`, `stock`, `image`)
+VALUES (1, 'Pepperoni Deluxe', 'Pizzas', 'Pepperoni and Cheese 10`', 5.99, 100, 'pizza1.jpg'),
+       (2, 'Fanta', 'Drinks', '300ML Fanta Soda', 1.00, 100, 'fanta.png'),
+       (3, 'Chocolate Sundae', 'Desserts', 'Snickers Sundae', 2.99, 300, 'sundae.jpg'),
+       (4, 'Pepperoni Family Meal Deal', 'Meal_Deals', '5 Pizzas and Kids Meal Included', 18, 100, 'mealdeal.png');
 
 CREATE TABLE `cart` (
                         `id` INT(100) NOT NULL PRIMARY KEY AUTO_INCREMENT,
@@ -74,16 +73,4 @@ CREATE TABLE `orders` (
                           FOREIGN KEY (`product_id`) REFERENCES `products`(`id`),
                           FOREIGN KEY (`customer_id`) REFERENCES `customers`(`id`),
                           FOREIGN KEY (`emp_id`) REFERENCES `employees`(`id`)
-);
-
-CREATE TABLE `address`(
-                          `id` INT(100) NOT NULL PRIMARY KEY AUTO_INCREMENT,
-                          `user_id` INT(100) NOT NULL,
-                          `street` VARCHAR(255),
-                          `town` VARCHAR(255),
-                          `county` VARCHAR(255),
-                          `eircode` VARCHAR(255),
-                          `create_time` DATE,
-                          `update_time` DATE,
-                          FOREIGN KEY (`user_id`) REFERENCES `users`(`id`)
 );

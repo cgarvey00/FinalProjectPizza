@@ -1,4 +1,6 @@
-<%@ page import="com.finalprojectcoffee.repositories.ProductRepositories" %>
+
+<%@ page import="com.finalprojectcoffee.entities.Product" %>
+<%@ page import="java.util.List" %>
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" language="java" %>
 <html lang="en">
 <head>
@@ -48,36 +50,35 @@
     </div>
 </header>
 <!-- home section starts  -->
-
+<br><br><br><br><br><br>
 <h2>View Products On Menu</h2>
-<div="container"></div>
-<c:if test="${not empty productList}">
-    <table>
-        <thead>
-        <tr>
-            <th>ID</th>
-            <th>Name</th>
-            <th>Category</th>
-            <th>Details</th>
-            <th>Cost</th>
-        </tr>
-        </thead>
-        <tbody>
-        <c:forEach var="product" items="${productList}">
-            <tr>
-                <td>${product.getId()}</td>
-                <td>${product.getName()}</td>
-                <td>${product.getCategory()}</td>
-                <td>${product.getDetails()}</td>
-                <td>${product.getCost()}</td>
-            </tr>
-        </c:forEach>
-        </tbody>
-    </table>
-</c:if>
-<c:if test="${empty productList}">
-    <p>No Item Available On Menu</p>
-</c:if>
+
+<%
+
+    List<Product> productList = (List<Product>) session.getAttribute("productList");
+    if(productList != null && !productList.isEmpty()){
+%>
+<table>
+    <%
+        for(Product p : productList){
+    %>
+    <tr>
+        <td><%=p.getId()%></td>
+        <td><%=p.getName()%></td>
+        <td><%=p.getCategory()%></td>
+        <td><%=p.getDetails()%></td>
+    </tr>
+    <%
+        }
+    %>
+</table>
+<%
+}else{
+%>
+<div>No Products currently found in the database</div>
+<%
+    }
+%>
 <section class="footer container">
 
     <a href="#" class="logo"> <i class="fa-solid fa-pizza-slice"></i> Pizza Shop </a>

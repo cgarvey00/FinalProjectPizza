@@ -1,129 +1,138 @@
 <%@page contentType="text/html" pageEncoding="UTF-8" %>
-<html>
+<!DOCTYPE html>
+<html lang="en">
 
-<
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Register</title>
-    <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
-    <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
-    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
-          integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+    <!-- font awesome cdn link  -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet"
           integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css"
-          integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
-    <!-- custom css file link  -->
+    <!-- font awesome cdn link  -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css">
     <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/stylesheets/signup.css">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"
+          integrity="sha512-Fo3rlrZj/k7ujTnHg4CGR2D7kSs0v4LLanw2qksYuRlEzO+tcaEPQogQ0KaoGN26/zrn20ImR1DfuLWnOo7aBA=="
+          crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+    <script src="https://kit.fontawesome.com/2bbac3a66c.js" crossorigin="anonymous"></script>
 </head>
+
 <body>
 <style>
-
-    html,
     body {
-        background-image: url('${pageContext.request.contextPath}/images/register.jpg');
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+        background-color: rgb(0, 0, 0);
+        background-image: url('${pageContext.request.contextPath}/images/pizza.jpg');
         background-size: cover;
         background-repeat: no-repeat;
-        font-family: 'Numans', sans-serif;
     }
 
-    .error {
-        color: rgb(186, 216, 255);
+    .s-error {
+        color: rgb(154, 50, 50);
         font-weight: bold;
         position: absolute;
-        bottom: 35px;
+        bottom: 25px;
         margin-top: 50px;
         font-size: 15px;
     }
 </style>
-<section class="vh-150 gradient-custom">
-    <div class="container py-560 h-160">
-        <div class="row d-flex justify-content-center align-items-center h-150">
-            <div class="col-12 col-md-12 col-lg-6 col-xl-5">
-                <div class="card-body p-5 text-center">
-                    <div class="mb-md-5 mt-md-4 pb-5">
-                        <div class="d-flex justify-content-center h-100">
-                            <div class="card py-560 h-170">
-                                <div class="card-header">
-                                    <h3>Sign Up Now</h3>
-                                </div>
-                                <div class="card-body">
-                                    <form action="controller" method="post">
-                                        <input type="hidden" name="action" value="register">
-                                        <div class="input-group form-group">
-                                            <div class="input-group-prepend">
-                                                <span class="input-group-text"><i class="fas fa-envelope"></i></span>
-                                            </div>
-                                            <c:if test="${not empty sessionScope.emsg}">
-                                                <div class="error">${sessionScope.emsg}</div>
-                                            </c:if>
-                                            <input type="email" class="required form-control " onkeyup="enableSubmit()"
-                                                   name="email" placeholder="Email Address">
-                                        </div>
-                                        <div class="input-group form-group">
-                                            <div class="input-group-prepend">
-                                                <span class="input-group-text"><i class="fas fa-users "></i></span>
-                                            </div>
-                                            <c:if test="${not empty sessionScope.usmg}">
-                                                <div class="error">${sessionScope.usmg}</div>
-                                            </c:if>
-                                            <input type="text" class="required form-control " onkeyup="enableSubmit()"
-                                                   name="username" placeholder="Username">
-                                        </div>
-                                        <div class="input-group form-group">
-                                            <div class="input-group-prepend">
-                                                <span class="input-group-text"><i class="fas fa-key"></i></span>
-                                            </div>
-                                            <c:if test="${not empty sessionScope.pwvmsg}">
-                                                <div class="error">${sessionScope.pwvmsg}</div>
-                                            </c:if>
-                                            <input type="password" class="required form-control "
-                                                   onkeyup="enableSubmit()" name="password" placeholder="Password">
-                                        </div>
-                                        <div class="input-group form-group">
-                                            <div class="input-group-prepend">
-                                                <span class="input-group-text"><i class="fas fa-key"></i></span>
-                                            </div>
-                                            <c:if test="${not empty sessionScope.pwcmsg}">
-                                                <div class="error">${sessionScope.pwcmsg}</div>
-                                            </c:if>
-                                            <input type="password" class="required form-control "
-                                                   onkeyup="enableSubmit()" name="passwordConfirmation"
-                                                   placeholder="Confirm Password">
-                                        </div>
-                                        <div class="input-group form-group">
-                                            <div class="input-group-prepend">
-                                                <span class="input-group-text"><i class="fas fad fa-phone"></i></span>
-                                            </div>
-                                            <c:if test="${not empty sessionScope.pnmsg}">
-                                                <div class="error">${sessionScope.pnmsg}</div>
-                                            </c:if>
-                                            <input type="number" class="required form-control " onkeyup="enableSubmit()"
-                                                   name="phoneNumber" placeholder="Phone Number">
-                                        </div>
-                                        <div class="form-group">
-                                            <input type="submit" name="register" value="Sign up" disabled
-                                                   class="btn float-right login_btn">
-                                        </div>
-                                    </form>
-                                </div>
-                                <div class="card-footer">
-                                    <div class="d-flex justify-content-center links">
-                                        Already have an account?<a href="controller?action=view-login">Log In</a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+<form id="register-form" action="controller" method="POST">
+    <input type="hidden" name="action" value="register">
+    <div class="title" style="text-align: center;">
+        <h2>Register as an Employee or Customer</h2>
+        <h6 style="text-transform: none;">Choose a Strong password, at least 8 characters, one uppercase letter,
+            lowercase, digit and special character</h6>
+    </div>
+
+    <!-- USERNAME -->
+    <div class="input-group">
+        <c:if test="${not empty sessionScope.usmg}">
+            <div class="s-error">${sessionScope.usmg}</div>
+        </c:if>
+        <label for="username">Username</label>
+        <input type="text" id="username" placeholder="Username" name="username">
+        <i class="fas fa-check-circle"></i>
+        <i class="fas fa-exclamation-circle"></i>
+        <p>Error Message</p>
+    </div>
+    <!-- PHONE -->
+    <div class="input-group">
+        <c:if test="${not empty sessionScope.pnmsg}">
+            <div class="s-error">${sessionScope.pnmsg}</div>
+        </c:if>
+        <label for="number">Phone</label>
+        <input type="number" id="number" placeholder="5654667876" name="phoneNumber">
+        <i class="fas fa-check-circle"></i>
+        <i class="fas fa-exclamation-circle"></i>
+        <p>Error Message</p>
+    </div>
+    <!-- EMAIL -->
+    <div class="input-group">
+        <c:if test="${not empty sessionScope.emsg}">
+            <div class="s-error">${sessionScope.emsg}</div>
+        </c:if>
+        <label for="email">Email</label>
+        <input type="email" id="email" placeholder="Email" name="email">
+        <i class="fas fa-check-circle"></i>
+        <i class="fas fa-exclamation-circle"></i>
+        <p>Error Message</p>
+    </div>
+    <!-- PASSWORD -->
+    <div class="input-group">
+        <c:if test="${not empty sessionScope.pwvmsg}">
+            <div class="s-error">${sessionScope.pwvmsg}</div>
+        </c:if>
+        <label for="password">Password</label>
+        <input type="password" id="password" placeholder="Password" name="password">
+        <i class="fas fa-check-circle"></i>
+        <i class="fas fa-exclamation-circle"></i>
+        <p>Error Message</p>
+    </div>
+    <!-- CONFIRM PASSWORD -->
+    <div class="input-group">
+        <c:if test="${not empty sessionScope.pwcmsg}">
+            <div class="s-error">${sessionScope.pwcmsg}</div>
+        </c:if>
+        <label for="confirm-password">Confirm Password</label>
+        <input type="password" id="confirm-password" placeholder="Password" name="passwordConfirmation">
+        <i class="fas fa-check-circle"></i>
+        <i class="fas fa-exclamation-circle"></i>
+        <p>Error Message</p>
+    </div>
+    <!-- USERTYPE -->
+    <div class="form-outline form-white mb-4">
+        <label style="color:#fff;" for="usertype">User Type</label>
+        <select name="userType" id="usertype" class="required form-control form-control-lg"
+                onchange="enableSubmit()">
+            <option value="customers">Customer</option>
+            <option value="employees">Employee </option>
+
+            <i class="fas fa-check-circle"></i>
+            <i class="fas fa-exclamation-circle"></i>
+            <p>Error Message</p>
+        </select>
+    </div>
+    <button type="submit" name="register" class="btn">Register</button>
+    <br><br> <br>
+    <div class="card-footer">
+        <div style="color:#fff;" class="d-flex justify-content-center links">
+            Already have an account?<a style="color:#6b1a1a;" href="show-login.html">Log In</a>
+        </div>
+        <div style="color:#fff;" class="d-flex justify-content-center">
+            <a style="color:#6b1a1a;" href="#">Return Home</a>
         </div>
     </div>
-</section>
+</form>
 </body>
+<script src="${pageContext.request.contextPath}/scripts/validation.js" type="text/javascript"></script>
 
-<script src="${pageContext.request.contextPath}/scripts/script.js" type="text/javascript"></script>
 </html>
