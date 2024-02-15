@@ -13,6 +13,9 @@ public class CommandFactory {
 
         if (action != null) {
             switch (action) {
+                case "home":
+                    command = new ViewHome(request, response, factory);
+                    break;
                 case "login":
                     command = new Login(request, response, factory);
                     break;
