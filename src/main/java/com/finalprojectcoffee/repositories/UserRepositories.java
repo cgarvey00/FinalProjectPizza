@@ -38,7 +38,11 @@ public class UserRepositories implements UserRepositoryInterfaces {
             Query query =entityManager.createQuery("SELECT u From User u Where u.username = :username");
             query.setParameter("username",username);
             User user = (User) query.getSingleResult();
-            return user;
+            if(user != null){
+                return user;
+            } else {
+                return null;
+            }
         } catch (Exception e) {
             System.err.println("An Exception occurred while searching " + e.getMessage());
             return null;
@@ -70,7 +74,11 @@ public class UserRepositories implements UserRepositoryInterfaces {
             query.setParameter("username",username);
             query.setParameter("password",password);
             User user = (User)query.getSingleResult();
-            return user;
+            if(user != null){
+                return user;
+            } else {
+                return null;
+            }
         } catch (Exception e) {
             System.err.println("An Exception occurred while searching " + e.getMessage());
             return null;
@@ -85,9 +93,14 @@ public class UserRepositories implements UserRepositoryInterfaces {
         EntityTransaction transaction = entityManager.getTransaction();
         try {
             transaction.begin();
-            entityManager.persist(user);
-            transaction.commit();
-            return true;
+            if(user != null){
+                entityManager.persist(user);
+                transaction.commit();
+                return true;
+            } else {
+                transaction.rollback();
+                return false;
+            }
         } catch (PersistenceException e) {
             System.err.println("A PersistenceException occurred while persisting " + e.getMessage());
             transaction.rollback();
@@ -112,7 +125,32 @@ public class UserRepositories implements UserRepositoryInterfaces {
             transaction.commit();
             return true;
         } catch (PersistenceException e) {
-            System.err.println("An PersistenceException occurred while merging " + e.getMessage());
+            System.err.println("A PersistenceException occurred while merging " + e.getMessage());
+            transaction.rollback();
+            return false;
+        } finally {
+            entityManager.close();
+        }
+    }
+
+    @Override
+    public Boolean deleteUser(int userId) {
+        EntityManager entityManager = factory.createEntityManager();
+        EntityTransaction transaction = entityManager.getTransaction();
+
+        try {
+            transaction.begin();
+            User user = entityManager.find(User.class,userId);
+            if(user != null){
+                entityManager.remove(user);
+                transaction.commit();
+                return true;
+            } else {
+                transaction.rollback();
+                return false;
+            }
+        } catch (PersistenceException e) {
+            System.err.println("A PersistenceException occurred while removing" + e.getMessage());
             transaction.rollback();
             return false;
         } finally {

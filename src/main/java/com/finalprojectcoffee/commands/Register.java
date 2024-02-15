@@ -1,7 +1,5 @@
 package com.finalprojectcoffee.commands;
 
-import com.finalprojectcoffee.entities.Customer;
-import com.finalprojectcoffee.entities.Employee;
 import com.finalprojectcoffee.entities.User;
 import com.finalprojectcoffee.repositories.UserRepositories;
 import com.finalprojectcoffee.utils.EmailUtil;
@@ -42,53 +40,40 @@ public class Register implements Command{
                 UserRepositories userRep = new UserRepositories(factory);
                 User user = userRep.findUserByUsername(username);
 
-                if(user == null){
-                    if(JBCriptUtil.validatePassword(password)){
-                        if(password.equals(passwordConfirmation)){
-                            if(EmailUtil.isValid(email)){
-                                if(PhoneNumberUtil.validationPhoneNumber(phoneNumber)){
-                                    if("customers".equals(userType)){
-                                        Customer newCustomer = new Customer();
-                                        newCustomer.setUsername(username);
-                                        newCustomer.setPassword(JBCriptUtil.getHashedPw(password));
-                                        newCustomer.setEmail(email);
-                                        newCustomer.setPhoneNumber(phoneNumber);
-                                        if(userRep.addUser(newCustomer)){
-                                            terminus = "login.jsp";
-                                        }
-                                    } else if("employees".equals(userType)){
-                                        Employee newEmployee = new Employee();
-                                        newEmployee.setUsername(username);
-                                        newEmployee.setPassword(JBCriptUtil.getHashedPw(password));
-                                        newEmployee.setEmail(email);
-                                        newEmployee.setPhoneNumber(phoneNumber);
-                                        if(userRep.addUser(newEmployee)){
-                                            terminus = "login.jsp";
-                                        }
-                                    } else {
-                                        User newUser = new User();
-                                        newUser.setUsername(username);
-                                        newUser.setPassword(JBCriptUtil.getHashedPw(password));
-                                        newUser.setEmail(email);
-                                        newUser.setPhoneNumber(phoneNumber);
-                                        if(userRep.addUser(newUser)){
-                                            terminus = "login.jsp";
-                                        }
-                                    }
-                                } else {
-                                    session.setAttribute("pnmsg", "Phone number format error");
-                                }
-                            } else {
-                                session.setAttribute("emsg", "Email format error");
-                            }
-                        } else {
-                            session.setAttribute("pwcmsg", "Password inconsistency");
-                        }
-                    } else {
-                        session.setAttribute("pwvmsg","Password format error");
-                    }
+                if(user != null){
+                    session.setAttribute("uMsg", "User already exists");
+                    return "register.jsp";
+                }
+
+                if(!JBCriptUtil.validatePassword(password)){
+                    session.setAttribute("pwvMsg", "Password format error");
+                    return "register.jsp";
+                }
+
+                if(!password.equals(passwordConfirmation)){
+                    session.setAttribute("pwcMsg", "Password inconsistency");
+                    return "register.jsp";
+                }
+
+                if(!EmailUtil.validateEmail(email)){
+                    session.setAttribute("eMsg", "Email format error");
+                    return "register.jsp";
+                }
+
+                if(!PhoneNumberUtil.validationPhoneNumber(phoneNumber)){
+                    session.setAttribute("pnMsg", "Phone number format error");
+                    return "register.jsp";
+                }
+
+                password = JBCriptUtil.getHashedPw(password);
+                User newUser = UserFactory.createUser(userType, username, password, email, phoneNumber);
+                Boolean isAdded = userRep.addUser(newUser);
+                if(isAdded){
+                    session.setAttribute("successMsg", "Registration successful");
+                    return "login.jsp";
                 } else {
-                    session.setAttribute("umsg","User exist");
+                    session.setAttribute("errorMsg", "Failed to register user");
+                    return "register.jsp";
                 }
             } finally {
                 entityManager.close();

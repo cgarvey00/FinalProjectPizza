@@ -31,22 +31,20 @@ public class UserRepositoriesTest {
 
     @Test
     public void findUserByIdTest(){
-        Customer expectedResult = new Customer(1,"cookregina","_IfkP$*t@4","311-325-1356","aguilarsara@hotmail.com",null,1,89);
+        Customer expectedResult = new Customer(1,"cookregina","_IfkP$*t@4","311-325-1356","aguilarsara@hotmail.com",null,89);
         User actualResult = userRep.findUserById(1);
         assertEquals(expectedResult,actualResult);
+        User notExistResult = userRep.findUserById(100);
+        assertEquals(null,notExistResult);
     }
 
     @Test
     public void findUserByUsername(){
-        Employee expectedResult = new Employee(2,"joseph40","kDk3(mDr_5","+1-442-410-1111x483","peter71@perez.org",null,1, 43694.26F, 305.72F);
-        User user= userRep.findUserByUsername("joseph40");
-        if(user instanceof Customer){
-            Customer actualResult = (Customer) user;
-            assertEquals(expectedResult,actualResult);
-        } else if(user instanceof Employee){
-            Employee actualResult = (Employee) user;
-            assertEquals(expectedResult,actualResult);
-        }
+       Employee expectedResult = new Employee("joseph40","kDk3(mDr_5","+1-442-410-1111x483","peter71@perez.org",null, 43694.26F);
+       User actualResult = userRep.findUserByUsername("joseph40");
+       assertEquals(expectedResult.getEmail(),actualResult.getEmail());
+       User notExistResult = userRep.findUserByUsername("Tom123");
+       assertEquals(null,notExistResult);
     }
 
     @Test
@@ -58,6 +56,22 @@ public class UserRepositoriesTest {
 
     @Test
     public void addUserTest(){
+        Employee employee = new Employee("tom666","kDk3(wed_5","+1-666-123-1111x483","tomcat123@outlook.com",null, 332344.26F);
+        Boolean expectedResult = userRep.addUser(employee);
+        assertTrue(expectedResult);
+    }
 
+    @Test
+    public void updateUserTest(){
+        Boolean epectedReuslt = userRep.updateUser(2,"kDk3(etEr_5","+1-442-410-1231x3","wef234@outlook.com",null);
+        assertTrue(epectedReuslt);
+    }
+
+    @Test
+    public void deleteUserTest(){
+        Boolean expectedResult = userRep.deleteUser(14);
+        assertTrue(expectedResult);
+        Boolean notExistResult = userRep.deleteUser(15);
+        assertFalse(notExistResult);
     }
 }

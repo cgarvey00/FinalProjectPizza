@@ -14,13 +14,13 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @Column(name = "username")
+    @Column(name = "username", nullable = false)
     private String username;
 
-    @Column(name = "password")
+    @Column(name = "password", nullable = false)
     private String password;
 
-    @Column(name = "phone_number")
+    @Column(name = "phone_number", nullable = false)
     private String phoneNumber;
 
     @Column(name = "email")
@@ -36,6 +36,14 @@ public class User {
         this.password = password;
         this.phoneNumber = phoneNumber;
         this.email = email;
+    }
+
+    public User(String username, String password, String phoneNumber, String email, String image) {
+        this.username = username;
+        this.password = password;
+        this.phoneNumber = phoneNumber;
+        this.email = email;
+        this.image = image;
     }
 
     public User(int id, String username, String password, String phoneNumber, String email, String image) {
