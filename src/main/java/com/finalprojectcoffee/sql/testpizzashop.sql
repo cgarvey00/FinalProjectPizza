@@ -1,8 +1,16 @@
-CREATE
-DATABASE `testpizzashop`;
+CREATE DATABASE `testpizzashop`;
 
-USE
-`testpizzashop`;
+USE `testpizzashop`;
+
+CREATE TABLE `address`(
+    `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    `user_id` INT(11) NOT NULL,
+    `street` VARCHAR(255),
+    `town` VARCHAR(255),
+    `county` VARCHAR(255),
+    `eir_code` VARCHAR(255),
+    FOREIGN KEY (`user_id`) REFERENCES `users` (`id`)
+);
 
 CREATE TABLE `users`
 (
@@ -12,12 +20,12 @@ CREATE TABLE `users`
     `phone_number` VARCHAR(255) NOT NULL,
     `email`        VARCHAR(255) NOT NULL,
     `image`        VARCHAR(255),
-    `user_type`    VARCHAR(255) NOT NULL
+    `type`         VARCHAR(255) NOT NULL
 );
 
 CREATE TABLE `customers`
 (
-    `id`             INT(100) NOT NULL,
+    `id`             INT(11) NOT NULL,
     `loyalty_points` INT(11) DEFAULT 0,
     FOREIGN KEY (`id`) REFERENCES `users` (`id`)
 );
@@ -31,8 +39,8 @@ CREATE TABLE `employees`
 
 CREATE TABLE `products`
 (
-    `id`       INT(100) NOT NULL PRIMARY KEY AUTO_INCREMENT,
-    `name`     VARCHAR(100) NOT NULL,
+    `id`       INT(11) NOT NULL PRIMARY KEY AUTO_INCREMENT,
+    `name`     VARCHAR(255) NOT NULL,
     `category` ENUM('Sides','Pizzas','Drinks','Meal_Deals','Desserts'),
     `details`  VARCHAR(500),
     `price`    FLOAT DEFAULT 0.0,
@@ -41,50 +49,49 @@ CREATE TABLE `products`
 );
 
 CREATE TABLE `cart` (
-                        `id` INT(100) NOT NULL PRIMARY KEY AUTO_INCREMENT,
-                        `user_id` INT(100) NOT NULL,
-                        `product_id` INT(100) NOT NULL,
-                        `cost` FLOAT DEFAULT 0.0,
-                        `quantity` INT(100) DEFAULT 0,
-                        FOREIGN KEY (`user_id`) REFERENCES `users`(`id`),
-                        FOREIGN KEY (`product_id`) REFERENCES `products`(`id`)
+    `id` INT(11) NOT NULL PRIMARY KEY AUTO_INCREMENT,
+    `user_id` INT(11) NOT NULL,
+    `product_id` INT(11) NOT NULL,
+    `cost` FLOAT DEFAULT 0.0,
+    `quantity` INT(100) DEFAULT 0,
+    FOREIGN KEY (`user_id`) REFERENCES `users`(`id`),
+    FOREIGN KEY (`product_id`) REFERENCES `products`(`id`)
 );
 
 CREATE TABLE `review` (
-                          `id` INT(11) NOT NULL PRIMARY KEY AUTO_INCREMENT,
-                          `user_id` INT(11) NOT NULL,
-                          `comment` VARBINARY(255),
-                          `comment_date` DATE,
-                          FOREIGN KEY (`user_id`) REFERENCES `users`(`id`)
+    `id` INT(11) NOT NULL PRIMARY KEY AUTO_INCREMENT,
+    `user_id` INT(11) NOT NULL,
+    `comment` VARCHAR(255),
+    `comment_date` DATE,
+    FOREIGN KEY (`user_id`) REFERENCES `users`(`id`)
 ) ;
 
 CREATE TABLE `orders` (
-                          `id` INT(100) NOT NULL PRIMARY KEY AUTO_INCREMENT,
-                          `product_id` INT(100) NOT NULL,
-                          `customer_id` INT(100) NOT NULL,
-                          `emp_id` INT(100) NOT NULL,
-                          `address` VARCHAR(500) NOT NULL,
-                          `payment_method` VARCHAR(50) NOT NULL,
-                          `payment_status` ENUM('Pending','Paid') NOT NULL DEFAULT 'Pending',
-                          `total_price` FLOAT DEFAULT 0.0,
-                          `create_time` DATE,
-                          `update_time` DATE,
-                          `overdue_time` DATE,
-                          `fine` FLOAT(10) DEFAULT 0.0,
-                          FOREIGN KEY (`product_id`) REFERENCES `products`(`id`),
-                          FOREIGN KEY (`customer_id`) REFERENCES `customers`(`id`),
-                          FOREIGN KEY (`emp_id`) REFERENCES `employees`(`id`)
+    `id` INT(11) NOT NULL PRIMARY KEY AUTO_INCREMENT,
+    `product_id` INT(11) NOT NULL,
+    `customer_id` INT(11) NOT NULL,
+    `employee_id` INT(11) NOT NULL,
+    `temp_address_id` INT(11),
+    `payment_method` VARCHAR(50) NOT NULL,
+    `payment_status` ENUM('Pending','Paid') NOT NULL DEFAULT 'Pending',
+    `total_price` FLOAT DEFAULT 0.0,
+    `create_time` DATE,
+    `update_time` DATE,
+    `overdue_time` DATE,
+    `fine` FLOAT(10) DEFAULT 0.0,
+    FOREIGN KEY (`product_id`) REFERENCES `products`(`id`),
+    FOREIGN KEY (`customer_id`) REFERENCES `customers`(`id`),
+    FOREIGN KEY (`employee_id`) REFERENCES `employees`(`id`),
+    FOREIGN KEY (`temp_address_id`) REFERENCES `temp_addresses`(`id`)
 );
 
-CREATE TABLE `address`(
-                          `id` INT(100) NOT NULL PRIMARY KEY AUTO_INCREMENT,
-                          `user_id` INT(100) NOT NULL,
-                          `street` VARCHAR(255),
-                          `town` VARCHAR(255),
-                          `county` VARCHAR(255),
-                          `eircode` VARCHAR(255),
-                          `create_time` DATE,
-                          `update_time` DATE,
-                          FOREIGN KEY (`user_id`) REFERENCES `users`(`id`)
+CREATE TABLE `temp_addresses` (
+    `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    `street` VARCHAR(255),
+    `town` VARCHAR(255),
+    `county` VARCHAR(255),
+    `eir_code` VARCHAR(255)
 );
+
+
 
