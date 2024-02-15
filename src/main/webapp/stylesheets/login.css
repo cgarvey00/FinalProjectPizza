@@ -1,103 +1,106 @@
-/*
-Author: Conor Garvey
-*/
 
 
 @import url('https://fonts.googleapis.com/css?family=Numans');
-
-:root {
-    --orange: #f39c12;
-    --book-shelf: #7d6447;
-    --black: #444;
-    --white: rgb(255, 255, 255);
-    --light-color: #777;
-    --light-bg: #f5f5f5;
-    --border: .2rem solid var(--black);
-    --box-shadow: 0 .5rem 1rem rgba(0, 0, 0, .1);
+* {
+    padding:0;
+    margin:0;
+    box-sizing: border-box;
 }
 
-html,
-body {
-    background-image: url("https://www.pixelstalk.net/wp-content/uploads/2016/08/Beautiful-Library-Wallpaper.jpg");
-    background-size: cover;
-    background-repeat: no-repeat;
-    background-position: center;
-    height: 100%;
-    font-family: 'Numans', sans-serif;
+#login-form {
+    width:400px;
+    padding:20px;
+    text-transform: uppercase;
+    background-color: #000000;
 }
 
-.card {
-    height: 520px;
-    margin-top: auto;
-    margin-bottom: auto;
-    width: 400px;
-    background-color: rgba(0, 0, 0, 0.5) ;
+.title {
+    color: #fff;
+    margin-bottom: 20px;
 }
 
-.social_icon span {
-    font-size: 60px;
-    margin-left: 10px;
-    left: 20px;
-    color: var(--book-shelf);
-    position: relative;
+.input-group {
+    margin:20px 0;
+    position:relative;
 }
 
-.social_icon span:hover {
-    color: var(--white);
-    cursor: pointer;
+
+
+.input-group label {
+    color: #fff;
+    display:inline-block;
+    margin-bottom: 5px;
 }
 
-.card-header h3 {
-    color: white;
+.input-group input {
+    display:block;
+    width:100%;
+    padding:10px;
 }
 
-.social_icon {
-    position: relative;
-    right: 20px;
-    bottom: 16px;
+.error input {
+    border:3px red solid;
 }
 
-.input-group-prepend span {
-    width: 50px;
-    background-color: #e1af73;
-    color: black;
-    border: 0 ;
+.success input {
+    border:3px green solid;
 }
 
-input:focus {
-    box-shadow: 0 0 0 0 ;
+.input-group i {
+    position:absolute;
+    right:10px;
+    top:35px;
+    visibility: hidden;
 }
 
-.remember {
-    color: white;
+
+.success i.fa-check-circle{
+    visibility: visible;
+    color:green;
 }
 
-.remember input {
-    width: 20px;
-    height: 20px;
-    margin-left: 15px;
-    margin-right: 5px;
+.error i.fa-exclamation-circle {
+    visibility: visible;
+    color:red;
 }
 
-.login_btn {
-    color: black;
-    background-color: var(--book-shelf);
-    width: 100px;
+
+.input-group p {
+    font-size: 15px;
+    color:red;
+    visibility: hidden;
 }
 
-.login_btn:hover {
-    color: black;
-    background-color: white;
+.error p {
+    visibility: visible;
 }
 
-.links {
-    color: white;
+.btn {
+    width:100%;
+    padding:10px;
+    font-size: 20px;
+    background-color: rgb(95, 18, 18);
+    color:#fff;
+    text-transform: uppercase;
+    border:none;
 }
 
-.links a {
-    margin-left: 4px;
-}
 
-.error{
-    color:rgb(94, 27, 27);
-}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
