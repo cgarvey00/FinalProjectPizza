@@ -80,13 +80,6 @@
                         <input type="number" name="qty" style="font-size:15px;" required class="box" min="0" max="40" placeholder="enter quantity" value="1">
                     </label>
                     <button type="submit" name="add-to-cart" class="cart-btn">Add to Cart</button>
-                    <form action="" method="post">
-                        <input type="hidden" name="action" value="add-favourite">
-                        <input type="hidden" name="product_id" value=" <%=p.getId()  %>">
-                        <input type="hidden" name="name" value="<%=p.getName()  %>">
-                        <input type="hidden" name="price" value="<%=p.getPrice()  %>">
-                        <button type="submit" name="add-favourite" class="fav-btn"> Add to Favourites</button>
-                    </form>
                 </div>
             </div>
         </form>
