@@ -41,27 +41,27 @@ public class Register implements Command{
                 User user = userRep.findUserByUsername(username);
 
                 if(user != null){
-                    session.setAttribute("uMsg", "User already exists");
+                    session.setAttribute("usmg", "User already exists");
                     return "register.jsp";
                 }
 
                 if(!JBCriptUtil.validatePassword(password)){
-                    session.setAttribute("pwvMsg", "Password format error");
+                    session.setAttribute("pwvmsg", "Password format error");
                     return "register.jsp";
                 }
 
                 if(!password.equals(passwordConfirmation)){
-                    session.setAttribute("pwcMsg", "Password inconsistency");
+                    session.setAttribute("pwcmsg", "Password inconsistency");
                     return "register.jsp";
                 }
 
                 if(!EmailUtil.validateEmail(email)){
-                    session.setAttribute("eMsg", "Email format error");
+                    session.setAttribute("emsg", "Email format error");
                     return "register.jsp";
                 }
 
                 if(!PhoneNumberUtil.validationPhoneNumber(phoneNumber)){
-                    session.setAttribute("pnMsg", "Phone number format error");
+                    session.setAttribute("pnmsg", "Phone number format error");
                     return "register.jsp";
                 }
 

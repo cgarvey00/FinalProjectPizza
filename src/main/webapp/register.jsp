@@ -55,8 +55,8 @@
 
     <!-- USERNAME -->
     <div class="input-group">
-        <c:if test="${not empty sessionScope.uMsg}">
-            <div class="s-error">${sessionScope.uMsg}</div>
+        <c:if test="${not empty sessionScope.usmg}">
+            <div class="s-error">${sessionScope.usmg}</div>
         </c:if>
         <label for="username">Username</label>
         <input type="text" id="username" placeholder="Username" name="username">
@@ -66,8 +66,8 @@
     </div>
     <!-- PHONE -->
     <div class="input-group">
-        <c:if test="${not empty sessionScope.pnMsg}">
-            <div class="s-error">${sessionScope.pnMsg}</div>
+        <c:if test="${not empty sessionScope.pnmsg}">
+            <div class="s-error">${sessionScope.pnmsg}</div>
         </c:if>
         <label for="number">Phone</label>
         <input type="number" id="number" placeholder="5654667876" name="phoneNumber">
@@ -77,8 +77,8 @@
     </div>
     <!-- EMAIL -->
     <div class="input-group">
-        <c:if test="${not empty sessionScope.eMsg}">
-            <div class="s-error">${sessionScope.eMsg}</div>
+        <c:if test="${not empty sessionScope.emsg}">
+            <div class="s-error">${sessionScope.emsg}</div>
         </c:if>
         <label for="email">Email</label>
         <input type="email" id="email" placeholder="Email" name="email">
@@ -88,8 +88,8 @@
     </div>
     <!-- PASSWORD -->
     <div class="input-group">
-        <c:if test="${not empty sessionScope.pwvMsg}">
-            <div class="s-error">${sessionScope.pwvMsg}</div>
+        <c:if test="${not empty sessionScope.pwvmsg}">
+            <div class="s-error">${sessionScope.pwvmsg}</div>
         </c:if>
         <label for="password">Password</label>
         <input type="password" id="password" placeholder="Password" name="password">
@@ -99,8 +99,8 @@
     </div>
     <!-- CONFIRM PASSWORD -->
     <div class="input-group">
-        <c:if test="${not empty sessionScope.pwcMsg}">
-            <div class="s-error">${sessionScope.pwcMsg}</div>
+        <c:if test="${not empty sessionScope.pwcmsg}">
+            <div class="s-error">${sessionScope.pwcmsg}</div>
         </c:if>
         <label for="confirm-password">Confirm Password</label>
         <input type="password" id="confirm-password" placeholder="Password" name="passwordConfirmation">
@@ -113,8 +113,8 @@
         <label style="color:#fff;" for="usertype">User Type</label>
         <select name="userType" id="usertype" class="required form-control form-control-lg"
                 onchange="enableSubmit()">
-            <option value="customers">Customer</option>
-            <option value="employees">Employee </option>
+            <option value="Customer">Customer</option>
+            <option value="Employee">Employee </option>
 
             <i class="fas fa-check-circle"></i>
             <i class="fas fa-exclamation-circle"></i>
@@ -128,7 +128,7 @@
             Already have an account?<a style="color:#6b1a1a;" href="controller?action=view-login">Log In</a>
         </div>
         <div style="color:#fff;" class="d-flex justify-content-center">
-            <a style="color:#6b1a1a;" href="#">Return Home</a>
+            <a style="color:#6b1a1a;" href="controller?action=home">Return Home</a>
         </div>
     </div>
 </form>
