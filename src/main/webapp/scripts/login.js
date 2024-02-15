@@ -1,9 +1,6 @@
 const form = document.querySelector('#login-form');
 const usernameInput = document.querySelector('#username');
-// const emailInput = document.querySelector('#email');
 const passwordInput = document.querySelector('#password');
-
-
 form.addEventListener('submit', (event) => {
 
     validateForm();
@@ -29,7 +26,7 @@ function isFormValid() {
 
 function validateForm() {
 
-    USERNAME
+    // USERNAME
     if (usernameInput.value.trim() == '') {
         setError(usernameInput, 'Username cant be empty');
     } else if (usernameInput.value.trim().length < 5 || usernameInput.value.trim().length > 15) {
@@ -37,16 +34,6 @@ function validateForm() {
     } else {
         setSuccess(usernameInput);
     }
-
-
-    // //EMAIL
-    // if (emailInput.value.trim() == '') {
-    //     setError(emailInput, 'Please Provide an Email Address');
-    // } else if (isEmailValid(emailInput.value)) {
-    //     setSuccess(emailInput);
-    // } else {
-    //     setError(emailInput, 'Provide valid email address');
-    // }
 
     //Password Checker which checks the password for many different cases
     if (passwordInput.value.trim() == '') {

@@ -29,18 +29,18 @@
         color: rgb(243, 74, 74);
         font-weight: bold;
         position: absolute;
-        bottom: 25px;
-        margin-top: 50px;
-        font-size: 15px;
+        top: 165px;
+        margin-bottom: 0;
+        font-size: 13.5px;
     }
 
     .s-success {
         color: rgb(138, 255, 64);
         font-weight: bold;
         position: absolute;
-        bottom: 25px;
-        margin-top: 50px;
-        font-size: 15px;
+        top: 165px;
+        margin-bottom: 0;
+        font-size: 13.5px;
     }
     body {
         display: flex;
@@ -59,8 +59,8 @@
         <div class="s-success">${sessionScope.successMsg}</div>
     </c:if>
 
-    <c:if test="${not empty sessionScope.errorMsg}">
-        <div class="s-error">${sessionScope.errorMsg}</div>
+    <c:if test="${not empty sessionScope.errorMessage}">
+        <div class="s-error">${sessionScope.errorMessage}</div>
     </c:if>
     <div class="title" style="text-align: center;">
         <h2>Login Here</h2>
@@ -88,7 +88,7 @@
             Haven't got an account?<a style="color:#6b1a1a;" href="controller?action=view-register">Register</a>
         </div>
         <div style="color:#fff;" class="d-flex justify-content-center">
-            <a style="color:#6b1a1a;" href="#">Return Home</a>
+            <a style="color:#6b1a1a;" href="controller?action=home">Return Home</a>
         </div>
     </div>
 </form>
