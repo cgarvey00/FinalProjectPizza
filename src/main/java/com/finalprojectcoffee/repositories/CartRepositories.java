@@ -83,6 +83,7 @@ public class CartRepositories implements CartRepositoriesInterface {
             Cart cartItem = entityManager.find(Cart.class, cartId);
             if (cartItem != null) {
                 cartItem.setQuantity(quantity);
+                entityManager.merge(cartItem);
             }
 
             entityManager.getTransaction().commit();
@@ -93,6 +94,7 @@ public class CartRepositories implements CartRepositoriesInterface {
             entityManager.close();
         }
     }
+
 
     @Override
     public List<Cart> getCartItems(int userId) {
