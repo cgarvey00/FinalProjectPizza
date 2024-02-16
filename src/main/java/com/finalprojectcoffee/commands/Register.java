@@ -5,7 +5,6 @@ import com.finalprojectcoffee.repositories.UserRepositories;
 import com.finalprojectcoffee.utils.EmailUtil;
 import com.finalprojectcoffee.utils.JBCriptUtil;
 import com.finalprojectcoffee.utils.PhoneNumberUtil;
-import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -34,35 +33,28 @@ public class Register implements Command{
         String userType = request.getParameter("userType");
 
         if(username != null && !username.isEmpty() && password != null && !password.isEmpty() && passwordConfirmation != null && !passwordConfirmation.isEmpty() && email != null && !email.isEmpty() && phoneNumber != null && !phoneNumber.isEmpty()){
-            EntityManager entityManager = factory.createEntityManager();
-
             try {
                 UserRepositories userRep = new UserRepositories(factory);
                 User user = userRep.findUserByUsername(username);
 
                 if(user != null){
                     session.setAttribute("uMsg", "User already exists");
-                    return "register.jsp";
                 }
 
                 if(!JBCriptUtil.validatePassword(password)){
                     session.setAttribute("pwvMsg", "Password format error");
-                    return "register.jsp";
                 }
 
                 if(!password.equals(passwordConfirmation)){
                     session.setAttribute("pwcMsg", "Password inconsistency");
-                    return "register.jsp";
                 }
 
                 if(!EmailUtil.validateEmail(email)){
                     session.setAttribute("eMsg", "Email format error");
-                    return "register.jsp";
                 }
 
                 if(!PhoneNumberUtil.validationPhoneNumber(phoneNumber)){
                     session.setAttribute("pnMsg", "Phone number format error");
-                    return "register.jsp";
                 }
 
                 password = JBCriptUtil.getHashedPw(password);
@@ -70,13 +62,12 @@ public class Register implements Command{
                 Boolean isAdded = userRep.addUser(newUser);
                 if(isAdded){
                     session.setAttribute("successMsg", "Registration successful");
-                    return "login.jsp";
+                    terminus = "login.jsp";
                 } else {
                     session.setAttribute("errorMsg", "Failed to register user");
-                    return "register.jsp";
                 }
-            } finally {
-                entityManager.close();
+            } catch (Exception e){
+                System.err.println("An Exception occurred " + e.getMessage());
             }
         }
         return terminus;

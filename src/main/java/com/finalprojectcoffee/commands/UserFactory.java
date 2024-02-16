@@ -8,10 +8,10 @@ public class UserFactory {
 
     public static User createUser(String userType, String username, String password, String email, String phoneNumber) {
         switch (userType) {
-            case "Customer":
+            case "customer":
                 return new Customer(username, password, email, phoneNumber);
 
-            case "Employee":
+            case "employee":
                 return new Employee(username, password, email, phoneNumber);
 
             default:

@@ -4,9 +4,6 @@ import jakarta.persistence.EntityManagerFactory;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
-import java.net.http.HttpRequest;
-import java.net.http.HttpResponse;
-
 public class CommandFactory {
     public static Command getCommand(String action, HttpServletRequest request, HttpServletResponse response, EntityManagerFactory factory) {
         Command command = null;
@@ -30,6 +27,9 @@ public class CommandFactory {
                     break;
                 case "view-menu":
                     command = new ViewMenu(request, response, factory);
+                    break;
+                case "update-user-profile":
+                    command = new UpdateUserProfile(request, response, factory);
                     break;
                 default:
                     break;

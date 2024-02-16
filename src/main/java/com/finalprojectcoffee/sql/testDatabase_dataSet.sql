@@ -1,6 +1,6 @@
 USE testpizzashop;
 
-INSERT INTO `users` (`id`, `username`, `password`, `phone_number`, `email`, `image`,`user_type`) VALUES
+INSERT INTO `users` (`id`, `username`, `password`, `phone_number`, `email`, `image`,`type`) VALUES
 (1, 'cookregina', '_IfkP$*t@4', '311-325-1356', 'aguilarsara@hotmail.com', NULL, 'Customer'),
 (2, 'joseph40', 'kDk3(mDr_5', '+1-442-410-1111x483', 'peter71@perez.org', NULL, 'Employee'),
 (3, 'sherriryan', '$8Ma7AGyZj', '(842)795-0469', 'longkyle@smith-white.org', NULL, 'Customer'),
@@ -31,3 +31,4 @@ INSERT INTO `employees` (`id`, `salary`) VALUES
 INSERT INTO `products` (`id`, `name`, `category`, `details`, `price`, `stock`, `image`)
 VALUES (1, 'Pepperoni Deluxe', 'Pizzas', 'Pepperoni and Cheese 10`', 5.99, 100, 'pizza1.jpg'),
        (2, 'Pepperoni Family Meal Deal', 'Meal_Deals', '5 Pizzas and Kids Meal Included', 18, 100, 'mealdeal.png');
+

@@ -7,7 +7,7 @@ import java.util.Objects;
 @Entity
 @Table(name = "users")
 @Inheritance(strategy = InheritanceType.JOINED)
-@DiscriminatorColumn(name = "user_type", discriminatorType = DiscriminatorType.STRING)
+@DiscriminatorColumn(name = "type", discriminatorType = DiscriminatorType.STRING)
 public class User {
     @Id
     @Column(name = "id", nullable = false)

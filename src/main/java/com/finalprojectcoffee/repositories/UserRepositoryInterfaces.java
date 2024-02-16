@@ -11,6 +11,6 @@ public interface UserRepositoryInterfaces {
     User findUserByUsernamePassword(String username, String password);
     Boolean addUser(User user);
     Boolean updateUser(int userId, String password, String phoneNumber, String email, String image);
-
     Boolean deleteUser(int userId);
+    Boolean updateAddress(int userId, String street, String town, String county, String eirCode);
 }

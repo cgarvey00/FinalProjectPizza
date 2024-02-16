@@ -1,5 +1,6 @@
 package com.finalprojectcoffee.repositories;
 
+import com.finalprojectcoffee.entities.Address;
 import com.finalprojectcoffee.entities.User;
 import jakarta.persistence.*;
 
@@ -20,8 +21,7 @@ public class UserRepositories implements UserRepositoryInterfaces {
     public User findUserById(int userId) {
         EntityManager entityManager = factory.createEntityManager();
         try {
-            User user = entityManager.find(User.class,userId);
-            return user;
+            return entityManager.find(User.class,userId);
         } catch (Exception e) {
             System.err.println("An Exception occurred while searching " + e.getMessage());
             return null;
@@ -37,12 +37,7 @@ public class UserRepositories implements UserRepositoryInterfaces {
         try {
             Query query =entityManager.createQuery("SELECT u From User u Where u.username = :username");
             query.setParameter("username",username);
-            User user = (User) query.getSingleResult();
-            if(user != null){
-                return user;
-            } else {
-                return null;
-            }
+            return (User) query.getSingleResult();
         } catch (Exception e) {
             System.err.println("An Exception occurred while searching " + e.getMessage());
             return null;
@@ -74,11 +69,7 @@ public class UserRepositories implements UserRepositoryInterfaces {
             query.setParameter("username",username);
             query.setParameter("password",password);
             User user = (User)query.getSingleResult();
-            if(user != null){
-                return user;
-            } else {
-                return null;
-            }
+            return user;
         } catch (Exception e) {
             System.err.println("An Exception occurred while searching " + e.getMessage());
             return null;
@@ -151,6 +142,34 @@ public class UserRepositories implements UserRepositoryInterfaces {
             }
         } catch (PersistenceException e) {
             System.err.println("A PersistenceException occurred while removing" + e.getMessage());
+            transaction.rollback();
+            return false;
+        } finally {
+            entityManager.close();
+        }
+    }
+
+    @Override
+    public Boolean updateAddress(int userId, String street, String town, String county, String eirCode) {
+        EntityManager entityManager = factory.createEntityManager();
+        EntityTransaction transaction = entityManager.getTransaction();
+
+        try {
+            transaction.begin();
+            User user = entityManager.find(User.class, userId);
+
+            Address address = new Address();
+            address.setUser(user);
+            address.setStreet(street);
+            address.setTown(town);
+            address.setCounty(county);
+            address.setEirCode(eirCode);
+
+            entityManager.merge(address);
+            transaction.commit();
+            return true;
+        } catch (PersistenceException e) {
+            System.err.println("A PersistenceException occurred while merging: " + e.getMessage());
             transaction.rollback();
             return false;
         } finally {

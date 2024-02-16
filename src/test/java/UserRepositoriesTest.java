@@ -1,3 +1,4 @@
+import com.finalprojectcoffee.entities.Address;
 import com.finalprojectcoffee.entities.Customer;
 import com.finalprojectcoffee.entities.Employee;
 import com.finalprojectcoffee.entities.User;
@@ -63,8 +64,8 @@ public class UserRepositoriesTest {
 
     @Test
     public void updateUserTest(){
-        Boolean epectedReuslt = userRep.updateUser(2,"kDk3(etEr_5","+1-442-410-1231x3","wef234@outlook.com",null);
-        assertTrue(epectedReuslt);
+        Boolean expectedResult = userRep.updateUser(2,"kDk3(etEr_5","+1-442-410-1231x3","wef234@outlook.com",null);
+        assertTrue(expectedResult);
     }
 
     @Test
@@ -73,5 +74,11 @@ public class UserRepositoriesTest {
         assertTrue(expectedResult);
         Boolean notExistResult = userRep.deleteUser(15);
         assertFalse(notExistResult);
+    }
+
+    @Test
+    public void updateAddressTest(){
+        Boolean actualResult = userRep.updateAddress(1, "Dublin Road", "Dundalk", "Louth", "AD983D");
+        assertTrue(actualResult);
     }
 }
