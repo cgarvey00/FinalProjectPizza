@@ -6,7 +6,6 @@ import java.util.Objects;
 
 @Entity
 @Table(name = "customers")
-@DiscriminatorValue("Customer")
 public class Customer extends User{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -20,13 +19,12 @@ public class Customer extends User{
 
     }
 
-    public Customer(String username, String password, String phoneNumber, String email) {
-        super(username, password, phoneNumber, email);
+    public Customer(String username, String password, String phoneNumber, String email,String type) {
+        super(username, password, phoneNumber, email,type);
     }
 
-    public Customer(int id, String username, String password, String phoneNumber, String email, String image, int id1, Integer loyaltyPoints) {
-        super(id, username, password, phoneNumber, email, image);
-        this.id = id1;
+    public Customer(int id, String username, String password, String phoneNumber, String email, String image, String type,Integer loyaltyPoints) {
+        super(id, username, password, phoneNumber, email, image,type);
         this.loyaltyPoints = loyaltyPoints;
     }
 

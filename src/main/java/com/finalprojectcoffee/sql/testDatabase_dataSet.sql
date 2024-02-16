@@ -14,16 +14,20 @@ INSERT INTO `users` (`id`, `username`, `password`, `phone_number`, `email`, `ima
 
 
 
-INSERT INTO `customers` (`id`, `user_id`, `loyalty_points`) VALUES
-(1, 1, 89),
-(2, 3, 786),
-(3, 5, 317),
-(4, 7, 763),
-(5, 9, 589);
+INSERT INTO `customers` (`id`, `loyalty_points`) VALUES
+(1, 89),
+(3, 786),
+(5, 317),
+(7, 763),
+(9, 589);
 
-INSERT INTO `employees` (`id`, `user_id`, `salary`, `fine`) VALUES
-(1, 2, 43694.26, 305.72),
-(2, 4, 32659.36, 470.78),
-(3, 6, 52066.96, 434.37),
-(4, 8, 53275.26, 269.07),
-(5, 10, 34917.29, 316.91);
+INSERT INTO `employees` (`id`, `salary`) VALUES
+(2, 43694.26),
+(4, 32659.36),
+(6, 52066.96),
+(8, 53275.26),
+(10, 34917.29);
+
+INSERT INTO `products` (`id`, `name`, `category`, `details`, `price`, `stock`, `image`)
+VALUES (1, 'Pepperoni Deluxe', 'Pizzas', 'Pepperoni and Cheese 10`', 5.99, 100, 'pizza1.jpg'),
+       (2, 'Pepperoni Family Meal Deal', 'Meal_Deals', '5 Pizzas and Kids Meal Included', 18, 100, 'mealdeal.png');

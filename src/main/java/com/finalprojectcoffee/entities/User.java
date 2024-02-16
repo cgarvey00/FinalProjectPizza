@@ -7,44 +7,59 @@ import java.util.Objects;
 @Entity
 @Table(name = "users")
 @Inheritance(strategy = InheritanceType.JOINED)
-@DiscriminatorColumn(name = "user_type", discriminatorType = DiscriminatorType.STRING)
+@DiscriminatorColumn(name = "type", discriminatorType = DiscriminatorType.STRING)
 public class User {
     @Id
     @Column(name = "id", nullable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @Column(name = "username")
+    @Column(name = "username", nullable = false)
     private String username;
 
-    @Column(name = "password")
+    @Column(name = "password", nullable = false)
     private String password;
 
-    @Column(name = "phone_number")
+    @Column(name = "phone_number", nullable = false)
     private String phoneNumber;
 
-    @Column(name = "email")
+    @Column(name = "email", nullable = false)
     private String email;
 
     @Column(name = "image")
     private String image;
+
+    @Column(name = "type", nullable = false)
+    private String type;
+
     public User() {
     }
 
-    public User(String username, String password, String phoneNumber, String email) {
+    public User(String username, String password, String phoneNumber, String email,String type) {
         this.username = username;
         this.password = password;
         this.phoneNumber = phoneNumber;
         this.email = email;
+        this.type=type;
     }
 
-    public User(int id, String username, String password, String phoneNumber, String email, String image) {
+    public User(String username, String password, String phoneNumber, String email, String image,String type) {
+        this.username = username;
+        this.password = password;
+        this.phoneNumber = phoneNumber;
+        this.email = email;
+        this.image = image;
+        this.type=type;
+    }
+
+    public User(int id, String username, String password, String phoneNumber, String email, String image,String type) {
         this.id = id;
         this.username = username;
         this.password = password;
         this.phoneNumber = phoneNumber;
         this.email = email;
         this.image = image;
+        this.type=type;
     }
     public int getId() {
         return id;
@@ -94,6 +109,14 @@ public class User {
         this.image = image;
     }
 
+    public String getType() {
+        return image;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
 
     @Override
     public String toString() {
@@ -104,6 +127,7 @@ public class User {
                 ", phoneNumber='" + phoneNumber + '\'' +
                 ", email='" + email + '\'' +
                 ", image='" + image + '\'' +
+                ", type='" + type + '\'' +
                 '}';
     }
 

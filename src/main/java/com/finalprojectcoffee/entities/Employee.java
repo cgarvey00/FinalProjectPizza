@@ -6,42 +6,23 @@ import java.util.Objects;
 
 @Entity
 @Table(name = "employees")
+@DiscriminatorColumn(name="type",discriminatorType = DiscriminatorType.STRING)
 @DiscriminatorValue("Employee")
 public class Employee extends User {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id", nullable = false)
-    private int id;
-
     @Column(name = "salary")
     private Float salary;
-
-    @Column(name = "fine")
-    private Float fine;
 
     public Employee() {
 
     }
 
-    public Employee(String username, String password, String phoneNumber, String email) {
-        super(username, password, phoneNumber, email);
+    public Employee(String username, String password, String phoneNumber, String email,String type) {
+        super(username, password, phoneNumber, email,type);
     }
 
-    public Employee(int id, String username, String password, String phoneNumber, String email, String image, int id1, Float salary, Float fine) {
-        super(id, username, password, phoneNumber, email, image);
-        this.id = id1;
+    public Employee(String username, String password, String phoneNumber, String email, String image,String type, Float salary) {
+        super(username, password, phoneNumber, email, image,type);
         this.salary = salary;
-        this.fine = fine;
-    }
-
-    @Override
-    public int getId() {
-        return id;
-    }
-
-    @Override
-    public void setId(int id) {
-        this.id = id;
     }
 
     public Float getSalary() {
@@ -52,34 +33,11 @@ public class Employee extends User {
         this.salary = salary;
     }
 
-    public Float getFine() {
-        return fine;
-    }
-
-    public void setFine(Float fine) {
-        this.fine = fine;
-    }
-
     @Override
     public String toString() {
         return "Employee{" +
-                "id=" + id +
-                ", salary=" + salary +
-                ", fine=" + fine +
+                "salary=" + salary +
                 "} " + super.toString();
     }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        if (!super.equals(o)) return false;
-        Employee employee = (Employee) o;
-        return id == employee.id;
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(super.hashCode(), id);
-    }
 }
+

@@ -35,7 +35,7 @@
             <a href="#" class="logo mr-auto"> <i class="fa-solid fa-pizza-slice"></i> Pizza Shop </a>
 
             <nav class="nav">
-                <a href="#">Home</a>
+                <a href="controller?action=home">Home</a>
                 <a href="controller?action=view-login">Login</a>
                 <a href="controller?action=view-register">Register</a>
             </nav>
@@ -48,7 +48,7 @@
 <!-- home section starts  -->
 <br><br><br><br><br><br><br><br><br><br><br><br>
 <div class="show-products" id="products">
-    <h2>View Products On Menu</h2>
+    <h1 style="text-align: center;">View Products On Menu</h1>
     <div class="box-container">
         <%
             List<Product> productList = (List<Product>) request.getSession().getAttribute("productList");
@@ -80,6 +80,7 @@
                         <input type="number" name="qty" style="font-size:15px;" required class="box" min="0" max="40" placeholder="enter quantity" value="1">
                     </label>
                     <button type="submit" name="add-to-cart" class="cart-btn">Add to Cart</button>
+
                 </div>
             </div>
         </form>
