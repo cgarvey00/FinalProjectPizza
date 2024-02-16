@@ -1,60 +1,58 @@
 package com.finalprojectcoffee.entities;
-import jakarta.persistence.Table;
 
 import jakarta.persistence.*;
+
 import java.util.Date;
 
 @Entity
 @Table(name = "review")
 public class Review {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
-    private Long id;
+    private int id;
 
-    @Column(name = "user_id", nullable = false)
-    private Long userId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")
+    private User user;
 
-    @Lob
-    @Column(name = "comment", nullable = false, length = 500)
-    private byte[] comment;
+    @Column(name = "comment")
+    private String comment;
 
-    @Column(name = "comment_date", nullable = false)
-    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "comment_date")
+    @Temporal(TemporalType.DATE)
     private Date commentDate;
-
 
     public Review() {
     }
 
-    public Review(Long userId, byte[] comment) {
-        this.userId = userId;
+    public Review(User user, String comment, Date commentDate) {
+        this.user = user;
         this.comment = comment;
-        this.commentDate = new Date();
+        this.commentDate = commentDate;
     }
 
-    public Long getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(int id) {
         this.id = id;
     }
 
-    public Long getUserId() {
-        return userId;
+    public User getUser() {
+        return user;
     }
 
-    public void setUserId(Long userId) {
-        this.userId = userId;
+    public void setUser(User user) {
+        this.user = user;
     }
 
-    public byte[] getComment() {
+    public String getComment() {
         return comment;
     }
 
-    public void setComment(byte[] comment) {
+    public void setComment(String comment) {
         this.comment = comment;
     }
 
@@ -66,5 +64,3 @@ public class Review {
         this.commentDate = commentDate;
     }
 }
-
-

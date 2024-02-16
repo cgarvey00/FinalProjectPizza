@@ -113,8 +113,8 @@
         <label style="color:#fff;" for="usertype">User Type</label>
         <select name="userType" id="usertype" class="required form-control form-control-lg"
                 onchange="enableSubmit()">
-            <option value="customers">Customer</option>
-            <option value="employees">Employee </option>
+            <option value="Customer">Customer</option>
+            <option value="Employee">Employee </option>
 
             <i class="fas fa-check-circle"></i>
             <i class="fas fa-exclamation-circle"></i>
@@ -125,10 +125,10 @@
     <br><br> <br>
     <div class="card-footer">
         <div style="color:#fff;" class="d-flex justify-content-center links">
-            Already have an account?<a style="color:#6b1a1a;" href="show-login.html">Log In</a>
+            Already have an account?<a style="color:#6b1a1a;" href="controller?action=view-login">Log In</a>
         </div>
         <div style="color:#fff;" class="d-flex justify-content-center">
-            <a style="color:#6b1a1a;" href="#">Return Home</a>
+            <a style="color:#6b1a1a;" href="controller?action=home">Return Home</a>
         </div>
     </div>
 </form>

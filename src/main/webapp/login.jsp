@@ -1,5 +1,6 @@
 <%@page contentType="text/html" pageEncoding="UTF-8" %>
-<html>
+<!DOCTYPE html>
+<html lang="en">
 
 <head>
     <meta charset="UTF-8">
@@ -7,96 +8,91 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login</title>
     <!-- font awesome cdn link  -->
-    <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
-    <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
-    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
-          integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet"
           integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
     <!-- font awesome cdn link  -->
-    <!--Fontawesome CDN-->
-    <link rel="icon" type="image/x-icon" href="${pageContext.request.contextPath}/images/favicon.ico">
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css"
-          integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
-    <!-- custom css file link  -->
-    <!--Custom styles-->
-    <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/stylesheets/login.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/stylesheets/login.css">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"
+          integrity="sha512-Fo3rlrZj/k7ujTnHg4CGR2D7kSs0v4LLanw2qksYuRlEzO+tcaEPQogQ0KaoGN26/zrn20ImR1DfuLWnOo7aBA=="
+          crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+    <script src="https://kit.fontawesome.com/2bbac3a66c.js" crossorigin="anonymous"></script>
 </head>
 
 <body>
 <style>
-    .error {
-        position: absolute;
-        bottom: 45px;
-        color: rgb(186, 216, 255);
+    .s-error {
+        color: rgb(243, 74, 74);
         font-weight: bold;
-        font-size: 14px;
+        position: absolute;
+        top: 165px;
+        margin-bottom: 0;
+        font-size: 13.5px;
     }
 
-    html,
+    .s-success {
+        color: rgb(138, 255, 64);
+        font-weight: bold;
+        position: absolute;
+        top: 165px;
+        margin-bottom: 0;
+        font-size: 13.5px;
+    }
     body {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+        background-color: rgb(0, 0, 0);
         background-image: url('${pageContext.request.contextPath}/images/login.jpg');
         background-size: cover;
         background-repeat: no-repeat;
-        background-position: center;
-        height: 100%;
-        font-family: 'Numans', sans-serif;
     }
 </style>
-<section class="vh-100 gradient-custom">
-    <div class="container py-500 h-100">
-        <div class="row d-flex justify-content-center align-items-center h-140">
-            <div class="col-12 col-md-10 col-lg-6 col-xl-5">
-                <div class="card-body p-5 text-center">
-                    <div class="mb-md-5 mt-md-4 pb-5">
-                        <div class="d-flex justify-content-center h-50">
-                            <div class="card  py-100 h-20">
-                                <div class="card-header">
-                                    <h3>Login</h3>
-                                    <div class="card-body">
-                                        <form action="controller" method="post">
-                                            <input type="hidden" name="action" value="login">
-                                            <div class="input-group form-group">
-                                                <c:if test="${not empty sessionScope.errorMessage}">
-                                                    <div class="error">${sessionScope.pnmsg}</div>
-                                                </c:if>
-                                                <div class="input-group-prepend">
-                                                    <span class="input-group-text"><i class="fas fa-user"></i></span>
-                                                </div>
-                                                <input type="text" class="required form-control "
-                                                       onkeyup="enableSubmit()" name="username"
-                                                       placeholder="Sample Username">
-                                            </div>
-                                            <div class="input-group form-group">
-                                                <div class="input-group-prepend">
-                                                    <span class="input-group-text"><i class="fas fa-key"></i></span>
-                                                </div>
-                                                <input type="password" name="password" class="required form-control"
-                                                       onkeyup="enableSubmit()" placeholder="Password">
-                                            </div>
-                                            <div class="form-group">
-                                                <input type="submit" value="Login" disabled name="login"
-                                                       class="btn float-right login_btn">
-                                            </div>
-                                        </form>
+<form id="login-form" action="controller" method="POST">
+    <input type="hidden" name="action" value="login">
+    <c:if test="${not empty sessionScope.successMsg}">
+        <div class="s-success">${sessionScope.successMsg}</div>
+    </c:if>
 
-                                    </div>
-                                    <div class="card-footer">
-                                        <div class="d-flex justify-content-center links">
-                                            Don't have an account?<a href="controller?action=view-register">Sign Up</a>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+    <c:if test="${not empty sessionScope.errorMessage}">
+        <div class="s-error">${sessionScope.errorMessage}</div>
+    </c:if>
+    <div class="title" style="text-align: center;">
+        <h2>Login Here</h2>
+    </div>
+    <!-- USERNAME -->
+    <div class="input-group">
+        <label for="username">Username</label>
+        <input type="text" id="username" placeholder="Username" name="username">
+        <i class="fas fa-check-circle"></i>
+        <i class="fas fa-exclamation-circle"></i>
+        <p>Error Message</p>
+    </div>
+    <!-- PASSWORD -->
+    <div class="input-group">
+        <label for="password">Password</label>
+        <input type="password" id="password" placeholder="Password" name="password">
+        <i class="fas fa-check-circle"></i>
+        <i class="fas fa-exclamation-circle"></i>
+        <p>Error Message</p>
+    </div>
+    <button type="submit" name="login" class="btn">Login</button>
+    <br><br> <br>
+    <div class="card-footer">
+        <div style="color:#fff;" class="d-flex justify-content-center links">
+            Haven't got an account?<a style="color:#6b1a1a;" href="controller?action=view-register">Register</a>
+        </div>
+        <div style="color:#fff;" class="d-flex justify-content-center">
+            <a style="color:#6b1a1a;" href="controller?action=home">Return Home</a>
         </div>
     </div>
-</section>
+</form>
 </body>
-<script src="${pageContext.request.contextPath}/scripts/script.js" type="text/javascript"></script>
+<script src="${pageContext.request.contextPath}/scripts/login.js" type="text/javascript"></script>
 
 </html>
