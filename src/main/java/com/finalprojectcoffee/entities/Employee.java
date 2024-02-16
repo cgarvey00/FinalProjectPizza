@@ -2,11 +2,8 @@ package com.finalprojectcoffee.entities;
 
 import jakarta.persistence.*;
 
-import java.util.Objects;
-
 @Entity
 @Table(name = "employees")
-@DiscriminatorColumn(name="type",discriminatorType = DiscriminatorType.STRING)
 @DiscriminatorValue("Employee")
 public class Employee extends User {
     @Column(name = "salary")
@@ -16,12 +13,17 @@ public class Employee extends User {
 
     }
 
-    public Employee(String username, String password, String phoneNumber, String email,String type) {
-        super(username, password, phoneNumber, email,type);
+    public Employee(String username, String password, String phoneNumber, String email) {
+        super(username, password, phoneNumber, email);
     }
 
-    public Employee(String username, String password, String phoneNumber, String email, String image,String type, Float salary) {
-        super(username, password, phoneNumber, email, image,type);
+    public Employee(String username, String password, String phoneNumber, String email, Float salary) {
+        super(username, password, phoneNumber, email);
+        this.salary = salary;
+    }
+
+    public Employee(int id, String username, String password, String phoneNumber, String email, String image, Float salary) {
+        super(id, username, password, phoneNumber, email, image);
         this.salary = salary;
     }
 

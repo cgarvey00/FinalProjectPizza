@@ -6,12 +6,8 @@ import java.util.Objects;
 
 @Entity
 @Table(name = "customers")
+@DiscriminatorValue("Customer")
 public class Customer extends User{
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id", nullable = false)
-    private int id;
-
     @Column(name = "loyalty_points")
     private Integer loyaltyPoints;
 
@@ -19,23 +15,13 @@ public class Customer extends User{
 
     }
 
-    public Customer(String username, String password, String phoneNumber, String email,String type) {
-        super(username, password, phoneNumber, email,type);
+    public Customer(String username, String password, String phoneNumber, String email) {
+        super(username, password, phoneNumber, email);
     }
 
-    public Customer(int id, String username, String password, String phoneNumber, String email, String image, String type,Integer loyaltyPoints) {
-        super(id, username, password, phoneNumber, email, image,type);
+    public Customer(int id, String username, String password, String phoneNumber, String email, String image, Integer loyaltyPoints) {
+        super(id, username, password, phoneNumber, email, image);
         this.loyaltyPoints = loyaltyPoints;
-    }
-
-    @Override
-    public int getId() {
-        return id;
-    }
-
-    @Override
-    public void setId(int id) {
-        this.id = id;
     }
 
     public Integer getLoyaltyPoints() {
@@ -49,22 +35,7 @@ public class Customer extends User{
     @Override
     public String toString() {
         return "Customer{" +
-                "id=" + id +
-                ", loyaltyPoints=" + loyaltyPoints +
+                "loyaltyPoints=" + loyaltyPoints +
                 "} " + super.toString();
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        if (!super.equals(o)) return false;
-        Customer customer = (Customer) o;
-        return id == customer.id;
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(super.hashCode(), id);
     }
 }

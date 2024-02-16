@@ -10,7 +10,7 @@ CREATE TABLE `users`
     `phone_number` VARCHAR(255) NOT NULL,
     `email`        VARCHAR(255) NOT NULL,
     `image`        VARCHAR(255),
-    `type`         VARCHAR(255) NOT NULL
+    `user_type`    VARCHAR(255) NOT NULL
 );
 
 CREATE TABLE `customers`

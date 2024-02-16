@@ -38,33 +38,32 @@ public class Register implements Command{
                 User user = userRep.findUserByUsername(username);
 
                 if(user != null){
-                    session.setAttribute("uMsg", "User already exists");
+                    session.setAttribute("umsg", "User already exists");
                 }
 
                 if(!JBCriptUtil.validatePassword(password)){
-                    session.setAttribute("pwvMsg", "Password format error");
+                    session.setAttribute("pwvmsg", "Password format error");
                 }
 
                 if(!password.equals(passwordConfirmation)){
-                    session.setAttribute("pwcMsg", "Password inconsistency");
+                    session.setAttribute("pwcmsg", "Password inconsistency");
                 }
 
                 if(!EmailUtil.validateEmail(email)){
-                    session.setAttribute("eMsg", "Email format error");
+                    session.setAttribute("emsg", "Email format error");
                 }
 
                 if(!PhoneNumberUtil.validationPhoneNumber(phoneNumber)){
-                    session.setAttribute("pnMsg", "Phone number format error");
+                    session.setAttribute("pnmsg", "Phone number format error");
                 }
 
                 password = JBCriptUtil.getHashedPw(password);
-                User newUser = UserFactory.createUser(userType, username, password, email, phoneNumber);
-                Boolean isAdded = userRep.addUser(newUser);
+                Boolean isAdded = userRep.addUser(UserFactory.createUser(userType, username, password, phoneNumber, email));
                 if(isAdded){
-                    session.setAttribute("successMsg", "Registration successful");
+                    session.setAttribute("successmsg", "Registration successful");
                     terminus = "login.jsp";
                 } else {
-                    session.setAttribute("errorMsg", "Failed to register user");
+                    session.setAttribute("errormsg", "Failed to register user");
                 }
             } catch (Exception e){
                 System.err.println("An Exception occurred " + e.getMessage());

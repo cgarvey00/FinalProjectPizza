@@ -1,6 +1,6 @@
 USE testpizzashop;
 
-INSERT INTO `users` (`id`, `username`, `password`, `phone_number`, `email`, `image`,`type`) VALUES
+INSERT INTO `users` (`id`, `username`, `password`, `phone_number`, `email`, `image`,`user_type`) VALUES
 (1, 'cookregina', '_IfkP$*t@4', '311-325-1356', 'aguilarsara@hotmail.com', NULL, 'Customer'),
 (2, 'joseph40', 'kDk3(mDr_5', '+1-442-410-1111x483', 'peter71@perez.org', NULL, 'Employee'),
 (3, 'sherriryan', '$8Ma7AGyZj', '(842)795-0469', 'longkyle@smith-white.org', NULL, 'Customer'),

@@ -21,8 +21,6 @@
             <property name="hibernate.show_sql" value="true"/>
             <property name="hibernate.dialect" value="org.hibernate.dialect.MySQLDialect" />
             <property name="hibernate.hbm2ddl.auto" value="update"/>
-<!--            <property name="hibernate.discriminator.ignore_explicit_for_joined" value="true"/>-->
-<!--            <property name="hibernate.id.new_generator_mappings" value="false"/>-->
         </properties>
     </persistence-unit>
 
@@ -37,8 +35,6 @@
             <property name="hibernate.show_sql" value="true"/>
             <property name="hibernate.dialect" value="org.hibernate.dialect.MySQLDialect" />
             <property name="hibernate.hbm2ddl.auto" value="update"/>
-            <property name="hibernate.discriminator.ignore_explicit_for_joined" value="true"/>
-            <property name="hibernate.id.new_generator_mappings" value="false"/>
         </properties>
     </persistence-unit>
 </persistence>
