@@ -58,7 +58,8 @@ public class Register implements Command{
                 }
 
                 password = JBCriptUtil.getHashedPw(password);
-                Boolean isAdded = userRep.addUser(UserFactory.createUser(userType, username, password, phoneNumber, email));
+                User newUser = UserFactory.createUser(userType, username, password, phoneNumber, email);
+                Boolean isAdded = userRep.addUser(newUser);
                 if(isAdded){
                     session.setAttribute("successmsg", "Registration successful");
                     terminus = "login.jsp";

@@ -62,23 +62,6 @@ public class UserRepositories implements UserRepositoryInterfaces {
     }
 
     @Override
-    public User findUserByUsernamePassword(String username, String password) {
-        EntityManager entityManager = factory.createEntityManager();
-        try {
-            Query query = entityManager.createQuery("SELECT u FROM User u WHERE u.username = :username AND u.password = :password");
-            query.setParameter("username",username);
-            query.setParameter("password",password);
-            User user = (User)query.getSingleResult();
-            return user;
-        } catch (Exception e) {
-            System.err.println("An Exception occurred while searching " + e.getMessage());
-            return null;
-        } finally {
-            entityManager.close();
-        }
-    }
-
-    @Override
     public Boolean addUser(User user) {
         EntityManager entityManager = factory.createEntityManager();
         EntityTransaction transaction = entityManager.getTransaction();

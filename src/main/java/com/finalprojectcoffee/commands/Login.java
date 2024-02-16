@@ -32,7 +32,7 @@ public class Login implements Command{
 
             try {
                 UserRepositories UserRep = new UserRepositories(factory);
-                User user = UserRep.findUserByUsernamePassword(username,password);
+                User user = UserRep.findUserByUsername(username);
 
                 if(user != null){
                     if(JBCriptUtil.checkPw(user.getPassword(),password)){
