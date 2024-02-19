@@ -33,9 +33,8 @@ public class UserRepositories implements UserRepositoryInterfaces {
     @Override
     public User findUserByUsername(String username) {
         EntityManager entityManager = factory.createEntityManager();
-
         try {
-            Query query =entityManager.createQuery("SELECT u From User u Where u.username = :username");
+            Query query =entityManager.createQuery("SELECT u FROM User u WHERE u.username = :username");
             query.setParameter("username",username);
             return (User) query.getSingleResult();
         } catch (Exception e) {

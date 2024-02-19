@@ -76,17 +76,16 @@ CREATE TABLE `temp_addresses` (
 
 CREATE TABLE `orders` (
     `id` INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
-    `product_id` INT NOT NULL,
+    `cart_id` INT NOT NULL,
     `customer_id` INT NOT NULL,
-    `employee_id` INT NOT NULL,
+    `employee_id` INT,
     `temp_address_id` INT,
-    `payment_method` VARCHAR(50) NOT NULL,
-    `payment_status` ENUM('Pending','Paid') NOT NULL DEFAULT 'Pending',
-    `total_price` FLOAT DEFAULT 0.0,
+    `payment_method` VARCHAR(255) NOT NULL,
+    `status` VARCHAR(255) NOT NULL,
     `create_time` DATE,
     `update_time` DATE,
     `overdue_time` DATE,
-    FOREIGN KEY (`product_id`) REFERENCES `products`(`id`),
+    FOREIGN KEY (`cart_id`) REFERENCES `cart`(`id`),
     FOREIGN KEY (`customer_id`) REFERENCES `customers`(`id`),
     FOREIGN KEY (`employee_id`) REFERENCES `employees`(`id`),
     FOREIGN KEY (`temp_address_id`) REFERENCES `temp_addresses`(`id`)
