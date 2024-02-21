@@ -31,8 +31,16 @@ public class CommandFactory {
                 case "view-menu":
                     command = new ViewMenu(request, response, factory);
                     break;
+                case "admin-dashboard":
+                    command = new ViewDashboard(request, response, factory);
+                    break;
                 case "update-user-profile":
                     command = new UpdateUserProfile(request, response, factory);
+                    break;
+                case "Employee":
+                case "Customer":
+                case "Admin":
+                    command = new UserPage(action, request, response, factory);
                     break;
                 default:
                     break;
