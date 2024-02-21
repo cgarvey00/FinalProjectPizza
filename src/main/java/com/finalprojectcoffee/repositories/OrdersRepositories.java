@@ -79,12 +79,12 @@ public class OrdersRepositories  implements OrdersRepositoriesInterface{
     public Boolean makeOrder(int cartId, int customerId, int temporaryAddressId) {
         EntityManager entityManager = factory.createEntityManager();
         EntityTransaction transaction = entityManager.getTransaction();
+        Cart cart = entityManager.find(Cart.class, cartId);
+        Customer customer = entityManager.find(Customer.class, customerId);
 
         try {
             transaction.begin();
 
-            Cart cart = entityManager.find(Cart.class, cartId);
-            Customer customer = entityManager.find(Customer.class, customerId);
             if(customer != null && cart != null){
                 Order order = new Order();
                 order.setCart(cart);
@@ -99,6 +99,7 @@ public class OrdersRepositories  implements OrdersRepositoriesInterface{
 
                 entityManager.persist(order);
             }
+
             transaction.commit();
             return true;
         } catch (PersistenceException e) {
@@ -111,7 +112,41 @@ public class OrdersRepositories  implements OrdersRepositoriesInterface{
     }
 
     @Override
-    public Boolean acceptOrders(List<Integer> orderIds, Employee employee) {
+    public Boolean payOrder(int orderId, int customerId, double payment) {
+        EntityManager entityManager = factory.createEntityManager();
+        EntityTransaction transaction = entityManager.getTransaction();
+        Order order = entityManager.find(Order.class, orderId);
+        Customer customer = entityManager.find(Customer.class, customerId);
+        Query query = entityManager.createQuery("SELECT c FROM Cart c WHERE c.orderId = :orderId");
+        query.setParameter("orderId", orderId);
+        Cart cart = (Cart) query.getSingleResult();
+        double cost = order.getCart().getCost();
+
+        try {
+            transaction.begin();
+
+            if(customer != null && payment >= cost){
+                order.setBalance(payment - cost);
+                cart.setCost(0.0);
+                order.setPaymentStatus(Status.Paid);
+                order.setUpdateTime(LocalDateTime.now());
+            }
+
+            entityManager.merge(cart);
+            entityManager.merge(order);
+            transaction.commit();
+            return true;
+        } catch (PersistenceException e) {
+            transaction.rollback();
+            System.out.println("A PersistenceException occurred while merging: " + e.getMessage());
+            return false;
+        } finally {
+            entityManager.close();
+        }
+    }
+
+    @Override
+    public List<Order> acceptOrders(List<Integer> orderIds) {
         EntityManager entityManager = factory.createEntityManager();
         EntityTransaction transaction = entityManager.getTransaction();
         List<Order> orders = new ArrayList<>();
@@ -122,8 +157,7 @@ public class OrdersRepositories  implements OrdersRepositoriesInterface{
             for(Integer orderId : orderIds){
                 Order order = entityManager.find(Order.class, orderId);
 
-                if(order != null && order.getStatus() == Status.Pending){
-                    order.setEmployee(employee);
+                if(order != null && order.getStatus() == Status.Pending && order.getPaymentStatus() == Status.Paid){
                     order.setStatus(Status.Accepted);
                     order.setUpdateTime(LocalDateTime.now());
                     orders.add(order);
@@ -132,10 +166,78 @@ public class OrdersRepositories  implements OrdersRepositoriesInterface{
 
             entityManager.merge(orders);
             transaction.commit();
-            return true;
+            return orders;
         } catch (PersistenceException e) {
             transaction.rollback();
             System.err.println("A PersistenceException occurred while merging: " + e.getMessage());
+            return null;
+        } finally {
+            entityManager.close();
+        }
+    }
+
+    @Override
+    public List<Order> deliverOrders(List<Integer> orderIds, int employeeId) {
+        EntityManager entityManager = factory.createEntityManager();
+        EntityTransaction transaction = entityManager.getTransaction();
+        List<Order> orders = new ArrayList<>();
+        Employee employee = entityManager.find(Employee.class, employeeId);
+
+        try {
+            transaction.begin();
+
+            for(Integer orderId : orderIds){
+                Order order = entityManager.find(Order.class, orderId);
+
+                if(order != null && order.getPaymentStatus() == Status.Paid){
+                    order.setEmployee(employee);
+                    order.setStatus(Status.Delivering);
+                    order.setUpdateTime(LocalDateTime.now());
+                    orders.add(order);
+                }
+                entityManager.merge(order);
+            }
+
+            transaction.commit();
+            return orders;
+        } catch (PersistenceException e) {
+            transaction.rollback();
+            System.out.println("A PersistenceException occurred while merging: " + e.getMessage());
+            return null;
+        } finally {
+            entityManager.close();
+        }
+    }
+
+    @Override
+    public Boolean cancelOrders(List<Integer> orderIds) {
+        EntityManager  entityManager = factory.createEntityManager();
+        EntityTransaction transaction = entityManager.getTransaction();
+
+        try {
+            transaction.begin();
+
+            for(Integer orderId: orderIds){
+                Order order = entityManager.find(Order.class, orderId);
+                Query query = entityManager.createQuery("SELECT c FROM Cart c WHERE c.orderId = :orderId");
+                query.setParameter("orderId", orderId);
+                Cart cart = (Cart) query.getSingleResult();
+
+                if(order != null){
+                    order.setBalance(cart.getCost());
+                    order.setStatus(Status.Cancelled);
+                    order.setPaymentStatus(Status.Refunded);
+                    order.setUpdateTime(LocalDateTime.now());
+                }
+
+                entityManager.merge(order);
+            }
+
+            transaction.commit();
+            return true;
+        } catch (PersistenceException e) {
+            transaction.rollback();
+            System.out.println("A PersistenceException occurred while merging: " + e.getMessage());
             return false;
         } finally {
             entityManager.close();

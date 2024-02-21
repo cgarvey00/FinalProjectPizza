@@ -13,5 +13,8 @@ public interface OrdersRepositoriesInterface {
     Order findOrderByCustomer(Customer customer);
     Order findOrderByEmployee(Employee employee);
     Boolean makeOrder(int cartId, int customerId, int temporaryAddressId);
-    Boolean acceptOrders(List<Integer> orderIds, Employee employee);
+    Boolean payOrder(int orderId, int customerId, double payment);
+    List<Order> acceptOrders(List<Integer> orderIds);
+    List<Order> deliverOrders(List<Integer> orderIds, int employeeId);
+    Boolean cancelOrders(List<Integer> orderIds);
 }

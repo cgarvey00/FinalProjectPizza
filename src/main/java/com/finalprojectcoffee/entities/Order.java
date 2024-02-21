@@ -33,8 +33,14 @@ public class Order {
     @JoinColumn(name = "temp_address_id", referencedColumnName = "id")
     private TemporaryAddress temporaryAddress;
 
+    @Column(name = "balance", columnDefinition = "0.0")
+    private double balance;
     @Column(name = "payment_method", nullable = false)
     private String paymentMethod;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "payment_status", nullable = false, columnDefinition = "Pending")
+    private Enum paymentStatus;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "status", nullable = false)
@@ -52,25 +58,29 @@ public class Order {
     public Order() {
     }
 
-    public Order(Cart cart, Customer customer, Employee employee, TemporaryAddress temporaryAddress, String paymentMethod, Enum status, LocalDateTime createTime, LocalDateTime updateTime, LocalDateTime overdueTime) {
+    public Order(Cart cart, Customer customer, Employee employee, TemporaryAddress temporaryAddress, double balance, String paymentMethod, Enum paymentStatus, Enum status, LocalDateTime createTime, LocalDateTime updateTime, LocalDateTime overdueTime) {
         this.cart = cart;
         this.customer = customer;
         this.employee = employee;
         this.temporaryAddress = temporaryAddress;
+        this.balance = balance;
         this.paymentMethod = paymentMethod;
+        this.paymentStatus = paymentStatus;
         this.status = status;
         this.createTime = createTime;
         this.updateTime = updateTime;
         this.overdueTime = overdueTime;
     }
 
-    public Order(int id, Cart cart, Customer customer, Employee employee, TemporaryAddress temporaryAddress, String paymentMethod, Enum status, LocalDateTime createTime, LocalDateTime updateTime, LocalDateTime overdueTime) {
+    public Order(int id, Cart cart, Customer customer, Employee employee, TemporaryAddress temporaryAddress, double balance, String paymentMethod, Enum paymentStatus, Enum status, LocalDateTime createTime, LocalDateTime updateTime, LocalDateTime overdueTime) {
         this.id = id;
         this.cart = cart;
         this.customer = customer;
         this.employee = employee;
         this.temporaryAddress = temporaryAddress;
+        this.balance = balance;
         this.paymentMethod = paymentMethod;
+        this.paymentStatus = paymentStatus;
         this.status = status;
         this.createTime = createTime;
         this.updateTime = updateTime;
@@ -117,12 +127,28 @@ public class Order {
         this.temporaryAddress = temporaryAddress;
     }
 
+    public double getBalance() {
+        return balance;
+    }
+
+    public void setBalance(double balance) {
+        this.balance = balance;
+    }
+
     public String getPaymentMethod() {
         return paymentMethod;
     }
 
     public void setPaymentMethod(String paymentMethod) {
         this.paymentMethod = paymentMethod;
+    }
+
+    public Enum getPaymentStatus() {
+        return paymentStatus;
+    }
+
+    public void setPaymentStatus(Enum paymentStatus) {
+        this.paymentStatus = paymentStatus;
     }
 
     public Enum getStatus() {
@@ -165,7 +191,9 @@ public class Order {
                 ", customer=" + customer +
                 ", employee=" + employee +
                 ", temporaryAddress=" + temporaryAddress +
+                ", balance=" + balance +
                 ", paymentMethod='" + paymentMethod + '\'' +
+                ", paymentStatus=" + paymentStatus +
                 ", status=" + status +
                 ", createTime=" + createTime +
                 ", updateTime=" + updateTime +
