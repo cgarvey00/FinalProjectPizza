@@ -2,6 +2,8 @@ package com.finalprojectcoffee.entities;
 
 import jakarta.persistence.*;
 
+import java.util.List;
+
 @Entity
 @Table(name = "cart")
 public class Cart {
@@ -10,23 +12,25 @@ public class Cart {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private int id;
-
     @Column(name = "user_id")
     private int userId;
+    @OneToMany(mappedBy = "cart",cascade = CascadeType.ALL,orphanRemoval = true)
+    private List<CartItems> cartItems;
 
-    @Column(name = "product_id")
-    private int productId;
+    public Cart() {
 
-    @Column(name = "order_id")
-    private int orderId;
+    }
 
-    @Column(name = "cost")
-    private double cost;
+    public Cart(int id, int user_id) {
+        this.id = id;
+        this.userId = userId;
 
-    @Column(name = "quantity")
-    private int quantity;
+    }
 
+    public Cart(int userId) {
+        this.userId = userId;
 
+    }
 
     public int getId() {
         return id;
@@ -40,39 +44,8 @@ public class Cart {
         return userId;
     }
 
-    public void setUserId(int userId) {
+    public void setUserId(int id) {
         this.userId = userId;
     }
 
-    public int getProductId() {
-        return productId;
-    }
-
-    public void setProductId(int productId) {
-        this.productId = productId;
-    }
-
-    public int getOrderId() {
-        return orderId;
-    }
-
-    public void setOrderId(int orderId) {
-        this.orderId = orderId;
-    }
-
-    public double getCost() {
-        return cost;
-    }
-
-    public void setCost(double cost) {
-        this.cost = cost;
-    }
-
-    public int getQuantity() {
-        return quantity;
-    }
-
-    public void setQuantity(int quantity) {
-        this.quantity = quantity;
-    }
 }

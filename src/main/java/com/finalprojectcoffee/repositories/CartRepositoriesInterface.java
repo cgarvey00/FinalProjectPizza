@@ -1,6 +1,8 @@
 package com.finalprojectcoffee.repositories;
 
 import com.finalprojectcoffee.entities.Cart;
+import com.finalprojectcoffee.entities.CartItems;
+
 import java.util.List;
 public interface CartRepositoriesInterface {
 
@@ -14,7 +16,7 @@ public interface CartRepositoriesInterface {
     void updateQuantity(int cartId, int quantity);
 
     // Get all items in the cart for a specific user
-    List<Cart> getCartItems(int userId);
+    List<CartItems> getCartItems(int userId);
 
     // Get the total cost of items in the cart for a specific user
     double getTotalCost(int userId);

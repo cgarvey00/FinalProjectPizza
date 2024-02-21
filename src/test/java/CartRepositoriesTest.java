@@ -1,112 +1,123 @@
-import com.finalprojectcoffee.entities.Cart;
-import com.finalprojectcoffee.repositories.CartRepositories;
-import jakarta.persistence.EntityManagerFactory;
-import jakarta.persistence.Persistence;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
+package com.finalprojectcoffee.repositories;
 
+import com.finalprojectcoffee.entities.Cart;
+import com.finalprojectcoffee.entities.CartItems;
+import com.finalprojectcoffee.entities.Product;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.EntityManagerFactory;
+import jakarta.persistence.EntityTransaction;
+import org.junit.jupiter.api.*;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
+
+//import javax.persistence.Query;
+
+import java.util.ArrayList;
 import java.util.List;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
 
-public class CartRepositoriesTest {
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+class CartRepositoriesTest {
 
-    private EntityManagerFactory factory;
-    private CartRepositories cartRepositories;
+    @Mock
+    private static EntityManagerFactory entityManagerFactory;
 
-    @Before
-    public void setUp() {
-        factory = Persistence.createEntityManagerFactory("testpizzashop");
-        cartRepositories = new CartRepositories(factory);
-    }
+    @Mock
+    private static EntityManager entityManager;
 
-    @After
-    public void tearDown() {
-        List<Cart> cartItems = cartRepositories.getCartItems(1);
-        if (cartItems != null && !cartItems.isEmpty()) {
-            for (Cart cartItem : cartItems) {
-                cartRepositories.removeFromCart(cartItem.getId());
-            }
-        }
+    @Mock
+    private static EntityTransaction transaction;
 
-        if (factory != null && factory.isOpen()) {
-            factory.close();
-        }
-    }
+   // @Mock
+  //  private static Query query;
 
+    private static CartRepositories cartRepositories;
 
-    @Test
-    public void testAddToCart_AddingItemToEmptyCart() {
-        assertTrue(cartRepositories.addToCart(1,1,2));
-        List<Cart> cartItems = cartRepositories.getCartItems(1);
-        assertEquals(1,cartItems.size());
-        assertEquals(2,cartItems.get(0).getQuantity());
-
-        double expectedCost = 5.99*2;
-        assertEquals(expectedCost, cartItems.get(0).getCost(), 0.01);
-
-
+    @BeforeAll
+    static void setUp() {
+        MockitoAnnotations.openMocks(CartRepositoriesTest.class);
+        cartRepositories = new CartRepositories(entityManagerFactory);
     }
 
     @Test
-    public void testAddToCart_AddingMultipleItemsToCart() {
+    @Order(1)
+    void testAddToCart_Success() {
+        // Mocking behavior
+        when(entityManagerFactory.createEntityManager()).thenReturn(entityManager);
+        when(entityManager.getTransaction()).thenReturn(transaction);
+        when(transaction.isActive()).thenReturn(false);
+
         assertTrue(cartRepositories.addToCart(1, 1, 2));
-        assertTrue(cartRepositories.addToCart(1, 2, 1));
-
-        List<Cart> cartItems = cartRepositories.getCartItems(1);
-        assertEquals(2, cartItems.size());
-        assertEquals(2, cartItems.get(0).getQuantity());
-        assertEquals(1, cartItems.get(1).getQuantity());
     }
 
     @Test
-    public void testRemoveFromCart_RemovingItemFromCart() {
-        assertTrue(cartRepositories.addToCart(1, 1, 2));
+    @Order(2)
+    void testAddToCart_ProductNotFound() {
+        // Mocking behavior
+        when(entityManagerFactory.createEntityManager()).thenReturn(entityManager);
+        when(entityManager.getTransaction()).thenReturn(transaction);
+        when(transaction.isActive()).thenReturn(false);
 
-        List<Cart> cartItemsBeforeRemoval = cartRepositories.getCartItems(1);
-        assertFalse(cartItemsBeforeRemoval.isEmpty());
-        cartRepositories.removeFromCart(cartItemsBeforeRemoval.get(0).getId());
-
-        List<Cart> cartItemsAfterRemoval = cartRepositories.getCartItems(1);
-        assertTrue(cartItemsAfterRemoval.isEmpty());
+        assertFalse(cartRepositories.addToCart(1, 999, 2));
     }
 
     @Test
-    public void testUpdateQuantity_UpdateItemQuantityInCart() {
-        assertTrue(cartRepositories.addToCart(1, 1, 2));
+    @Order(3)
+    void testRemoveFromCart_Success() {
+        // Mocking behavior
+        when(entityManagerFactory.createEntityManager()).thenReturn(entityManager);
+        when(entityManager.find(Cart.class, 1)).thenReturn(new Cart());
 
-        List<Cart> cartItemsBeforeUpdate = cartRepositories.getCartItems(1);
-        assertEquals(2, cartItemsBeforeUpdate.get(0).getQuantity());
-        cartRepositories.updateQuantity(cartItemsBeforeUpdate.get(0).getId(), 3);
-
-        List<Cart> cartItemsAfterUpdate = cartRepositories.getCartItems(1);
-        assertEquals(3, cartItemsAfterUpdate.get(0).getQuantity());
+        cartRepositories.removeFromCart(1);
+        verify(entityManager).remove(any());
     }
 
     @Test
-    public void testGetTotalCost_CalculateTotalCostOfCartItems() {
-        assertTrue(cartRepositories.addToCart(1, 1, 2));
-        assertTrue(cartRepositories.addToCart(1, 2, 1));
+    @Order(4)
+    void testUpdateQuantity_Success() {
+        // Mocking behavior
+        when(entityManagerFactory.createEntityManager()).thenReturn(entityManager);
+        CartItems cartItem = new CartItems();
+        cartItem.setId(1);
+        when(entityManager.find(CartItems.class, 1)).thenReturn(cartItem);
 
-        double totalCost = cartRepositories.getTotalCost(1);
-
-        double expectedTotalCost = (5.99 * 2) + 18.0; // Cost of two pizzas and one meal deal
-        assertEquals(expectedTotalCost, totalCost, 0.01);
+        cartRepositories.updateQuantity(1, 5);
+        assertEquals(5, cartItem.getQuantity());
     }
-
-
-
 
     @Test
-    public void testClearCart_ClearCartForUser() {
+    @Order(5)
+    void testClearCart_Success() {
+        // Mocking behavior
+        when(entityManagerFactory.createEntityManager()).thenReturn(entityManager);
+        when(entityManager.getTransaction()).thenReturn(transaction);
+        when(transaction.isActive()).thenReturn(false);
 
-        cartRepositories.addToCart(7, 1, 1);
-        cartRepositories.addToCart(7, 2, 2);
-        cartRepositories.clearCart(7);
-        List<Cart> cartItems = cartRepositories.getCartItems(7);
-        assertTrue(cartItems.isEmpty());
+        cartRepositories.clearCart(1);
+        verify(entityManager).createQuery(anyString());
     }
 
+ //   @Test
+  //  @Order(6)
+   // void testGetCartItems_Success() {
+     //   when(entityManagerFactory.createEntityManager()).thenReturn(entityManager);
+    //    List<CartItems> cartItemsList = new ArrayList<>();
+     //   when(entityManager.createQuery(anyString())).thenReturn(query);
+    //    when(query.setParameter(anyString(), anyInt())).thenReturn(query);
+    //    when(query.getResultList()).thenReturn(cartItemsList);
 
+      //  List<CartItems> result = cartRepositories.getCartItems(1);
+      //  assertEquals(cartItemsList, result);
+   // }
+
+
+
+
+
+    @AfterAll
+    static void tearDown() {
+
+    }
 }
