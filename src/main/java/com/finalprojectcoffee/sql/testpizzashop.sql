@@ -24,6 +24,7 @@ CREATE TABLE `employees`
 (
     `id`      INT NOT NULL,
     `salary`  FLOAT(10) DEFAULT 0.0,
+    `status`  VARCHAR(255),
     FOREIGN KEY (`id`) REFERENCES `users` (`id`)
 );
 
@@ -80,7 +81,9 @@ CREATE TABLE `orders` (
     `customer_id` INT NOT NULL,
     `employee_id` INT,
     `temp_address_id` INT,
+    `balance` DOUBLE DEFAULT 0.0,
     `payment_method` VARCHAR(255) NOT NULL,
+    `payment_status` VARCHAR(255) NOT NULL DEFAULT 'Pending',
     `status` VARCHAR(255) NOT NULL,
     `create_time` DATE,
     `update_time` DATE,
