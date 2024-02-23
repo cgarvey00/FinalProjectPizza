@@ -1,6 +1,5 @@
 package com.finalprojectcoffee.repositories;
 
-import com.finalprojectcoffee.entities.Cart;
 import com.finalprojectcoffee.entities.Customer;
 import com.finalprojectcoffee.entities.Employee;
 import com.finalprojectcoffee.entities.Order;

@@ -1,8 +1,7 @@
 package com.finalprojectcoffee.repositories;
 
 import com.finalprojectcoffee.entities.Cart;
-import com.finalprojectcoffee.entities.CartItems;
-import com.finalprojectcoffee.entities.Product;
+import com.finalprojectcoffee.entities.CartItem;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.EntityTransaction;
@@ -11,9 +10,6 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 //import javax.persistence.Query;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -79,9 +75,9 @@ class CartRepositoriesTest {
     void testUpdateQuantity_Success() {
         // Mocking behavior
         when(entityManagerFactory.createEntityManager()).thenReturn(entityManager);
-        CartItems cartItem = new CartItems();
+        CartItem cartItem = new CartItem();
         cartItem.setId(1);
-        when(entityManager.find(CartItems.class, 1)).thenReturn(cartItem);
+        when(entityManager.find(CartItem.class, 1)).thenReturn(cartItem);
 
         cartRepositories.updateQuantity(1, 5);
         assertEquals(5, cartItem.getQuantity());
