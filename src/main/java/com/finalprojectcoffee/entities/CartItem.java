@@ -1,6 +1,7 @@
 package com.finalprojectcoffee.entities;
 
 import jakarta.persistence.*;
+
 import java.util.Objects;
 
 @Entity
@@ -12,22 +13,22 @@ public class CartItem {
     @Column(name = "id")
     private int id;
 
-    @ManyToOne
-    @JoinColumn(name = "cart_id", nullable = false)
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "cart_id")
     private Cart cart;
 
     @Column(name = "product_id")
     private int productId;
 
-    @Column(name = "cost")
-    private float cost;
+    @Column(name = "cost", columnDefinition = "float default 0")
+    private double cost;
 
-    @Column(name = "quantity")
+    @Column(name = "quantity", columnDefinition = "int default 0")
     private int quantity;
 
     public CartItem() {}
 
-    public CartItem(Cart cart, int productId, float cost, int quantity) {
+    public CartItem(Cart cart, int productId, double cost, int quantity) {
         this.cart = cart;
         this.productId = productId;
         this.cost = cost;
@@ -58,11 +59,11 @@ public class CartItem {
         this.productId = productId;
     }
 
-    public float getCost() {
+    public double getCost() {
         return cost;
     }
 
-    public void setCost(float cost) {
+    public void setCost(double cost) {
         this.cost = cost;
     }
 
@@ -80,7 +81,7 @@ public class CartItem {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         CartItem cartItem = (CartItem) o;
-        return id == cartItem.id && productId == cartItem.productId && Float.compare(cartItem.cost, cost) == 0 && quantity == cartItem.quantity && Objects.equals(cart, cartItem.cart);
+        return id == cartItem.id && productId == cartItem.productId && Double.compare(cartItem.cost, cost) == 0 && quantity == cartItem.quantity && Objects.equals(cart, cartItem.cart);
     }
 
     @Override

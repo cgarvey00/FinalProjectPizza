@@ -6,7 +6,7 @@ import java.util.Objects;
 
 @Entity
 @Table(name = "cart")
-public class Cart {
+public class Cart extends CartItem{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -25,7 +25,6 @@ public class Cart {
         this.userId = userId;
     }
 
-    // Getters and setters
     public int getId() {
         return id;
     }
