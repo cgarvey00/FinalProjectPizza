@@ -13,10 +13,6 @@ public class Cart {
     @Column(name = "id", nullable = false)
     private int id;
 
-    @OneToOne
-    @JoinColumn(name = "orders", nullable = false)
-    private Order order;
-
     @OneToMany(mappedBy = "carts",cascade = CascadeType.ALL,orphanRemoval = true)
     private List<CartItem> cartItems;
 
@@ -27,15 +23,13 @@ public class Cart {
 
     }
 
-    public Cart(Order order, List<CartItem> cartItems, double totalCost) {
-        this.order = order;
+    public Cart(List<CartItem> cartItems, double totalCost) {
         this.cartItems = cartItems;
         this.totalCost = totalCost;
     }
 
-    public Cart(int id, Order order, List<CartItem> cartItems, double totalCost) {
+    public Cart(int id, List<CartItem> cartItems, double totalCost) {
         this.id = id;
-        this.order = order;
         this.cartItems = cartItems;
         this.totalCost = totalCost;
     }
@@ -46,14 +40,6 @@ public class Cart {
 
     public void setId(int id) {
         this.id = id;
-    }
-
-    public Order getOrder() {
-        return order;
-    }
-
-    public void setOrder(Order order) {
-        this.order = order;
     }
 
     public List<CartItem> getCartItems() {
@@ -76,7 +62,6 @@ public class Cart {
     public String toString() {
         return "Cart{" +
                 "id=" + id +
-                ", order=" + order +
                 ", cartItems=" + cartItems +
                 ", totalCost=" + totalCost +
                 '}';

@@ -62,21 +62,20 @@ public class OrdersRepositories  implements OrdersRepositoriesInterface{
     }
 
     @Override
-    public Boolean addOrder(int cartId, int userId, int temporaryAddressId) {
+    public Boolean addOrder(int userId, int cartId, int temporaryAddressId) {
         EntityManager entityManager = factory.createEntityManager();
         EntityTransaction transaction = entityManager.getTransaction();
 
         try {
             transaction.begin();
 
+            Order order = new Order();
             Cart cart = entityManager.find(Cart.class, cartId);
             User user = entityManager.find(User.class, userId);
 
             if(user != null && cart != null){
-                Order order = new Order();
                 order.setCart(cart);
                 order.setUser(user);
-                order.setStatus(Status.Pending);
                 order.setCreateTime(LocalDateTime.now());
 
                 TemporaryAddress temporaryAddress = entityManager.find(TemporaryAddress.class, temporaryAddressId);

@@ -11,7 +11,7 @@ public interface OrdersRepositoriesInterface {
     Order findOrderById(int orderId);
     List<Order> getAllOrders();
     List<Order> getAllOrdersByUserId(int userId);
-    Boolean addOrder(int cartId, int userId, int temporaryAddressId);
+    Boolean addOrder(int userId, int cartId, int temporaryAddressId);
     Boolean payOrder(int orderId, int userId, double payment);
     List<Order> acceptOrders(List<Integer> orderIds);
     List<Order> deliverOrders(List<Integer> orderIds, int userId);

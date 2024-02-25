@@ -39,10 +39,10 @@ public class Order {
     private Enum paymentStatus;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "status", nullable = false)
+    @Column(name = "status", nullable = false, columnDefinition = "Pending")
     private Enum status;
 
-    @Column(name = "create_date")
+    @Column(name = "create_date", nullable = false)
     private LocalDateTime createTime;
 
     @Column(name = "update_time")

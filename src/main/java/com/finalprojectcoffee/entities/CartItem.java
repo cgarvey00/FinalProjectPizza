@@ -11,9 +11,6 @@ public class CartItem {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
     private int id;
-    @ManyToOne
-    @Column(name = "cart_id", nullable = false)
-    private Cart cart;
     @OneToOne
     @JoinColumn(name = "product_id", nullable = false)
     private Product product;
@@ -26,16 +23,14 @@ public class CartItem {
 
     }
 
-    public CartItem(Cart cart, Product product, int quantity, double cost) {
-        this.cart = cart;
+    public CartItem(Product product, int quantity, double cost) {
         this.product = product;
         this.quantity = quantity;
         this.cost = cost;
     }
 
-    public CartItem(int id, Cart cart, Product product, int quantity, double cost) {
+    public CartItem(int id, Product product, int quantity, double cost) {
         this.id = id;
-        this.cart = cart;
         this.product = product;
         this.quantity = quantity;
         this.cost = cost;
@@ -47,14 +42,6 @@ public class CartItem {
 
     public void setId(int id) {
         this.id = id;
-    }
-
-    public Cart getCart() {
-        return cart;
-    }
-
-    public void setCart(Cart cart) {
-        this.cart = cart;
     }
 
     public Product getProduct() {
@@ -85,7 +72,6 @@ public class CartItem {
     public String toString() {
         return "CartItem{" +
                 "id=" + id +
-                ", cart=" + cart +
                 ", product=" + product +
                 ", quantity=" + quantity +
                 ", cost=" + cost +

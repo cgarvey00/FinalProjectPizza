@@ -41,10 +41,8 @@ CREATE TABLE `products`
 
 CREATE TABLE `carts` (
     `id` INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
-    `order_id` INT NOT NULL,
     `cart_item_id` INT,
     `total_cost` DOUBLE DEFAULT 0.0,
-    FOREIGN KEY (`order_id`) REFERENCES `orders`(`id`),
     FOREIGN KEY (`cart_item_id`) REFERENCES `cart_items`(`id`)
 );
 
@@ -90,11 +88,11 @@ CREATE TABLE `orders` (
     `balance` DOUBLE DEFAULT 0.0,
     `payment_method` VARCHAR(255) NOT NULL,
     `payment_status` VARCHAR(255) NOT NULL DEFAULT 'Pending',
-    `status` VARCHAR(255) NOT NULL,
-    `create_time` DATE,
+    `status` VARCHAR(255) NOT NULL DEFAULT 'Pending',
+    `create_time` DATE NOT NULL,
     `update_time` DATE,
     `overdue_time` DATE,
-    FOREIGN KEY (`cart_id`) REFERENCES `cart`(`id`),
+    FOREIGN KEY (`cart_id`) REFERENCES `carts`(`id`),
     FOREIGN KEY (`user_id`) REFERENCES `users`(`id`),
     FOREIGN KEY (`temp_address_id`) REFERENCES `temp_addresses`(`id`)
 );

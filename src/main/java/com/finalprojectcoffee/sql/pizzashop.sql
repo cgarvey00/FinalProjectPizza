@@ -94,7 +94,7 @@ CREATE TABLE `orders` (
     `create_time` DATE,
     `update_time` DATE,
     `overdue_time` DATE,
-    FOREIGN KEY (`cart_id`) REFERENCES `cart`(`id`),
+    FOREIGN KEY (`cart_id`) REFERENCES `carts`(`id`),
     FOREIGN KEY (`user_id`) REFERENCES `users`(`id`),
     FOREIGN KEY (`temp_address_id`) REFERENCES `temp_addresses`(`id`)
 );

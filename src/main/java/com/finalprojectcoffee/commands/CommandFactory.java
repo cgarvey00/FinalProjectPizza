@@ -34,6 +34,9 @@ public class CommandFactory {
                 case "update-user-profile":
                     command = new UpdateUserProfile(request, response, factory);
                     break;
+                case "order-customer":
+                    command = new AddOrder(request, response, factory);
+                    break;
                 default:
                     break;
             }

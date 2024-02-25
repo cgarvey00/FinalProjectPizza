@@ -3,7 +3,6 @@ package com.finalprojectcoffee.repositories;
 import com.finalprojectcoffee.entities.*;
 import jakarta.persistence.*;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -16,18 +15,16 @@ public class CartRepositories implements CartRepositoriesInterface {
     }
 
     @Override
-    public Boolean addItem(int cartId, int productId, int quantity) {
+    public Boolean addItem(int productId, int quantity) {
         EntityManager entityManager = factory.createEntityManager();
         EntityTransaction transaction = entityManager.getTransaction();
 
         try {
             transaction.begin();
 
-            Cart cart = entityManager.find(Cart.class, cartId);
             Product product = entityManager.find(Product.class, productId);
             CartItem cartItem = new CartItem();
 
-            cartItem.setCart(cart);
             cartItem.setProduct(product);
             cartItem.setQuantity(quantity);
             cartItem.setCost(quantity * product.getPrice());
@@ -47,26 +44,21 @@ public class CartRepositories implements CartRepositoriesInterface {
     }
 
     @Override
-    public Boolean addCart(int orderId, int cartId, List<Integer> cartItemIds) {
+    public Boolean addCart(List<CartItem> cartItems) {
         EntityManager entityManager = factory.createEntityManager();
         EntityTransaction transaction = entityManager.getTransaction();
 
         try {
             transaction.begin();
 
-            Order order = entityManager.find(Order.class, orderId);
-            List<CartItem> cartItems = new ArrayList<>();
-            double totalCost = 0.0;
             Cart cart = new Cart();
+            double totalCost = 0.0;
 
-            for(int cartItemId : cartItemIds){
-                CartItem cartItem = entityManager.find(CartItem.class, cartItemId);
-                cartItems.add(cartItem);
+            for(CartItem cartItem : cartItems){
                 totalCost += cartItem.getCost();
             }
 
             cart.setCartItems(cartItems);
-            cart.setOrder(order);
             cart.setTotalCost(totalCost);
 
             entityManager.persist(cart);
@@ -82,7 +74,7 @@ public class CartRepositories implements CartRepositoriesInterface {
     }
 
     @Override
-    public Boolean removeItemsFromCart( List<Integer> cartItemIds) {
+    public Boolean removeItemsFromCart(List<Integer> cartItemIds) {
         EntityManager entityManager = factory.createEntityManager();
         EntityTransaction transaction = entityManager.getTransaction();
 
@@ -93,8 +85,8 @@ public class CartRepositories implements CartRepositoriesInterface {
                 CartItem cartItem = entityManager.find(CartItem.class, cartItemId);
                 Product product = entityManager.find(Product.class, cartItem.getProduct().getId());
                 int stock = cartItem.getQuantity();
-                entityManager.remove(cartItem);
                 product.setStock(product.getStock() + stock);
+                entityManager.remove(cartItem);
             }
 
             transaction.commit();
@@ -113,7 +105,7 @@ public class CartRepositories implements CartRepositoriesInterface {
         EntityManager entityManager = factory.createEntityManager();
 
         try {
-            TypedQuery<CartItem> query = entityManager.createQuery("SELECT ci FROM CartItem ci WHERE ci.cart.id = :cartId", CartItem.class);
+            TypedQuery<CartItem> query = entityManager.createQuery("SELECT c.cartItems FROM Cart c WHERE c.id = :cartId", CartItem.class);
             query.setParameter("cartId", cartId);
             List<CartItem> cartItems = query.getResultList();
             return cartItems;
