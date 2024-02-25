@@ -1,10 +1,10 @@
 package com.finalprojectcoffee.repositories;
 
-import com.finalprojectcoffee.entities.Cart;
-import com.finalprojectcoffee.entities.CartItems;
-import com.finalprojectcoffee.entities.Product;
+import com.finalprojectcoffee.entities.*;
 import jakarta.persistence.*;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class CartRepositories implements CartRepositoriesInterface {
@@ -15,179 +15,143 @@ public class CartRepositories implements CartRepositoriesInterface {
         this.factory = factory;
     }
 
-
     @Override
-    public boolean addToCart(int userId, int productId, int quantity) {
+    public Boolean addItem(int cartId, int productId, int quantity) {
         EntityManager entityManager = factory.createEntityManager();
         EntityTransaction transaction = entityManager.getTransaction();
+
         try {
             transaction.begin();
-            Cart cart = getOrCreateCart(userId, entityManager);
 
-            CartItems existingCartItem = findCartItemByProductID(cart.getId(), productId, entityManager);
+            Cart cart = entityManager.find(Cart.class, cartId);
+            Product product = entityManager.find(Product.class, productId);
+            CartItem cartItem = new CartItem();
 
-            if (existingCartItem != null) {
-                existingCartItem.setQuantity(existingCartItem.getQuantity() + quantity);
-            } else {
-                Product product = entityManager.find(Product.class, productId);
-                if (product == null) {
-                    return false;
-                }
-                double cost = product.getPrice() * quantity;
-                CartItems cartItem = new CartItems(cart, productId, cost, quantity);
-                entityManager.persist(cartItem);
-            }
+            cartItem.setCart(cart);
+            cartItem.setProduct(product);
+            cartItem.setQuantity(quantity);
+            cartItem.setCost(quantity * product.getPrice());
+            product.setStock(product.getStock() - quantity);
+
+            entityManager.persist(cartItem);
+            entityManager.merge(product);
             transaction.commit();
             return true;
         } catch (PersistenceException e) {
-            entityManager.getTransaction().rollback();
-            System.err.println("An Exception has occurred when adding item to cart: " + e.getMessage());
+            transaction.rollback();
+            System.err.println("An PersistenceException occurred while persisting: " + e.getMessage());
             return false;
         } finally {
             entityManager.close();
         }
     }
 
-    private Cart getOrCreateCart(int userID, EntityManager entityManager) {
-        Cart cart = findCartByUserId(userID, entityManager);
-        if (cart == null) {
-            cart = new Cart();
-            cart.setUserId(userID);
+    @Override
+    public Boolean addCart(int orderId, int cartId, List<Integer> cartItemIds) {
+        EntityManager entityManager = factory.createEntityManager();
+        EntityTransaction transaction = entityManager.getTransaction();
+
+        try {
+            transaction.begin();
+
+            Order order = entityManager.find(Order.class, orderId);
+            List<CartItem> cartItems = new ArrayList<>();
+            double totalCost = 0.0;
+            Cart cart = new Cart();
+
+            for(int cartItemId : cartItemIds){
+                CartItem cartItem = entityManager.find(CartItem.class, cartItemId);
+                cartItems.add(cartItem);
+                totalCost += cartItem.getCost();
+            }
+
+            cart.setCartItems(cartItems);
+            cart.setOrder(order);
+            cart.setTotalCost(totalCost);
+
             entityManager.persist(cart);
-        }
-        return cart;
-    }
-
-    private CartItems findCartItemByProductID(int cartId, int productId, EntityManager entityManager) {
-        Query q = entityManager.createQuery("SELECT ci FROM CartItems ci WHERE ci.cart.id=:cartId AND ci.product_id=:productId");
-        q.setParameter("userId", cartId);
-        q.setParameter("productId", productId);
-
-        try {
-            return (CartItems) q.getSingleResult();
-        } catch (Exception e) {
-            System.out.println("There has been no Cart Item Found");
-            System.out.println(e.getMessage());
-            return null;
-        }
-    }
-
-    private Cart findCartByUserId(int userId, EntityManager entityManager) {
-        Query q = entityManager.createQuery("SELECT c FROM Cart c WHERE c.userId=:userId");
-        q.setParameter("userId", userId);
-
-        try {
-            return (Cart) q.getSingleResult();
-        } catch (Exception e) {
-            System.out.println("There has been no Cart Found");
-            System.out.println(e.getMessage());
-            return null;
-        }
-
-    }
-
-    @Override
-    public void removeFromCart(int cartId) {
-        EntityManager entityManager = factory.createEntityManager();
-        try {
-            entityManager.getTransaction().begin();
-
-            Cart cartItem = entityManager.find(Cart.class, cartId);
-            if (cartItem != null) {
-                entityManager.remove(cartItem);
-            }
-
-            entityManager.getTransaction().commit();
-        } catch (Exception e) {
-            entityManager.getTransaction().rollback();
-            System.err.println("An Exception has occurred when removing item from cart: " + e.getMessage());
-        } finally {
-            entityManager.close();
-        }
-    }
-
-    @Override
-    public void updateQuantity(int cartId, int quantity) {
-        EntityManager entityManager = factory.createEntityManager();
-        try {
-            entityManager.getTransaction().begin();
-
-            CartItems cartItem = entityManager.find(CartItems.class, cartId);
-            if (cartItem != null) {
-                cartItem.setQuantity(quantity);
-                entityManager.merge(cartItem);
-            }
-
-            entityManager.getTransaction().commit();
+            transaction.commit();
+            return true;
         } catch (PersistenceException e) {
-            entityManager.getTransaction().rollback();
-            System.err.println("An Exception has occurred when updating quantity of item in cart: " + e.getMessage());
+            transaction.rollback();
+            System.err.println("A PersistenceException occurred while persisting: " + e.getMessage());
+            return false;
         } finally {
             entityManager.close();
         }
     }
 
+    @Override
+    public Boolean removeItemsFromCart( List<Integer> cartItemIds) {
+        EntityManager entityManager = factory.createEntityManager();
+        EntityTransaction transaction = entityManager.getTransaction();
+
+        try {
+            transaction.begin();
+
+            for(int cartItemId : cartItemIds){
+                CartItem cartItem = entityManager.find(CartItem.class, cartItemId);
+                Product product = entityManager.find(Product.class, cartItem.getProduct().getId());
+                int stock = cartItem.getQuantity();
+                entityManager.remove(cartItem);
+                product.setStock(product.getStock() + stock);
+            }
+
+            transaction.commit();
+            return true;
+        } catch (PersistenceException e) {
+            transaction.rollback();
+            System.err.println("A PersistenceException occurred while removing: " + e.getMessage());
+            return false;
+        } finally {
+            entityManager.close();
+        }
+    }
 
     @Override
-    public List<CartItems> getCartItems(int userId) {
+    public List<CartItem> getAllCartItemsByCartId(int cartId) {
         EntityManager entityManager = factory.createEntityManager();
+
         try {
-            Query q = entityManager.createQuery("SELECT ci FROM CartItems ci WHERE ci.cart.userId = :userId");
-            q.setParameter("userId", userId);
-            return q.getResultList();
+            TypedQuery<CartItem> query = entityManager.createQuery("SELECT ci FROM CartItem ci WHERE ci.cart.id = :cartId", CartItem.class);
+            query.setParameter("cartId", cartId);
+            List<CartItem> cartItems = query.getResultList();
+            return cartItems;
         } catch (Exception e) {
             System.err.println("An Exception has occurred when retrieving cart items: " + e.getMessage());
-            return null;
+            return Collections.emptyList();
         } finally {
             entityManager.close();
         }
     }
 
-    @Override
-    public double getTotalCost(int userId) {
-        EntityManager entityManager = factory.createEntityManager();
-        try {
-            Query q = entityManager.createQuery("SELECT SUM(ci.cost) FROM CartItems ci WHERE ci.cart.userId = :userId");
-            q.setParameter("userId", userId);
-            Double result = (Double) q.getSingleResult();
-            return result != null ? result : 0.0;
-        } catch (Exception e) {
-            System.err.println("An Exception has occurred when calculating total cost of cart items: " + e.getMessage());
-            return 0.0;
-        } finally {
-            entityManager.close();
-        }
-    }
 
     @Override
-    public void clearCart(int userId) {
+    public Boolean clearCart(int cartId) {
         EntityManager entityManager = factory.createEntityManager();
+        EntityTransaction transaction = entityManager.getTransaction();
+
+
         try {
-            entityManager.getTransaction().begin();
+            transaction.begin();
 
-            Query q = entityManager.createQuery("DELETE FROM CartItems ci WHERE ci.cart.userId = :userId");
-            q.setParameter("userId", userId);
-            q.executeUpdate();
+            Cart cart = entityManager.find(Cart.class, cartId);
+            List<CartItem> cartItems = cart.getCartItems();
 
-            entityManager.getTransaction().commit();
-        } catch (Exception e) {
-            entityManager.getTransaction().rollback();
-            System.err.println("An Exception has occurred when clearing cart: " + e.getMessage());
-        } finally {
-            entityManager.close();
-        }
-    }
+            for (CartItem cartItem : cartItems) {
+                int quantity = cartItem.getQuantity();
+                Product product = cartItem.getProduct();
+                product.setStock(product.getStock() + quantity);
+                entityManager.merge(product);
+            }
 
-    @Override
-    public Cart findByUserIdAndProductId(int userId, int productId) {
-        EntityManager entityManager = factory.createEntityManager();
-        try {
-            Query q = entityManager.createQuery("SELECT ci FROM CartItems ci WHERE ci.cart.userId = :userId AND ci.product_id = :productId");
-            q.setParameter("userId", userId);
-            q.setParameter("productId", productId);
-            return (Cart) q.getSingleResult();
-        } catch (Exception e) {
-            return null;
+            entityManager.remove(cart);
+            transaction.commit();
+            return true;
+        } catch (PersistenceException e) {
+            transaction.rollback();
+            System.err.println("A PersistenceException occurred while removing: " + e.getMessage());
+            return false;
         } finally {
             entityManager.close();
         }

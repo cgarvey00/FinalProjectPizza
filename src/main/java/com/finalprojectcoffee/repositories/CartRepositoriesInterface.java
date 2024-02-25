@@ -1,28 +1,23 @@
 package com.finalprojectcoffee.repositories;
 
 import com.finalprojectcoffee.entities.Cart;
-import com.finalprojectcoffee.entities.CartItems;
+import com.finalprojectcoffee.entities.CartItem;
 
 import java.util.List;
 public interface CartRepositoriesInterface {
 
-    // Add a product to the cart
-    boolean addToCart(int userId, int productId, int quantity);
+    // Add a product to the cart item
+    Boolean addItem(int cartId, int productId, int quantity);
 
-    // Remove a product from the cart
-    void removeFromCart(int cartId);
+    // Add items to the cart
+    Boolean addCart(int orderId, int cartId, List<Integer> cartItemIds);
 
-    // Update the quantity of a product in the cart
-    void updateQuantity(int cartId, int quantity);
+    // Remove items from the cart
+    Boolean removeItemsFromCart( List<Integer> cartItemIds);
 
-    // Get all items in the cart for a specific user
-    List<CartItems> getCartItems(int userId);
+    // Get all items in the cart
+    List<CartItem> getAllCartItemsByCartId(int cartId);
 
-    // Get the total cost of items in the cart for a specific user
-    double getTotalCost(int userId);
-
-    // Clear the cart for a specific user after order finalization
-    void clearCart(int userId);
-
-    Cart findByUserIdAndProductId(int userId, int productId);
+    // Clear a cart
+    Boolean clearCart(int cartId);
 }

@@ -18,7 +18,8 @@ public class OrdersRepositories  implements OrdersRepositoriesInterface{
         EntityManager entityManager = factory.createEntityManager();
 
         try {
-            return entityManager.find(Order.class,orderId);
+            Order order = entityManager.find(Order.class, orderId);
+            return order;
         } catch (Exception e) {
             System.err.println("An Exception occurred while searching: " + e.getMessage());
             return null;
@@ -44,51 +45,37 @@ public class OrdersRepositories  implements OrdersRepositoriesInterface{
     }
 
     @Override
-    public Order findOrderByCustomer(Customer customer) {
+    public List<Order> getAllOrdersByUserId(int userId) {
         EntityManager entityManager = factory.createEntityManager();
 
         try {
-            Query query = entityManager.createQuery("SELECT o FROM Order o WHERE o.customer = :customer");
-            query.setParameter("customer", customer);
-            return (Order) query.getSingleResult();
+            TypedQuery<Order> query = entityManager.createQuery("SELECT o FROM Order o WHERE o.user.id = :userId", Order.class);
+            query.setParameter("userId", userId);
+            List<Order> orders = query.getResultList();
+            return  orders;
         } catch (Exception e) {
-            System.err.println("An Exception occurred while searching " + e.getMessage());
-            return null;
+            System.err.println("An Exception occurred while searching: " + e.getMessage());
+            return Collections.emptyList();
         } finally {
             entityManager.close();
         }
     }
 
     @Override
-    public Order findOrderByEmployee(Employee employee) {
-        EntityManager entityManager = factory.createEntityManager();
-
-        try {
-            Query query = entityManager.createQuery("SELECT o FROM Order O WHERE o.employee = :employee");
-            query.setParameter("employee", employee);
-            return (Order) query.getSingleResult();
-        } catch (Exception e) {
-            System.err.println("An Exception occurred while searching " + e.getMessage());
-            return null;
-        } finally {
-            entityManager.close();
-        }
-    }
-
-    @Override
-    public Boolean makeOrder(int cartId, int customerId, int temporaryAddressId) {
+    public Boolean addOrder(int cartId, int userId, int temporaryAddressId) {
         EntityManager entityManager = factory.createEntityManager();
         EntityTransaction transaction = entityManager.getTransaction();
-        Cart cart = entityManager.find(Cart.class, cartId);
-        Customer customer = entityManager.find(Customer.class, customerId);
 
         try {
             transaction.begin();
 
-            if(customer != null && cart != null){
+            Cart cart = entityManager.find(Cart.class, cartId);
+            User user = entityManager.find(User.class, userId);
+
+            if(user != null && cart != null){
                 Order order = new Order();
                 order.setCart(cart);
-                order.setCustomer(customer);
+                order.setUser(user);
                 order.setStatus(Status.Pending);
                 order.setCreateTime(LocalDateTime.now());
 
@@ -115,19 +102,20 @@ public class OrdersRepositories  implements OrdersRepositoriesInterface{
     public Boolean payOrder(int orderId, int customerId, double payment) {
         EntityManager entityManager = factory.createEntityManager();
         EntityTransaction transaction = entityManager.getTransaction();
-        Order order = entityManager.find(Order.class, orderId);
-        Customer customer = entityManager.find(Customer.class, customerId);
-        Query query = entityManager.createQuery("SELECT c FROM Cart c WHERE c.orderId = :orderId");
-        query.setParameter("orderId", orderId);
-        Cart cart = (Cart) query.getSingleResult();
-        double cost = order.getCart().getCost();
 
         try {
             transaction.begin();
 
-            if(customer != null && payment >= cost){
-                order.setBalance(payment - cost);
-                cart.setCost(0.0);
+            Order order = entityManager.find(Order.class, orderId);
+            Customer customer = entityManager.find(Customer.class, customerId);
+            Query query = entityManager.createQuery("SELECT c FROM Cart c WHERE c.id = :orderId");
+            query.setParameter("orderId", orderId);
+            Cart cart = (Cart) query.getSingleResult();
+            double totalCost = order.getCart().getTotalCost();
+
+            if(customer != null && payment >= totalCost){
+                order.setBalance(payment - totalCost);
+                cart.setTotalCost(0.0);
                 order.setPaymentStatus(Status.Paid);
                 order.setUpdateTime(LocalDateTime.now());
             }
@@ -149,10 +137,11 @@ public class OrdersRepositories  implements OrdersRepositoriesInterface{
     public List<Order> acceptOrders(List<Integer> orderIds) {
         EntityManager entityManager = factory.createEntityManager();
         EntityTransaction transaction = entityManager.getTransaction();
-        List<Order> orders = new ArrayList<>();
 
         try {
             transaction.begin();
+
+            List<Order> orders = new ArrayList<>();
 
             for(Integer orderId : orderIds){
                 Order order = entityManager.find(Order.class, orderId);
@@ -177,20 +166,21 @@ public class OrdersRepositories  implements OrdersRepositoriesInterface{
     }
 
     @Override
-    public List<Order> deliverOrders(List<Integer> orderIds, int employeeId) {
+    public List<Order> deliverOrders(List<Integer> orderIds, int userId) {
         EntityManager entityManager = factory.createEntityManager();
         EntityTransaction transaction = entityManager.getTransaction();
-        List<Order> orders = new ArrayList<>();
-        Employee employee = entityManager.find(Employee.class, employeeId);
 
         try {
             transaction.begin();
+
+            List<Order> orders = new ArrayList<>();
+            User user = entityManager.find(User.class, userId);
 
             for(Integer orderId : orderIds){
                 Order order = entityManager.find(Order.class, orderId);
 
                 if(order != null && order.getPaymentStatus() == Status.Paid){
-                    order.setEmployee(employee);
+                    order.setUser(user);
                     order.setStatus(Status.Delivering);
                     order.setUpdateTime(LocalDateTime.now());
                     orders.add(order);
@@ -219,12 +209,12 @@ public class OrdersRepositories  implements OrdersRepositoriesInterface{
 
             for(Integer orderId: orderIds){
                 Order order = entityManager.find(Order.class, orderId);
-                Query query = entityManager.createQuery("SELECT c FROM Cart c WHERE c.orderId = :orderId");
+                Query query = entityManager.createQuery("SELECT c FROM Cart c WHERE c.id = :orderId");
                 query.setParameter("orderId", orderId);
                 Cart cart = (Cart) query.getSingleResult();
 
                 if(order != null){
-                    order.setBalance(cart.getCost());
+                    order.setBalance(cart.getTotalCost());
                     order.setStatus(Status.Cancelled);
                     order.setPaymentStatus(Status.Refunded);
                     order.setUpdateTime(LocalDateTime.now());

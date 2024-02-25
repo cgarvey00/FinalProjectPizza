@@ -21,13 +21,9 @@ public class Order {
     @JoinColumn(name = "cart_id", referencedColumnName = "id", nullable = false)
     private Cart cart;
 
-    @OneToOne
-    @JoinColumn(name = "customer_id", referencedColumnName = "id", nullable = false)
-    private Customer customer;
-
-    @OneToOne
-    @JoinColumn(name = "employee_id", referencedColumnName = "id", nullable = false)
-    private Employee employee;
+    @ManyToOne
+    @JoinColumn(name = "user_id", referencedColumnName = "id", nullable = false)
+    private User user;
 
     @OneToOne
     @JoinColumn(name = "temp_address_id", referencedColumnName = "id")
@@ -58,10 +54,9 @@ public class Order {
     public Order() {
     }
 
-    public Order(Cart cart, Customer customer, Employee employee, TemporaryAddress temporaryAddress, double balance, String paymentMethod, Enum paymentStatus, Enum status, LocalDateTime createTime, LocalDateTime updateTime, LocalDateTime overdueTime) {
+    public Order(Cart cart, User user, TemporaryAddress temporaryAddress, double balance, String paymentMethod, Enum paymentStatus, Enum status, LocalDateTime createTime, LocalDateTime updateTime, LocalDateTime overdueTime) {
         this.cart = cart;
-        this.customer = customer;
-        this.employee = employee;
+        this.user = user;
         this.temporaryAddress = temporaryAddress;
         this.balance = balance;
         this.paymentMethod = paymentMethod;
@@ -72,11 +67,10 @@ public class Order {
         this.overdueTime = overdueTime;
     }
 
-    public Order(int id, Cart cart, Customer customer, Employee employee, TemporaryAddress temporaryAddress, double balance, String paymentMethod, Enum paymentStatus, Enum status, LocalDateTime createTime, LocalDateTime updateTime, LocalDateTime overdueTime) {
+    public Order(int id, Cart cart, User user, TemporaryAddress temporaryAddress, double balance, String paymentMethod, Enum paymentStatus, Enum status, LocalDateTime createTime, LocalDateTime updateTime, LocalDateTime overdueTime) {
         this.id = id;
         this.cart = cart;
-        this.customer = customer;
-        this.employee = employee;
+        this.user = user;
         this.temporaryAddress = temporaryAddress;
         this.balance = balance;
         this.paymentMethod = paymentMethod;
@@ -103,20 +97,12 @@ public class Order {
         this.cart = cart;
     }
 
-    public Customer getCustomer() {
-        return customer;
+    public User getUser() {
+        return user;
     }
 
-    public void setCustomer(Customer customer) {
-        this.customer = customer;
-    }
-
-    public Employee getEmployee() {
-        return employee;
-    }
-
-    public void setEmployee(Employee employee) {
-        this.employee = employee;
+    public void setUser(User user) {
+        this.user = user;
     }
 
     public TemporaryAddress getTemporaryAddress() {
@@ -188,8 +174,7 @@ public class Order {
         return "Order{" +
                 "id=" + id +
                 ", cart=" + cart +
-                ", customer=" + customer +
-                ", employee=" + employee +
+                ", user=" + user +
                 ", temporaryAddress=" + temporaryAddress +
                 ", balance=" + balance +
                 ", paymentMethod='" + paymentMethod + '\'' +
