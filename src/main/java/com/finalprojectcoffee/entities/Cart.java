@@ -13,10 +13,10 @@ public class Cart {
     @Column(name = "id", nullable = false)
     private int id;
 
-    @OneToMany(mappedBy = "carts",cascade = CascadeType.ALL,orphanRemoval = true)
+    @OneToMany(mappedBy = "cart",cascade = CascadeType.ALL,orphanRemoval = true)
     private List<CartItem> cartItems;
 
-    @Column(name = "total_cost", columnDefinition = "0.0")
+    @Column(name = "total_cost")
     private double totalCost;
 
     public Cart() {

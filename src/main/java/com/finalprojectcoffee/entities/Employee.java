@@ -11,7 +11,7 @@ public class Employee extends User {
 
     @Enumerated(EnumType.STRING)
     @Column(name = "status")
-    private Enum status;
+    private Status status;
 
     public Employee() {
 
@@ -26,7 +26,7 @@ public class Employee extends User {
         this.salary = salary;
     }
 
-    public Employee(String username, String password, String phoneNumber, String email, Float salary, Enum status) {
+    public Employee(String username, String password, String phoneNumber, String email, Float salary, Status status) {
         super(username, password, phoneNumber, email);
         this.salary = salary;
         this.status = status;
@@ -37,7 +37,7 @@ public class Employee extends User {
         this.salary = salary;
     }
 
-    public Employee(int id, String username, String password, String phoneNumber, String email, String image, Float salary, Enum status) {
+    public Employee(int id, String username, String password, String phoneNumber, String email, String image, Float salary, Status status) {
         super(id, username, password, phoneNumber, email, image);
         this.salary = salary;
         this.status = status;
@@ -51,11 +51,11 @@ public class Employee extends User {
         this.salary = salary;
     }
 
-    public Enum getStatus() {
+    public Status getStatus() {
         return status;
     }
 
-    public void setStatus(Enum status) {
+    public void setStatus(Status status) {
         this.status = status;
     }
 

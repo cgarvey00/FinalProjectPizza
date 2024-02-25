@@ -3,13 +3,14 @@ package com.finalprojectcoffee.entities;
 public enum Status {
     Pending("Pending"),
     Accepted("Accepted"),
-    Preparing("Preparing"),
+    Finished("Finished"),
     ReadForPick("Read for Pick"),
     OutForDelivery("Out for Delivery"),
     Delivered("Delivered"),
     Cancelled("Cancelled"),
     Failed("Failed"),
     WaitingForPickUp("Waiting for Pick Up"),
+
     Available("Available"),
     Delivering("Delivering"),
     Paid("Paid"),

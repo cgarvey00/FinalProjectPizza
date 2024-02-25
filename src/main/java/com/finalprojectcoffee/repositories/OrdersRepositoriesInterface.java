@@ -10,10 +10,12 @@ import java.util.List;
 public interface OrdersRepositoriesInterface {
     Order findOrderById(int orderId);
     List<Order> getAllOrders();
-    List<Order> getAllOrdersByUserId(int userId);
-    Boolean addOrder(int userId, int cartId, int temporaryAddressId);
-    Boolean payOrder(int orderId, int userId, double payment);
-    List<Order> acceptOrders(List<Integer> orderIds);
-    List<Order> deliverOrders(List<Integer> orderIds, int userId);
+    List<Order> getAllOrdersByCustomerId(int CustomerId);
+    List<Order> getAllOrdersByEmployeeId(int EmployeeId);
+    Boolean addOrder(int customerId, int cartId, int temporaryAddressId);
+    Boolean payOrder(int orderId, double payment);
+    Boolean acceptOrders(List<Integer> orderIds);
+    Boolean deliverOrders(List<Integer> orderIds, int employeeId);
+    Boolean finishOrder(int orderId);
     Boolean cancelOrders(List<Integer> orderIds);
 }

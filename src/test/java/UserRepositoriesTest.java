@@ -1,4 +1,3 @@
-import com.finalprojectcoffee.entities.Address;
 import com.finalprojectcoffee.entities.Customer;
 import com.finalprojectcoffee.entities.Employee;
 import com.finalprojectcoffee.entities.User;
@@ -36,7 +35,7 @@ public class UserRepositoriesTest {
         User actualResult = userRep.findUserById(1);
         assertEquals(expectedResult,actualResult);
         User notExistResult = userRep.findUserById(100);
-        assertEquals(null,notExistResult);
+        assertNull(notExistResult);
     }
 
     @Test
@@ -45,7 +44,7 @@ public class UserRepositoriesTest {
        User actualResult = userRep.findUserByUsername("joseph40");
        assertEquals(expectedResult.getEmail(),actualResult.getEmail());
        User notExistResult = userRep.findUserByUsername("Tom123");
-       assertEquals(null,notExistResult);
+       assertNull(notExistResult);
     }
 
     @Test
