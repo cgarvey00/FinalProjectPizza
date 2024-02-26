@@ -1,14 +1,11 @@
-import com.finalprojectcoffee.entities.Cart;
 import com.finalprojectcoffee.entities.Order;
 import com.finalprojectcoffee.entities.Status;
-import com.finalprojectcoffee.entities.TemporaryAddress;
-import com.finalprojectcoffee.repositories.OrdersRepositories;
+import com.finalprojectcoffee.repositories.OrderRepositories;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.Persistence;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.internal.matchers.Or;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,12 +14,12 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class OrderRepositoriesTest {
     private EntityManagerFactory factory;
-    private OrdersRepositories orderRep;
+    private OrderRepositories orderRep;
 
     @BeforeEach
     public void setUp(){
         factory = Persistence.createEntityManagerFactory("testpizzashop");
-        orderRep = new OrdersRepositories(factory);
+        orderRep = new OrderRepositories(factory);
     }
 
     @AfterEach

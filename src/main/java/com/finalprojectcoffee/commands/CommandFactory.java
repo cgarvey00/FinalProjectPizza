@@ -37,6 +37,12 @@ public class CommandFactory {
                 case "order-customer":
                     command = new AddOrder(request, response, factory);
                     break;
+                case "order-admin":
+                    command = new AcceptOrder(request, response, factory);
+                    break;
+                case "order-delivery":
+                    command = new DeliveryOrder(request, response, factory);
+                    break;
                 default:
                     break;
             }

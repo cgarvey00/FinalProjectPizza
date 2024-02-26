@@ -8,11 +8,11 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public class OrdersRepositories  implements OrdersRepositoriesInterface{
+public class OrderRepositories implements OrderRepositoriesInterface {
     private EntityManagerFactory factory;
-    public OrdersRepositories(EntityManagerFactory factory){this.factory = factory;}
+    public OrderRepositories(EntityManagerFactory factory){this.factory = factory;}
 
-    public OrdersRepositories(){};
+    public OrderRepositories(){};
     @Override
     public Order findOrderById(int orderId) {
         EntityManager entityManager = factory.createEntityManager();

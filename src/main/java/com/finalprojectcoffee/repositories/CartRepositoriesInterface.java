@@ -7,10 +7,10 @@ import java.util.List;
 public interface CartRepositoriesInterface {
 
     // Add a product to the cart item
-    Boolean addItem(int productId, int quantity);
+    CartItem addItem(int productId, int quantity);
 
     // Add items to the cart
-    Boolean addCart(List<CartItem> cartItems);
+    Cart addCart(List<CartItem> cartItems);
 
     // Remove items from the cart
     Boolean removeItemsFromCart(List<Integer> cartItemIds);
