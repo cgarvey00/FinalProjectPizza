@@ -18,7 +18,8 @@ public class OrdersRepositories  implements OrdersRepositoriesInterface{
         EntityManager entityManager = factory.createEntityManager();
 
         try {
-            return entityManager.find(Order.class,orderId);
+            Order order = entityManager.find(Order.class, orderId);
+            return order;
         } catch (Exception e) {
             System.err.println("An Exception occurred while searching: " + e.getMessage());
             return null;
@@ -44,53 +45,59 @@ public class OrdersRepositories  implements OrdersRepositoriesInterface{
     }
 
     @Override
-    public Order findOrderByCustomer(Customer customer) {
+    public List<Order> getAllOrdersByCustomerId(int customerId) {
         EntityManager entityManager = factory.createEntityManager();
 
         try {
-            Query query = entityManager.createQuery("SELECT o FROM Order o WHERE o.customer = :customer");
-            query.setParameter("customer", customer);
-            return (Order) query.getSingleResult();
+            TypedQuery<Order> query = entityManager.createQuery("SELECT o FROM Order o WHERE o.customer.id = :customerId", Order.class);
+            query.setParameter("customerId", customerId);
+            List<Order> orders = query.getResultList();
+            return orders;
         } catch (Exception e) {
-            System.err.println("An Exception occurred while searching " + e.getMessage());
-            return null;
+            System.err.println("An Exception occurred while searching: " + e.getMessage());
+            return Collections.emptyList();
         } finally {
             entityManager.close();
         }
     }
 
     @Override
-    public Order findOrderByEmployee(Employee employee) {
+    public List<Order> getAllOrdersByEmployeeId(int employeeId) {
         EntityManager entityManager = factory.createEntityManager();
 
         try {
-            Query query = entityManager.createQuery("SELECT o FROM Order O WHERE o.employee = :employee");
-            query.setParameter("employee", employee);
-            return (Order) query.getSingleResult();
+            TypedQuery<Order> query = entityManager.createQuery("SELECT o FROM Order o WHERE o.employee.id = :employeeId", Order.class);
+            query.setParameter("employeeId", employeeId);
+            List<Order> orders = query.getResultList();
+            return orders;
         } catch (Exception e) {
-            System.err.println("An Exception occurred while searching " + e.getMessage());
-            return null;
+            System.err.println("An Exception occurred while searching: " + e.getMessage());
+            return Collections.emptyList();
         } finally {
             entityManager.close();
         }
     }
 
     @Override
-    public Boolean makeOrder(int cartId, int customerId, int temporaryAddressId) {
+    public Boolean addOrder(int customerId, int cartId, int temporaryAddressId) {
         EntityManager entityManager = factory.createEntityManager();
         EntityTransaction transaction = entityManager.getTransaction();
-        Cart cart = entityManager.find(Cart.class, cartId);
-        Customer customer = entityManager.find(Customer.class, customerId);
 
         try {
             transaction.begin();
 
+            Order order = new Order();
+            Cart cart = entityManager.find(Cart.class, cartId);
+            Customer customer = entityManager.find(Customer.class, customerId);
+
             if(customer != null && cart != null){
-                Order order = new Order();
                 order.setCart(cart);
                 order.setCustomer(customer);
-                order.setStatus(Status.Pending);
                 order.setCreateTime(LocalDateTime.now());
+                order.setOverdueTime(LocalDateTime.now().plusMinutes(30));
+                order.setPaymentStatus(Status.Pending);
+                order.setStatus(Status.Pending);
+                order.setBalance(cart.getTotalCost());
 
                 TemporaryAddress temporaryAddress = entityManager.find(TemporaryAddress.class, temporaryAddressId);
                 if(temporaryAddress != null){
@@ -112,25 +119,23 @@ public class OrdersRepositories  implements OrdersRepositoriesInterface{
     }
 
     @Override
-    public Boolean payOrder(int orderId, int customerId, double payment) {
+    public Boolean payOrder(int orderId, double payment) {
         EntityManager entityManager = factory.createEntityManager();
         EntityTransaction transaction = entityManager.getTransaction();
-        Order order = entityManager.find(Order.class, orderId);
-        Customer customer = entityManager.find(Customer.class, customerId);
-        Query query = entityManager.createQuery("SELECT c FROM Cart c WHERE c.orderId = :orderId");
-        query.setParameter("orderId", orderId);
-        Cart cart = (Cart) query.getSingleResult();
-        double cost = order.getCart().getCost();
 
         try {
             transaction.begin();
 
-            if(customer != null && payment >= cost){
-                order.setBalance(payment - cost);
-                cart.setCost(0.0);
-                order.setPaymentStatus(Status.Paid);
-                order.setUpdateTime(LocalDateTime.now());
-            }
+            Order order = entityManager.find(Order.class, orderId);
+            Query query = entityManager.createQuery("SELECT c FROM Cart c WHERE c.id = :orderId");
+            query.setParameter("orderId", orderId);
+            Cart cart = (Cart) query.getSingleResult();
+            double totalCost = order.getCart().getTotalCost();
+
+            order.setBalance(payment - totalCost);
+            order.setBalance(0.0);
+            order.setPaymentStatus(Status.Paid);
+            order.setUpdateTime(LocalDateTime.now());
 
             entityManager.merge(cart);
             entityManager.merge(order);
@@ -146,10 +151,9 @@ public class OrdersRepositories  implements OrdersRepositoriesInterface{
     }
 
     @Override
-    public List<Order> acceptOrders(List<Integer> orderIds) {
+    public Boolean acceptOrders(List<Integer> orderIds) {
         EntityManager entityManager = factory.createEntityManager();
         EntityTransaction transaction = entityManager.getTransaction();
-        List<Order> orders = new ArrayList<>();
 
         try {
             transaction.begin();
@@ -157,34 +161,34 @@ public class OrdersRepositories  implements OrdersRepositoriesInterface{
             for(Integer orderId : orderIds){
                 Order order = entityManager.find(Order.class, orderId);
 
-                if(order != null && order.getStatus() == Status.Pending && order.getPaymentStatus() == Status.Paid){
+                if(order.getStatus() == Status.Pending && order.getPaymentStatus() == Status.Paid){
                     order.setStatus(Status.Accepted);
                     order.setUpdateTime(LocalDateTime.now());
-                    orders.add(order);
+                    entityManager.merge(order);
                 }
             }
 
-            entityManager.merge(orders);
             transaction.commit();
-            return orders;
+            return true;
         } catch (PersistenceException e) {
             transaction.rollback();
             System.err.println("A PersistenceException occurred while merging: " + e.getMessage());
-            return null;
+            return false;
         } finally {
             entityManager.close();
         }
     }
 
     @Override
-    public List<Order> deliverOrders(List<Integer> orderIds, int employeeId) {
+    public Boolean deliverOrders(List<Integer> orderIds, int employeeId) {
         EntityManager entityManager = factory.createEntityManager();
         EntityTransaction transaction = entityManager.getTransaction();
-        List<Order> orders = new ArrayList<>();
-        Employee employee = entityManager.find(Employee.class, employeeId);
 
         try {
             transaction.begin();
+
+            List<Order> orders = new ArrayList<>();
+            Employee employee = entityManager.find(Employee.class, employeeId);
 
             for(Integer orderId : orderIds){
                 Order order = entityManager.find(Order.class, orderId);
@@ -199,11 +203,34 @@ public class OrdersRepositories  implements OrdersRepositoriesInterface{
             }
 
             transaction.commit();
-            return orders;
+            return true;
         } catch (PersistenceException e) {
             transaction.rollback();
             System.out.println("A PersistenceException occurred while merging: " + e.getMessage());
-            return null;
+            return false;
+        } finally {
+            entityManager.close();
+        }
+    }
+
+    @Override
+    public Boolean finishOrder(int orderId) {
+        EntityManager entityManager = factory.createEntityManager();
+        EntityTransaction transaction = entityManager.getTransaction();
+
+        try {
+            transaction.begin();
+
+            Order order = entityManager.find(Order.class, orderId);
+            order.setStatus(Status.Finished);
+
+            entityManager.merge(order);
+            transaction.commit();
+            return true;
+        } catch (PersistenceException e) {
+            transaction.rollback();
+            System.err.println("A Persistence occurred while merging: " + e.getMessage());
+            return false;
         } finally {
             entityManager.close();
         }
@@ -219,12 +246,12 @@ public class OrdersRepositories  implements OrdersRepositoriesInterface{
 
             for(Integer orderId: orderIds){
                 Order order = entityManager.find(Order.class, orderId);
-                Query query = entityManager.createQuery("SELECT c FROM Cart c WHERE c.orderId = :orderId");
+                Query query = entityManager.createQuery("SELECT c FROM Cart c WHERE c.id = :orderId");
                 query.setParameter("orderId", orderId);
                 Cart cart = (Cart) query.getSingleResult();
 
                 if(order != null){
-                    order.setBalance(cart.getCost());
+                    order.setBalance(cart.getTotalCost());
                     order.setStatus(Status.Cancelled);
                     order.setPaymentStatus(Status.Refunded);
                     order.setUpdateTime(LocalDateTime.now());

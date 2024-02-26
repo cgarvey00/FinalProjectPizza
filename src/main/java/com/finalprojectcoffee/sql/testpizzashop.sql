@@ -23,7 +23,7 @@ CREATE TABLE `customers`
 CREATE TABLE `employees`
 (
     `id`      INT NOT NULL,
-    `salary`  FLOAT(10) DEFAULT 0.0,
+    `salary`  DOUBLE DEFAULT 0.0,
     `status`  VARCHAR(255),
     FOREIGN KEY (`id`) REFERENCES `users` (`id`)
 );
@@ -34,18 +34,23 @@ CREATE TABLE `products`
     `name`     VARCHAR(255) NOT NULL,
     `category` ENUM('Sides','Pizzas','Drinks','Meal_Deals','Desserts'),
     `details`  VARCHAR(500),
-    `price`    FLOAT DEFAULT 0.0,
-    `stock`    INT(100) DEFAULT 0,
+    `price`    DOUBLE DEFAULT 0.0,
+    `stock`    INT DEFAULT 0,
     `image`    VARCHAR(255)
 );
 
-CREATE TABLE `cart` (
+CREATE TABLE `carts` (
     `id` INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
-    `user_id` INT NOT NULL,
+    `total_cost` DOUBLE DEFAULT 0.0
+);
+
+CREATE TABLE `cart_items`(
+    `id` INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+    `cart_id` INT NOT NULL,
     `product_id` INT NOT NULL,
-    `cost` FLOAT DEFAULT 0.0,
-    `quantity` INT(100) DEFAULT 0,
-    FOREIGN KEY (`user_id`) REFERENCES `users`(`id`),
+    `quantity` INT DEFAULT 0,
+    `cost` DOUBLE DEFAULT 0.0,
+    FOREIGN KEY (`cart_id`) REFERENCES `carts`(`id`),
     FOREIGN KEY (`product_id`) REFERENCES `products`(`id`)
 );
 
@@ -82,13 +87,12 @@ CREATE TABLE `orders` (
     `employee_id` INT,
     `temp_address_id` INT,
     `balance` DOUBLE DEFAULT 0.0,
-    `payment_method` VARCHAR(255) NOT NULL,
     `payment_status` VARCHAR(255) NOT NULL DEFAULT 'Pending',
-    `status` VARCHAR(255) NOT NULL,
-    `create_time` DATE,
+    `status` VARCHAR(255) NOT NULL DEFAULT 'Pending',
+    `create_time` DATE NOT NULL,
     `update_time` DATE,
     `overdue_time` DATE,
-    FOREIGN KEY (`cart_id`) REFERENCES `cart`(`id`),
+    FOREIGN KEY (`cart_id`) REFERENCES `carts`(`id`),
     FOREIGN KEY (`customer_id`) REFERENCES `customers`(`id`),
     FOREIGN KEY (`employee_id`) REFERENCES `employees`(`id`),
     FOREIGN KEY (`temp_address_id`) REFERENCES `temp_addresses`(`id`)

@@ -7,32 +7,39 @@ import java.util.Objects;
 @Entity
 @Table(name = "cart_items")
 public class CartItem {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
+    @Column(name = "id", nullable = false)
     private int id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "cart_id")
+    @ManyToOne
+    @JoinColumn(name = "cart_id", nullable = false)
     private Cart cart;
-
-    @Column(name = "product_id")
-    private int productId;
-
-    @Column(name = "cost", columnDefinition = "float default 0")
+    @OneToOne
+    @JoinColumn(name = "product_id", nullable = false)
+    private Product product;
+    @Column(name = "quantity")
+    private int quantity;
+    @Column(name = "cost")
     private double cost;
 
-    @Column(name = "quantity", columnDefinition = "int default 0")
-    private int quantity;
+    public CartItem() {
 
-    public CartItem() {}
+    }
 
-    public CartItem(Cart cart, int productId, double cost, int quantity) {
+    public CartItem(Cart cart, Product product, int quantity, double cost) {
         this.cart = cart;
-        this.productId = productId;
-        this.cost = cost;
+        this.product = product;
         this.quantity = quantity;
+        this.cost = cost;
+    }
+
+    public CartItem(int id, Cart cart, Product product, int quantity, double cost) {
+        this.id = id;
+        this.cart = cart;
+        this.product = product;
+        this.quantity = quantity;
+        this.cost = cost;
     }
 
     public int getId() {
@@ -51,20 +58,12 @@ public class CartItem {
         this.cart = cart;
     }
 
-    public int getProductId() {
-        return productId;
+    public Product getProduct() {
+        return product;
     }
 
-    public void setProductId(int productId) {
-        this.productId = productId;
-    }
-
-    public double getCost() {
-        return cost;
-    }
-
-    public void setCost(double cost) {
-        this.cost = cost;
+    public void setProduct(Product product) {
+        this.product = product;
     }
 
     public int getQuantity() {
@@ -75,29 +74,35 @@ public class CartItem {
         this.quantity = quantity;
     }
 
-    // Equals and hashCode
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        CartItem cartItem = (CartItem) o;
-        return id == cartItem.id && productId == cartItem.productId && Double.compare(cartItem.cost, cost) == 0 && quantity == cartItem.quantity && Objects.equals(cart, cartItem.cart);
+    public double getCost() {
+        return cost;
     }
 
-    @Override
-    public int hashCode() {
-        return Objects.hash(id, cart, productId, cost, quantity);
+    public void setCost(double cost) {
+        this.cost = cost;
     }
 
-    // ToString
     @Override
     public String toString() {
         return "CartItem{" +
                 "id=" + id +
                 ", cart=" + cart +
-                ", productId=" + productId +
-                ", cost=" + cost +
+                ", product=" + product +
                 ", quantity=" + quantity +
+                ", cost=" + cost +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        CartItem cartItem = (CartItem) o;
+        return id == cartItem.id;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
     }
 }

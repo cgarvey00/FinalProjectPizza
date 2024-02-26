@@ -1,6 +1,5 @@
 package com.finalprojectcoffee.entities;
 
-
 import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
@@ -21,12 +20,12 @@ public class Order {
     @JoinColumn(name = "cart_id", referencedColumnName = "id", nullable = false)
     private Cart cart;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "customer_id", referencedColumnName = "id", nullable = false)
     private Customer customer;
 
-    @OneToOne
-    @JoinColumn(name = "employee_id", referencedColumnName = "id", nullable = false)
+    @ManyToOne
+    @JoinColumn(name = "employee_id", referencedColumnName = "id")
     private Employee employee;
 
     @OneToOne
@@ -35,18 +34,16 @@ public class Order {
 
     @Column(name = "balance", columnDefinition = "0.0")
     private double balance;
-    @Column(name = "payment_method", nullable = false)
-    private String paymentMethod;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "payment_status", nullable = false, columnDefinition = "Pending")
-    private Enum paymentStatus;
+    @Column(name = "payment_status", columnDefinition = "Pending")
+    private Status paymentStatus;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "status", nullable = false)
-    private Enum status;
+    @Column(name = "status", columnDefinition = "Pending")
+    private Status status;
 
-    @Column(name = "create_date")
+    @Column(name = "create_time", nullable = false)
     private LocalDateTime createTime;
 
     @Column(name = "update_time")
@@ -58,13 +55,12 @@ public class Order {
     public Order() {
     }
 
-    public Order(Cart cart, Customer customer, Employee employee, TemporaryAddress temporaryAddress, double balance, String paymentMethod, Enum paymentStatus, Enum status, LocalDateTime createTime, LocalDateTime updateTime, LocalDateTime overdueTime) {
+    public Order(Cart cart, Customer customer, Employee employee, TemporaryAddress temporaryAddress, double balance, Status paymentStatus, Status status, LocalDateTime createTime, LocalDateTime updateTime, LocalDateTime overdueTime) {
         this.cart = cart;
         this.customer = customer;
         this.employee = employee;
         this.temporaryAddress = temporaryAddress;
         this.balance = balance;
-        this.paymentMethod = paymentMethod;
         this.paymentStatus = paymentStatus;
         this.status = status;
         this.createTime = createTime;
@@ -72,14 +68,13 @@ public class Order {
         this.overdueTime = overdueTime;
     }
 
-    public Order(int id, Cart cart, Customer customer, Employee employee, TemporaryAddress temporaryAddress, double balance, String paymentMethod, Enum paymentStatus, Enum status, LocalDateTime createTime, LocalDateTime updateTime, LocalDateTime overdueTime) {
+    public Order(int id, Cart cart, Customer customer, Employee employee, TemporaryAddress temporaryAddress, double balance, Status paymentStatus, Status status, LocalDateTime createTime, LocalDateTime updateTime, LocalDateTime overdueTime) {
         this.id = id;
         this.cart = cart;
         this.customer = customer;
         this.employee = employee;
         this.temporaryAddress = temporaryAddress;
         this.balance = balance;
-        this.paymentMethod = paymentMethod;
         this.paymentStatus = paymentStatus;
         this.status = status;
         this.createTime = createTime;
@@ -135,27 +130,19 @@ public class Order {
         this.balance = balance;
     }
 
-    public String getPaymentMethod() {
-        return paymentMethod;
-    }
-
-    public void setPaymentMethod(String paymentMethod) {
-        this.paymentMethod = paymentMethod;
-    }
-
-    public Enum getPaymentStatus() {
+    public Status getPaymentStatus() {
         return paymentStatus;
     }
 
-    public void setPaymentStatus(Enum paymentStatus) {
+    public void setPaymentStatus(Status paymentStatus) {
         this.paymentStatus = paymentStatus;
     }
 
-    public Enum getStatus() {
+    public Status getStatus() {
         return status;
     }
 
-    public void setStatus(Enum status) {
+    public void setStatus(Status status) {
         this.status = status;
     }
 
@@ -192,7 +179,6 @@ public class Order {
                 ", employee=" + employee +
                 ", temporaryAddress=" + temporaryAddress +
                 ", balance=" + balance +
-                ", paymentMethod='" + paymentMethod + '\'' +
                 ", paymentStatus=" + paymentStatus +
                 ", status=" + status +
                 ", createTime=" + createTime +
