@@ -82,6 +82,13 @@ public class CartItem {
         this.cost = cost;
     }
 
+    public void setCartAndUpdateCost(Cart cart) {
+        this.cart = cart;
+        if (product != null) {
+            this.cost = this.quantity * this.product.getPrice();
+        }
+    }
+
     @Override
     public String toString() {
         return "CartItem{" +
