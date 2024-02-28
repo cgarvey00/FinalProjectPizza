@@ -3,7 +3,6 @@ package com.finalprojectcoffee.commands;
 import com.finalprojectcoffee.entities.User;
 import com.finalprojectcoffee.repositories.UserRepositories;
 import com.finalprojectcoffee.utils.JBCriptUtil;
-import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -28,7 +27,6 @@ public class Login implements Command{
         String password = request.getParameter("password");
 
         if(username != null && !username.isEmpty() && password != null && !password.isEmpty()){
-            EntityManager entityManager = factory.createEntityManager();
 
             try {
                 UserRepositories UserRep = new UserRepositories(factory);
@@ -46,8 +44,8 @@ public class Login implements Command{
                     String errorMessage = "User doesn't exist";
                     session.setAttribute("errorMessage",errorMessage);
                 }
-            } finally {
-                entityManager.close();
+            } catch (Exception e){
+                System.err.println("An Exception occurred while logging: " + e.getMessage());
             }
         } else {
             String errorMessage = "Register for Account";

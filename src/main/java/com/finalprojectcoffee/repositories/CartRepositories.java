@@ -15,7 +15,7 @@ public class CartRepositories implements CartRepositoriesInterface {
     }
 
     @Override
-    public Boolean addItem(int productId, int quantity) {
+    public CartItem addItem(int productId, int quantity) {
         EntityManager entityManager = factory.createEntityManager();
         EntityTransaction transaction = entityManager.getTransaction();
 
@@ -33,18 +33,18 @@ public class CartRepositories implements CartRepositoriesInterface {
             entityManager.persist(cartItem);
             entityManager.merge(product);
             transaction.commit();
-            return true;
+            return cartItem;
         } catch (PersistenceException e) {
             transaction.rollback();
             System.err.println("An PersistenceException occurred while persisting: " + e.getMessage());
-            return false;
+            return null;
         } finally {
             entityManager.close();
         }
     }
 
     @Override
-    public Boolean addCart(List<CartItem> cartItems) {
+    public Cart addCart(List<CartItem> cartItems) {
         EntityManager entityManager = factory.createEntityManager();
         EntityTransaction transaction = entityManager.getTransaction();
 
@@ -63,11 +63,11 @@ public class CartRepositories implements CartRepositoriesInterface {
 
             entityManager.persist(cart);
             transaction.commit();
-            return true;
+            return cart;
         } catch (PersistenceException e) {
             transaction.rollback();
             System.err.println("A PersistenceException occurred while persisting: " + e.getMessage());
-            return false;
+            return null;
         } finally {
             entityManager.close();
         }
