@@ -5,6 +5,7 @@ import com.finalprojectcoffee.entities.ProductCategory;
 import jakarta.persistence.*;
 
 import java.util.List;
+import java.util.Optional;
 
 /**
  * @author cgarvey00
@@ -82,17 +83,13 @@ public class ProductRepositories implements ProductRepositoriesInterface {
         EntityTransaction transaction = entityManager.getTransaction();
         try {
             transaction.begin();
-
             TypedQuery<Long> query = entityManager.createQuery("SELECT COUNT(p) FROM Product p WHERE p.name=:name", Long.class);
             query.setParameter("name", p.getName());
-
-            long productCount = query.getSingleResult();
-
-            if (productCount == 0) {
+            Optional<Long> productCount = Optional.ofNullable(query.getSingleResult());
+            if (productCount.orElse(0L) == 0) {
                 entityManager.persist(p);
                 transaction.commit();
                 return true;
-
             } else {
                 return false;
             }
