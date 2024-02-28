@@ -10,7 +10,7 @@ CREATE TABLE `users`
     `phone_number` VARCHAR(255) NOT NULL,
     `email`        VARCHAR(255) NOT NULL,
     `image`        VARCHAR(255),
-    `type`         VARCHAR(255) NOT NULL
+    `user_type`    VARCHAR(255) NOT NULL
 );
 
 CREATE TABLE `customers`
@@ -23,7 +23,8 @@ CREATE TABLE `customers`
 CREATE TABLE `employees`
 (
     `id`      INT NOT NULL,
-    `salary`  FLOAT(10) DEFAULT 0.0,
+    `salary`  DOUBLE DEFAULT 0.0,
+    `status`  VARCHAR(255),
     FOREIGN KEY (`id`) REFERENCES `users` (`id`)
 );
 
@@ -33,18 +34,25 @@ CREATE TABLE `products`
     `name`     VARCHAR(255) NOT NULL,
     `category` ENUM('Sides','Pizzas','Drinks','Meal_Deals','Desserts'),
     `details`  VARCHAR(500),
-    `price`    FLOAT DEFAULT 0.0,
-    `stock`    INT(100) DEFAULT 0,
+    `price`    DOUBLE DEFAULT 0.0,
+    `stock`    INT DEFAULT 0,
     `image`    VARCHAR(255)
 );
 
-CREATE TABLE `cart` (
+CREATE TABLE `carts` (
     `id` INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
-    `user_id` INT NOT NULL,
+    `order_id` INT NOT NULL,
+    `cart_item_id` INT,
+    `total_cost` DOUBLE DEFAULT 0.0,
+    FOREIGN KEY (`order_id`) REFERENCES `orders`(`id`),
+    FOREIGN KEY (`cart_item_id`) REFERENCES `cart_items`(`id`)
+);
+
+CREATE TABLE `cart_items`(
+    `id` INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
     `product_id` INT NOT NULL,
-    `cost` FLOAT DEFAULT 0.0,
-    `quantity` INT(100) DEFAULT 0,
-    FOREIGN KEY (`user_id`) REFERENCES `users`(`id`),
+    `quantity` INT DEFAULT 0,
+    `cost` DOUBLE DEFAULT 0.0,
     FOREIGN KEY (`product_id`) REFERENCES `products`(`id`)
 );
 
@@ -76,18 +84,17 @@ CREATE TABLE `temp_addresses` (
 
 CREATE TABLE `orders` (
     `id` INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
-    `product_id` INT NOT NULL,
-    `customer_id` INT NOT NULL,
-    `employee_id` INT NOT NULL,
+    `cart_id` INT NOT NULL,
+    `user_id` INT NOT NULL,
     `temp_address_id` INT,
-    `payment_method` VARCHAR(50) NOT NULL,
-    `payment_status` ENUM('Pending','Paid') NOT NULL DEFAULT 'Pending',
-    `total_price` FLOAT DEFAULT 0.0,
+    `balance` DOUBLE DEFAULT 0.0,
+    `payment_method` VARCHAR(255) NOT NULL,
+    `payment_status` VARCHAR(255) NOT NULL DEFAULT 'Pending',
+    `status` VARCHAR(255) NOT NULL,
     `create_time` DATE,
     `update_time` DATE,
     `overdue_time` DATE,
-    FOREIGN KEY (`product_id`) REFERENCES `products`(`id`),
-    FOREIGN KEY (`customer_id`) REFERENCES `customers`(`id`),
-    FOREIGN KEY (`employee_id`) REFERENCES `employees`(`id`),
+    FOREIGN KEY (`cart_id`) REFERENCES `carts`(`id`),
+    FOREIGN KEY (`user_id`) REFERENCES `users`(`id`),
     FOREIGN KEY (`temp_address_id`) REFERENCES `temp_addresses`(`id`)
 );

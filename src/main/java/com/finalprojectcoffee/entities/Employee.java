@@ -9,6 +9,10 @@ public class Employee extends User {
     @Column(name = "salary")
     private Float salary;
 
+    @Enumerated(EnumType.STRING)
+    @Column(name = "status")
+    private Status status;
+
     public Employee() {
 
     }
@@ -22,9 +26,21 @@ public class Employee extends User {
         this.salary = salary;
     }
 
+    public Employee(String username, String password, String phoneNumber, String email, Float salary, Status status) {
+        super(username, password, phoneNumber, email);
+        this.salary = salary;
+        this.status = status;
+    }
+
     public Employee(int id, String username, String password, String phoneNumber, String email, String image, Float salary) {
         super(id, username, password, phoneNumber, email, image);
         this.salary = salary;
+    }
+
+    public Employee(int id, String username, String password, String phoneNumber, String email, String image, Float salary, Status status) {
+        super(id, username, password, phoneNumber, email, image);
+        this.salary = salary;
+        this.status = status;
     }
 
     public Float getSalary() {
@@ -33,6 +49,14 @@ public class Employee extends User {
 
     public void setSalary(Float salary) {
         this.salary = salary;
+    }
+
+    public Status getStatus() {
+        return status;
+    }
+
+    public void setStatus(Status status) {
+        this.status = status;
     }
 
     @Override

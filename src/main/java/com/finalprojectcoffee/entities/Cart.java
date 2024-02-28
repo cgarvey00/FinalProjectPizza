@@ -2,31 +2,37 @@ package com.finalprojectcoffee.entities;
 
 import jakarta.persistence.*;
 
-@Entity
-@Table(name = "cart")
-public class Cart {
+import java.util.List;
+import java.util.Objects;
 
+@Entity
+@Table(name = "carts")
+public class Cart {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
+    @Column(name = "id", nullable = false)
     private int id;
 
-    @Column(name = "user_id")
-    private int userId;
+    @OneToMany(mappedBy = "cart",cascade = CascadeType.ALL,orphanRemoval = true)
+    private List<CartItem> cartItems;
 
-    @Column(name = "product_id")
-    private int productId;
+    @Column(name = "total_cost")
+    private double totalCost;
 
-    @Column(name = "order_id")
-    private int orderId;
+    public Cart() {
 
-    @Column(name = "cost")
-    private double cost;
+    }
 
-    @Column(name = "quantity")
-    private int quantity;
+    public Cart(List<CartItem> cartItems, double totalCost) {
+        this.cartItems = cartItems;
+        this.totalCost = totalCost;
+    }
 
-
+    public Cart(int id, List<CartItem> cartItems, double totalCost) {
+        this.id = id;
+        this.cartItems = cartItems;
+        this.totalCost = totalCost;
+    }
 
     public int getId() {
         return id;
@@ -36,43 +42,41 @@ public class Cart {
         this.id = id;
     }
 
-    public int getUserId() {
-        return userId;
+    public List<CartItem> getCartItems() {
+        return cartItems;
     }
 
-    public void setUserId(int userId) {
-        this.userId = userId;
+    public void setCartItems(List<CartItem> cartItems) {
+        this.cartItems = cartItems;
     }
 
-    public int getProductId() {
-        return productId;
+    public double getTotalCost() {
+        return totalCost;
     }
 
-    public void setProductId(int productId) {
-        this.productId = productId;
+    public void setTotalCost(double totalCost) {
+        this.totalCost = totalCost;
     }
 
-    public int getOrderId() {
-        return orderId;
+    @Override
+    public String toString() {
+        return "Cart{" +
+                "id=" + id +
+                ", cartItems=" + cartItems +
+                ", totalCost=" + totalCost +
+                '}';
     }
 
-    public void setOrderId(int orderId) {
-        this.orderId = orderId;
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Cart cart = (Cart) o;
+        return id == cart.id;
     }
 
-    public double getCost() {
-        return cost;
-    }
-
-    public void setCost(double cost) {
-        this.cost = cost;
-    }
-
-    public int getQuantity() {
-        return quantity;
-    }
-
-    public void setQuantity(int quantity) {
-        this.quantity = quantity;
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
     }
 }

@@ -7,7 +7,7 @@
         <class>com.finalprojectcoffee.entities.Customer</class>
         <class>com.finalprojectcoffee.entities.User</class>
         <class>com.finalprojectcoffee.entities.Employee</class>
-        <class>com.finalprojectcoffee.entities.Orders</class>
+        <class>com.finalprojectcoffee.entities.Order</class>
         <class>com.finalprojectcoffee.entities.Product</class>
         <class>com.finalprojectcoffee.entities.Review</class>
         <class>com.finalprojectcoffee.entities.Cart</class>

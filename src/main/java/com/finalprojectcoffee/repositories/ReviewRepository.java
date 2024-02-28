@@ -30,7 +30,7 @@ public class ReviewRepository implements ReviewRepositoryInterface {
             transaction.commit();
             return true;
         } catch (PersistenceException e) {
-            System.err.println("A PersistenceException occurred while adding a review: " + e.getMessage());
+            System.err.println("An error occurred while adding a review: " + e.getMessage());
             transaction.rollback();
             return false;
         } finally {
@@ -44,7 +44,7 @@ public class ReviewRepository implements ReviewRepositoryInterface {
         try {
             return entityManager.createQuery("SELECT r FROM Review r", Review.class).getResultList();
         } catch (Exception e) {
-            System.err.println("An Exception occurred while retrieving all reviews: " + e.getMessage());
+            System.err.println("An error occurred while retrieving all reviews: " + e.getMessage());
             return Collections.emptyList();
         } finally {
             entityManager.close();
@@ -59,7 +59,7 @@ public class ReviewRepository implements ReviewRepositoryInterface {
                     .setParameter("userId", userId)
                     .getResultList();
         } catch (Exception e) {
-            System.err.println("An Exception occurred while retrieving reviews by user ID: " + e.getMessage());
+            System.err.println("An error occurred while retrieving reviews by user ID: " + e.getMessage());
             return Collections.emptyList();
         } finally {
             entityManager.close();
@@ -81,7 +81,7 @@ public class ReviewRepository implements ReviewRepositoryInterface {
             }
             return false;
         } catch (PersistenceException e) {
-            System.err.println("A PersistenceException occurred while removing a review: " + e.getMessage());
+            System.err.println("An error occurred while removing a review: " + e.getMessage());
             transaction.rollback();
             return false;
         } finally {
