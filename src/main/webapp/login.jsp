@@ -29,7 +29,7 @@
         color: rgb(243, 74, 74);
         font-weight: bold;
         position: absolute;
-        top: 165px;
+        top: 145px;
         margin-bottom: 0;
         font-size: 13.5px;
     }
@@ -55,11 +55,11 @@
 </style>
 <form id="login-form" action="controller" method="POST">
     <input type="hidden" name="action" value="login">
-    <c:if test="${not empty sessionScope.successMsg}">
-        <div class="s-success">${sessionScope.successMsg}</div>
+    <c:if test="${not empty sessionScope.successmsg}">
+        <div class="s-success">${sessionScope.successmsg}</div>
     </c:if>
 
-    <c:if test="${not empty sessionScope.errorMessage}">
+    <c:if test="${not empty sessionScope.errormsg}">
         <div class="s-error">${sessionScope.errorMessage}</div>
     </c:if>
     <div class="title" style="text-align: center;">
