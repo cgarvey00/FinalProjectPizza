@@ -71,15 +71,15 @@ public class ReviewRepository implements ReviewRepositoryInterface {
     public boolean removeReview(int reviewId) {
         EntityManager entityManager = factory.createEntityManager();
         EntityTransaction transaction = entityManager.getTransaction();
+
         try {
             transaction.begin();
+
             Review review = entityManager.find(Review.class, reviewId);
-            if (review != null) {
-                entityManager.remove(review);
-                transaction.commit();
-                return true;
-            }
-            return false;
+
+            entityManager.remove(review);
+            transaction.commit();
+            return true;
         } catch (PersistenceException e) {
             System.err.println("An error occurred while removing a review: " + e.getMessage());
             transaction.rollback();

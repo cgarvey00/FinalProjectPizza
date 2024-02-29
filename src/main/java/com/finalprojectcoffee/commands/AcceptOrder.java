@@ -42,6 +42,9 @@ public class AcceptOrder implements Command{
 
             if(!orderIds.isEmpty()){
                 orderRep.acceptOrders(orderIds);
+                session.setAttribute("aos_message", "Accept order successfully");
+            } else {
+                session.setAttribute("aoe_message", "Failed to accept order");
             }
 
         } catch (Exception e) {

@@ -34,8 +34,14 @@ public class OrderRepositories implements OrderRepositoriesInterface {
 
         try {
             TypedQuery<Order> query = entityManager.createQuery("SELECT o FROM Order o", Order.class);
-            List<Order> orders = query.getResultList();
-            return orders;
+            try {
+                List<Order> orders = query.getResultList();
+                return orders;
+            } catch (NoResultException e) {
+                System.err.println(e.getMessage());
+                System.err.println("Orders are not found");
+                return Collections.emptyList();
+            }
         } catch (Exception e) {
             System.err.println("An Exception occurred while searching " + e.getMessage());
             return Collections.emptyList();
@@ -51,8 +57,14 @@ public class OrderRepositories implements OrderRepositoriesInterface {
         try {
             TypedQuery<Order> query = entityManager.createQuery("SELECT o FROM Order o WHERE o.customer.id = :customerId", Order.class);
             query.setParameter("customerId", customerId);
-            List<Order> orders = query.getResultList();
-            return orders;
+            try {
+                List<Order> orders = query.getResultList();
+                return orders;
+            } catch (NoResultException e) {
+                System.err.println(e.getMessage());
+                System.err.println("Orders are not found");
+                return Collections.emptyList();
+            }
         } catch (Exception e) {
             System.err.println("An Exception occurred while searching: " + e.getMessage());
             return Collections.emptyList();
@@ -68,8 +80,15 @@ public class OrderRepositories implements OrderRepositoriesInterface {
         try {
             TypedQuery<Order> query = entityManager.createQuery("SELECT o FROM Order o WHERE o.employee.id = :employeeId", Order.class);
             query.setParameter("employeeId", employeeId);
-            List<Order> orders = query.getResultList();
-            return orders;
+
+            try {
+                List<Order> orders = query.getResultList();
+                return orders;
+            } catch (NoResultException e) {
+                System.err.println(e.getMessage());
+                System.err.println("Orders are not found");
+                return Collections.emptyList();
+            }
         } catch (Exception e) {
             System.err.println("An Exception occurred while searching: " + e.getMessage());
             return Collections.emptyList();

@@ -4,6 +4,7 @@ import com.finalprojectcoffee.entities.Product;
 import com.finalprojectcoffee.entities.ProductCategory;
 import jakarta.persistence.*;
 
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -18,29 +19,30 @@ public class ProductRepositories implements ProductRepositoriesInterface {
 
 
     @Override
-    public Product findProductByID(int productID) {
+    public Product findProductByID(int productId) {
         EntityManager entityManager = factory.createEntityManager();
+
         try {
-            Product p = entityManager.find(Product.class, productID);
-            return p;
+            Product product = entityManager.find(Product.class, productId);
+            return product;
         } catch (Exception e) {
             System.err.println("There has been an Exception when Searching for a Product " + e.getMessage());
             return null;
         } finally {
             entityManager.close();
-
         }
     }
 
     @Override
     public List<Product> getAllProducts() {
         EntityManager entityManager = factory.createEntityManager();
+
         try {
-            Query q = entityManager.createQuery("SELECT p FROM Product p");
-            return q.getResultList();
+            TypedQuery<Product> query = entityManager.createQuery("SELECT p FROM Product p", Product.class);
+            return query.getResultList();
         } catch (Exception e) {
             System.err.println("An Exception has occurred when Searching for a List of Product " + e.getMessage());
-            return null;
+            return Collections.emptyList();
         } finally {
             entityManager.close();
         }
@@ -49,13 +51,14 @@ public class ProductRepositories implements ProductRepositoriesInterface {
     @Override
     public List<Product> findProductsByCategory(ProductCategory category) {
         EntityManager entityManager = factory.createEntityManager();
+
         try {
-            Query q = entityManager.createQuery("SELECT p FROM Product p WHERE p.category=:category");
-            q.setParameter("category", category);
-            return q.getResultList();
+            TypedQuery<Product> query = entityManager.createQuery("SELECT p FROM Product p WHERE p.category=:category", Product.class);
+            query.setParameter("category", category);
+            return query.getResultList();
         } catch (Exception e) {
             System.err.println("An Exception has occurred when Searching for Products of a specific category " + e.getMessage());
-            return null;
+            return Collections.emptyList();
         } finally {
             entityManager.close();
         }
@@ -64,43 +67,55 @@ public class ProductRepositories implements ProductRepositoriesInterface {
     @Override
     public List<Product> findProductsByKeyword(String keyword) {
         EntityManager entityManager = factory.createEntityManager();
+
         try {
-            Query q = entityManager.createQuery("SELECT p FROM Product p WHERE LOWER(p.name)LIKE LOWER(:keyword) OR LOWER(p.details)LIKE LOWER(:keyword) ");
-            q.setParameter("keyword", "%" + keyword + "%");
-            return q.getResultList();
+            TypedQuery<Product> query = entityManager.createQuery("SELECT p FROM Product p WHERE LOWER(p.name)LIKE LOWER(:keyword) OR LOWER(p.details)LIKE LOWER(:keyword) ", Product.class);
+            query.setParameter("keyword", "%" + keyword + "%");
+            return query.getResultList();
         } catch (Exception e) {
             System.err.println("An Exception has occurred when Searching for Products of a specific keyword " + e.getMessage());
-            return null;
+            return Collections.emptyList();
         } finally {
             entityManager.close();
         }
     }
 
     @Override
-    public boolean addProduct(Product p) {
+    public boolean addProducts(List<Product> products) {
         EntityManager entityManager = factory.createEntityManager();
         EntityTransaction transaction = entityManager.getTransaction();
+
         try {
             transaction.begin();
 
-            TypedQuery<Long> query = entityManager.createQuery("SELECT COUNT(p) FROM Product p WHERE p.name=:name", Long.class);
-            query.setParameter("name", p.getName());
+            for(Product product : products){
+                TypedQuery<Product> query = entityManager.createQuery("SELECT p FROM Product p WHERE p.name = :name", Product.class);
+                query.setParameter("name", product.getName());
 
-            long productCount = query.getSingleResult();
+                try {
+                    Product newProduct = query.getSingleResult();
+                    newProduct.setName(product.getName());
+                    newProduct.setImage(product.getImage());
+                    newProduct.setStock(product.getStock());
+                    newProduct.setCategory(product.getCategory());
+                    newProduct.setDetails(product.getDetails());
+                    newProduct.setPrice(product.getPrice());
 
-            if (productCount == 0) {
-                entityManager.persist(p);
-                transaction.commit();
-                return true;
-
-            } else {
-                return false;
+                    entityManager.persist(newProduct);
+                }catch (NoResultException e){
+                    System.err.println(e.getMessage());
+                    System.err.println("Product exists.");
+                }
             }
-        } catch (PersistenceException pe) {
-            System.err.println(pe.getMessage());
-            System.err.println("A Persistence Exception occurred while Adding the Product\n\t" + p);
+
+            transaction.commit();
+            return true;
+        } catch (PersistenceException e) {
+            System.err.println("A PersistenceException occurred while Adding the Product: " + e.getMessage());
             transaction.rollback();
             return false;
+        } finally {
+            entityManager.close();
         }
     }
 
@@ -110,25 +125,20 @@ public class ProductRepositories implements ProductRepositoriesInterface {
         EntityTransaction transaction = entityManager.getTransaction();
         try {
             transaction.begin();
-            Product p = entityManager.find(Product.class, id);
+            Product product = entityManager.find(Product.class, id);
 
-            if (p != null) {
-                p.setCategory(category);
-                p.setDetails(details);
-                p.setName(name);
-                p.setPrice(price);
-                p.setImage(image);
-                p.setStock(stock);
-                entityManager.merge(p);
-                transaction.commit();
-                return true;
-            } else {
-                System.err.println("Product with ID  +" + id + " not available");
-                return false;
-            }
+            product.setCategory(category);
+            product.setDetails(details);
+            product.setName(name);
+            product.setPrice(price);
+            product.setImage(image);
+            product.setStock(stock);
+            entityManager.merge(product);
+
+            transaction.commit();
+            return true;
         } catch (PersistenceException e) {
-            System.err.println(e.getMessage());
-            System.err.println("A Persistence Exception occurred while Updating the Product\n\t" + e);
+            System.err.println("A Persistence Exception occurred while Updating the Product: " + e.getMessage());
             transaction.rollback();
             return false;
         } finally {
@@ -137,20 +147,28 @@ public class ProductRepositories implements ProductRepositoriesInterface {
     }
 
     @Override
-    public boolean deleteProduct(int pID) {
+    public boolean deleteProduct(List<Product> products) {
         EntityManager entityManager = factory.createEntityManager();
         EntityTransaction transaction = entityManager.getTransaction();
+
         try {
             transaction.begin();
-            Product p = entityManager.find(Product.class, pID);
 
-            if (p != null) {
-                entityManager.remove(p);
-                transaction.commit();
-                return true;
-            } else {
-                return false;
+            for(Product product : products){
+                TypedQuery<Product> query = entityManager.createQuery("SELECT p FROM Product p WHERE p.id = :id", Product.class);
+                query.setParameter("id", product.getId());
+
+                try {
+                    Product deleteProduct = query.getSingleResult();
+                    entityManager.remove(deleteProduct);
+                } catch (NoResultException e) {
+                    System.err.println(e.getMessage());
+                    System.err.println("Product doesn't exist");
+                }
             }
+
+            transaction.commit();
+            return true;
         } catch (PersistenceException e) {
             System.err.println(e.getMessage());
             System.err.println("A Persistence Exception occurred while Deleting the Product\n\t" + e);
@@ -160,23 +178,4 @@ public class ProductRepositories implements ProductRepositoriesInterface {
             entityManager.close();
         }
     }
-
-    public void resetAutoIncrement(String tableName, int value) {
-        EntityManager entityManager = factory.createEntityManager();
-        EntityTransaction transaction = entityManager.getTransaction();
-        try {
-            transaction.begin();
-            entityManager.createNativeQuery("ALTER TABLE " + tableName + " AUTO_INCREMENT=:value")
-                    .setParameter("value", value).executeUpdate();
-            transaction.commit();
-
-        } catch (PersistenceException e) {
-            System.err.println(e.getMessage());
-            System.err.println("A Persistence Exception occurred while Updating the Product ID Generation \n\t" + e);
-            transaction.rollback();
-        } finally {
-            entityManager.close();
-        }
-    }
-
 }

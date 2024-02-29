@@ -9,11 +9,11 @@ import java.util.List;
  * @author cgarvey00
  */
 public interface ProductRepositoriesInterface {
-    public Product findProductByID(int productID);
-    public List<Product> getAllProducts();
-    public List<Product> findProductsByCategory(ProductCategory category);
-    public List<Product> findProductsByKeyword(String keyword);
-    public boolean addProduct(Product p);
-    public boolean updateProduct(int id, String name, ProductCategory category, String details, double price, int stock, String image);
-    public boolean deleteProduct(int pID);
+     Product findProductByID(int productId);
+     List<Product> getAllProducts();
+     List<Product> findProductsByCategory(ProductCategory category);
+     List<Product> findProductsByKeyword(String keyword);
+     boolean addProducts(List<Product> products);
+     boolean updateProduct(int id, String name, ProductCategory category, String details, double price, int stock, String image);
+     boolean deleteProduct(List<Product> products);
 }

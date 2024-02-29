@@ -60,10 +60,10 @@ public class AddOrder implements Command{
                 Boolean order = orderRep.addOrder(activeCustomerId, cart.getId(), temporaryAddress.getId());
 
                 if(order){
-                    session.setAttribute("order_successful", "");
+                    session.setAttribute("aos_message", "Add order successfully");
                     terminus = "payment-page";
                 } else {
-                    session.setAttribute("order_error", "Failed to add order");
+                    session.setAttribute("aoe_message", "Failed to add order");
                 }
             } else {
                 session.setAttribute("cart_error", "Failed to add cart");

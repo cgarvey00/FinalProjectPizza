@@ -52,8 +52,15 @@ public class UserRepositories implements UserRepositoryInterfaces {
         EntityManager entityManager = factory.createEntityManager();
         try {
             TypedQuery<User> query = entityManager.createQuery("SELECT u FROM User u", User.class);
-            List<User> users = query.getResultList();
-            return users;
+
+            try {
+                List<User> users = query.getResultList();
+                return users;
+            } catch (NoResultException e) {
+                System.err.println(e.getMessage());
+                System.err.println("Users are not found");
+                return Collections.emptyList();
+            }
         } catch (Exception e) {
             System.err.println("An Exception occurred while searching " + e.getMessage());
             return Collections.emptyList();
