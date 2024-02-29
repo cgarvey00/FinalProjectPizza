@@ -36,33 +36,19 @@ public class Login implements Command {
                 User user = UserRep.findUserByUsername(username);
                 if (user != null) {
                     if (JBCriptUtil.checkPw(user.getPassword(), password)) {
-                        //Obtaining the User Type
-                        DiscriminatorValue discriminatorValue = user.getClass().getAnnotation(DiscriminatorValue.class);
-                        String uType;
-                        if (discriminatorValue != null) {
-                            //Setting the User Type as a String
-                            uType = discriminatorValue.value();
-                            session.setAttribute("userRole", uType);
-                            session.setAttribute("loggedInUser", user);
+                       session.setAttribute("loggedInUser", user);
 
-                            switch (uType) {
-                                case "Admin":
-                                    terminus = new UserPage("admin-dashboard",request,response,factory).execute();
-                                    break;
-                                case "Customer":
-                                    terminus = new UserPage("customer-dashboard",request,response,factory).execute();
-                                    break;
-                                case "Employee":
-                                    terminus = "employee-page.jsp";
-                                    break;
-                                default:
-                                    String errorMessage = "You may not be registered, try register if possible";
-                                    session.setAttribute("errorMessage", errorMessage);
-                            }
-                        } else {
-                            String errorMessage = "You may not be registered, try register if possible";
-                            session.setAttribute("errorMessage", errorMessage);
-                        }
+                       switch (user.getUserType()){
+                           case "Customer":
+                               terminus = "customer-home.jsp";
+                               break;
+                           case "Employee":
+                               terminus = "employee-home.jsp";
+                               break;
+                           case "Admin":
+                               terminus = "admin-home.jsp";
+                               break;
+                       }
                     } else {
                         String errorMessage = "Wrong password";
                         session.setAttribute("errorMessage", errorMessage);

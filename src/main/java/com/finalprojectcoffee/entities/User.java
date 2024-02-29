@@ -30,6 +30,9 @@ public class User {
     @Column(name = "image")
     private String image;
 
+    @Column(name = "user_type", insertable = false, updatable = false)
+    private String userType;
+
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Address> addresses;
 
@@ -119,6 +122,10 @@ public class User {
         this.image = image;
     }
 
+    public String getUserType() {
+        return userType;
+    }
+
     public List<Address> getAddresses() {
         return addresses;
     }
@@ -136,6 +143,7 @@ public class User {
                 ", phoneNumber='" + phoneNumber + '\'' +
                 ", email='" + email + '\'' +
                 ", image='" + image + '\'' +
+                ", userType='" + userType + '\'' +
                 ", addresses=" + addresses +
                 '}';
     }
