@@ -24,17 +24,18 @@ public class AddOrder implements Command{
 
     @Override
     public String execute() {
-        String terminus = "order-customer";
+        String terminus = "order-customer.jsp";
         HttpSession session = request.getSession(true);
 
         //The required values of adding cart item
         Integer[] productIds = (Integer[]) session.getAttribute("product_ids");
         Integer[] productQuantities = (Integer[]) session.getAttribute("product_quantities");
 
-        //Active user and temporary address
+        //Active user
         User activeCustomer = (User) session.getAttribute("loggedInUser");
         int activeCustomerId = activeCustomer.getId();
-        TemporaryAddress temporaryAddress = (TemporaryAddress) session.getAttribute("tem_address");
+        //Address
+        int addressId = (int) session.getAttribute("address_id");
 
         try {
             CartRepositories cartRep = new CartRepositories(factory);
@@ -57,11 +58,11 @@ public class AddOrder implements Command{
 
             Cart cart = cartRep.addCart(cartItems);
             if(cart != null){
-                Boolean order = orderRep.addOrder(activeCustomerId, cart.getId(), temporaryAddress.getId());
+                Boolean order = orderRep.addOrder(activeCustomerId, cart.getId(), addressId);
 
                 if(order){
                     session.setAttribute("aos_message", "Add order successfully");
-                    terminus = "payment-page";
+                    terminus = "payment-page.jsp";
                 } else {
                     session.setAttribute("aoe_message", "Failed to add order");
                 }

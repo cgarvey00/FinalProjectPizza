@@ -50,19 +50,12 @@ public class UserRepositories implements UserRepositoryInterfaces {
     @Override
     public List<User> getAllUsers() {
         EntityManager entityManager = factory.createEntityManager();
+
         try {
             TypedQuery<User> query = entityManager.createQuery("SELECT u FROM User u", User.class);
-
-            try {
-                List<User> users = query.getResultList();
-                return users;
-            } catch (NoResultException e) {
-                System.err.println(e.getMessage());
-                System.err.println("Users are not found");
-                return Collections.emptyList();
-            }
-        } catch (Exception e) {
-            System.err.println("An Exception occurred while searching " + e.getMessage());
+            return query.getResultList();
+        } catch (NoResultException e) {
+            System.err.println("A NoResultException occurred while searching " + e.getMessage());
             return Collections.emptyList();
         } finally {
             entityManager.close();
@@ -138,6 +131,29 @@ public class UserRepositories implements UserRepositoryInterfaces {
     }
 
     @Override
+    public Boolean addAddress(int userId, Address address) {
+        EntityManager entityManager = factory.createEntityManager();
+        EntityTransaction transaction = entityManager.getTransaction();
+
+        try {
+            transaction.begin();
+
+            User user = entityManager.find(User.class, userId);
+            address.setUser(user);
+
+            entityManager.persist(address);
+            transaction.commit();
+            return true;
+        } catch (PersistenceException e) {
+            transaction.rollback();
+            System.err.println("A PersistenceException occurred while persisting: " + e.getMessage());
+            return false;
+        } finally {
+            entityManager.close();
+        }
+    }
+
+    @Override
     public Boolean updateAddress(int userId, String street, String town, String county, String eirCode) {
         EntityManager entityManager = factory.createEntityManager();
         EntityTransaction transaction = entityManager.getTransaction();
@@ -161,6 +177,23 @@ public class UserRepositories implements UserRepositoryInterfaces {
             System.err.println("A PersistenceException occurred while merging: " + e.getMessage());
             transaction.rollback();
             return false;
+        } finally {
+            entityManager.close();
+        }
+    }
+
+    @Override
+    public List<Address> getAddressesByUserId(int userId) {
+        EntityManager entityManager = factory.createEntityManager();
+
+        try {
+            TypedQuery<Address> query = entityManager.createQuery("SELECT a FROM Address a WHERE a.user.id = :userId", Address.class);
+            query.setParameter("userId", userId);
+
+            return query.getResultList();
+        } catch (NoResultException e) {
+            System.err.println("A NoResultException occurred while searching: " + e.getMessage());
+            return Collections.emptyList();
         } finally {
             entityManager.close();
         }

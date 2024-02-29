@@ -27,10 +27,9 @@ public class Order {
     @ManyToOne
     @JoinColumn(name = "employee_id", referencedColumnName = "id")
     private Employee employee;
-
     @OneToOne
-    @JoinColumn(name = "temp_address_id", referencedColumnName = "id")
-    private TemporaryAddress temporaryAddress;
+    @JoinColumn(name = "address", referencedColumnName = "id", nullable = false)
+    private Address address;
 
     @Column(name = "balance", columnDefinition = "0.0")
     private double balance;
@@ -49,37 +48,32 @@ public class Order {
     @Column(name = "update_time")
     private LocalDateTime updateTime;
 
-    @Column(name = "overdue_time")
-    private LocalDateTime overdueTime;
-
     public Order() {
     }
 
-    public Order(Cart cart, Customer customer, Employee employee, TemporaryAddress temporaryAddress, double balance, Status paymentStatus, Status status, LocalDateTime createTime, LocalDateTime updateTime, LocalDateTime overdueTime) {
+    public Order(Cart cart, Customer customer, Employee employee, Address address, double balance, Status paymentStatus, Status status, LocalDateTime createTime, LocalDateTime updateTime) {
         this.cart = cart;
         this.customer = customer;
         this.employee = employee;
-        this.temporaryAddress = temporaryAddress;
+        this.address = address;
         this.balance = balance;
         this.paymentStatus = paymentStatus;
         this.status = status;
         this.createTime = createTime;
         this.updateTime = updateTime;
-        this.overdueTime = overdueTime;
     }
 
-    public Order(int id, Cart cart, Customer customer, Employee employee, TemporaryAddress temporaryAddress, double balance, Status paymentStatus, Status status, LocalDateTime createTime, LocalDateTime updateTime, LocalDateTime overdueTime) {
+    public Order(int id, Cart cart, Customer customer, Employee employee, Address address, double balance, Status paymentStatus, Status status, LocalDateTime createTime, LocalDateTime updateTime) {
         this.id = id;
         this.cart = cart;
         this.customer = customer;
         this.employee = employee;
-        this.temporaryAddress = temporaryAddress;
+        this.address = address;
         this.balance = balance;
         this.paymentStatus = paymentStatus;
         this.status = status;
         this.createTime = createTime;
         this.updateTime = updateTime;
-        this.overdueTime = overdueTime;
     }
 
     public int getId() {
@@ -114,12 +108,12 @@ public class Order {
         this.employee = employee;
     }
 
-    public TemporaryAddress getTemporaryAddress() {
-        return temporaryAddress;
+    public Address getAddress() {
+        return address;
     }
 
-    public void setTemporaryAddress(TemporaryAddress temporaryAddress) {
-        this.temporaryAddress = temporaryAddress;
+    public void setAddress(Address address) {
+        this.address = address;
     }
 
     public double getBalance() {
@@ -162,14 +156,6 @@ public class Order {
         this.updateTime = updateTime;
     }
 
-    public LocalDateTime getOverdueTime() {
-        return overdueTime;
-    }
-
-    public void setOverdueTime(LocalDateTime overdueTime) {
-        this.overdueTime = overdueTime;
-    }
-
     @Override
     public String toString() {
         return "Order{" +
@@ -177,13 +163,12 @@ public class Order {
                 ", cart=" + cart +
                 ", customer=" + customer +
                 ", employee=" + employee +
-                ", temporaryAddress=" + temporaryAddress +
+                ", address=" + address +
                 ", balance=" + balance +
                 ", paymentStatus=" + paymentStatus +
                 ", status=" + status +
                 ", createTime=" + createTime +
                 ", updateTime=" + updateTime +
-                ", overdueTime=" + overdueTime +
                 '}';
     }
 

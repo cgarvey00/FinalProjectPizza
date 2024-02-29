@@ -25,7 +25,7 @@ public class AcceptOrder implements Command{
 
     @Override
     public String execute() {
-        String terminus = "order-admin";
+        String terminus = "order-admin.jsp";
 
         HttpSession session = request.getSession(true);
         Object orderIdsObj = session.getAttribute("order_ids");

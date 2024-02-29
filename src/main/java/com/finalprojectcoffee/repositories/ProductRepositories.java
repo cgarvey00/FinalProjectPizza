@@ -92,19 +92,11 @@ public class ProductRepositories implements ProductRepositoriesInterface {
                 TypedQuery<Product> query = entityManager.createQuery("SELECT p FROM Product p WHERE p.name = :name", Product.class);
                 query.setParameter("name", product.getName());
 
-                try {
-                    Product newProduct = query.getSingleResult();
-                    newProduct.setName(product.getName());
-                    newProduct.setImage(product.getImage());
-                    newProduct.setStock(product.getStock());
-                    newProduct.setCategory(product.getCategory());
-                    newProduct.setDetails(product.getDetails());
-                    newProduct.setPrice(product.getPrice());
-
-                    entityManager.persist(newProduct);
-                }catch (NoResultException e){
-                    System.err.println(e.getMessage());
-                    System.err.println("Product exists.");
+                List<Product> existingProducts = query.getResultList();
+                if(existingProducts.isEmpty()){
+                    entityManager.persist(product);
+                } else {
+                    System.err.println("Product exists: " + product.getName());
                 }
             }
 

@@ -2,6 +2,8 @@ package com.finalprojectcoffee.entities;
 
 import jakarta.persistence.*;
 
+import java.util.List;
+
 @Entity
 @Table(name = "employees")
 @DiscriminatorValue("Employee")
@@ -26,19 +28,19 @@ public class Employee extends User {
         this.salary = salary;
     }
 
-    public Employee(String username, String password, String phoneNumber, String email, Float salary, Status status) {
-        super(username, password, phoneNumber, email);
+    public Employee(String username, String password, String phoneNumber, String email, String image, List<Address> addresses, Float salary, Status status) {
+        super(username, password, phoneNumber, email, image, addresses);
         this.salary = salary;
         this.status = status;
     }
 
-    public Employee(int id, String username, String password, String phoneNumber, String email, String image, Float salary) {
-        super(id, username, password, phoneNumber, email, image);
+    public Employee(int id, String username, String password, String phoneNumber, String email, String image, List<Address> addresses, Float salary) {
+        super(id, username, password, phoneNumber, email, image, addresses);
         this.salary = salary;
     }
 
-    public Employee(int id, String username, String password, String phoneNumber, String email, String image, Float salary, Status status) {
-        super(id, username, password, phoneNumber, email, image);
+    public Employee(int id, String username, String password, String phoneNumber, String email, String image, List<Address> addresses, Float salary, Status status) {
+        super(id, username, password, phoneNumber, email, image, addresses);
         this.salary = salary;
         this.status = status;
     }

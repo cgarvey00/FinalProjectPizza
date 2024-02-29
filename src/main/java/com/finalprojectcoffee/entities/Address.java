@@ -5,15 +5,15 @@ import jakarta.persistence.*;
 import java.util.Objects;
 
 @Entity
-@Table(name = "address")
+@Table(name = "addresses")
 public class Address {
     @Id
     @Column(name = "id", nullable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @OneToOne
-    @JoinColumn(name = "user_id", referencedColumnName = "id")
+    @ManyToOne
+    @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
     @Column(name = "street")
@@ -29,6 +29,21 @@ public class Address {
     private String eirCode;
 
     public Address() {
+    }
+
+    public Address(String street, String town, String county, String eirCode) {
+        this.street = street;
+        this.town = town;
+        this.county = county;
+        this.eirCode = eirCode;
+    }
+
+    public Address(User user, String street, String town, String county, String eirCode) {
+        this.user = user;
+        this.street = street;
+        this.town = town;
+        this.county = county;
+        this.eirCode = eirCode;
     }
 
     public Address(int id, User user, String street, String town, String county, String eirCode) {

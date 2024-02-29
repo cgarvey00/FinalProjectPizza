@@ -2,6 +2,7 @@ package com.finalprojectcoffee.entities;
 
 import jakarta.persistence.*;
 
+import java.util.List;
 import java.util.Objects;
 
 @Entity
@@ -29,6 +30,10 @@ public class User {
     @Column(name = "image")
     private String image;
 
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Address> addresses;
+
+
     public User() {
     }
 
@@ -39,13 +44,31 @@ public class User {
         this.email = email;
     }
 
-    public User(int id, String username, String password, String phoneNumber, String email, String image) {
+    public User(String username, String password, String phoneNumber, String email, String image) {
+        this.username = username;
+        this.password = password;
+        this.phoneNumber = phoneNumber;
+        this.email = email;
+        this.image = image;
+    }
+
+    public User(String username, String password, String phoneNumber, String email, String image, List<Address> addresses) {
+        this.username = username;
+        this.password = password;
+        this.phoneNumber = phoneNumber;
+        this.email = email;
+        this.image = image;
+        this.addresses = addresses;
+    }
+
+    public User(int id, String username, String password, String phoneNumber, String email, String image, List<Address> addresses) {
         this.id = id;
         this.username = username;
         this.password = password;
         this.phoneNumber = phoneNumber;
         this.email = email;
         this.image = image;
+        this.addresses = addresses;
     }
 
     public int getId() {
@@ -96,6 +119,14 @@ public class User {
         this.image = image;
     }
 
+    public List<Address> getAddresses() {
+        return addresses;
+    }
+
+    public void setAddresses(List<Address> addresses) {
+        this.addresses = addresses;
+    }
+
     @Override
     public String toString() {
         return "User{" +
@@ -105,6 +136,7 @@ public class User {
                 ", phoneNumber='" + phoneNumber + '\'' +
                 ", email='" + email + '\'' +
                 ", image='" + image + '\'' +
+                ", addresses=" + addresses +
                 '}';
     }
 

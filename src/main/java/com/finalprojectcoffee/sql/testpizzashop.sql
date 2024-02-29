@@ -62,7 +62,7 @@ CREATE TABLE `review` (
     FOREIGN KEY (`user_id`) REFERENCES `users`(`id`)
 ) ;
 
-CREATE TABLE `address`(
+CREATE TABLE `addresses`(
     `id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
     `user_id` INT NOT NULL,
     `street` VARCHAR(255),
@@ -72,28 +72,19 @@ CREATE TABLE `address`(
     FOREIGN KEY (`user_id`) REFERENCES `users` (`id`)
 );
 
-CREATE TABLE `temp_addresses` (
-    `id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    `street` VARCHAR(255),
-    `town` VARCHAR(255),
-    `county` VARCHAR(255),
-    `eir_code` VARCHAR(255)
-);
-
 CREATE TABLE `orders` (
     `id` INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
     `cart_id` INT NOT NULL,
     `customer_id` INT NOT NULL,
     `employee_id` INT,
-    `temp_address_id` INT,
+    `address_id` INT NOT NULL,
     `balance` DOUBLE DEFAULT 0.0,
     `payment_status` VARCHAR(255) NOT NULL DEFAULT 'Pending',
     `status` VARCHAR(255) NOT NULL DEFAULT 'Pending',
     `create_time` DATE NOT NULL,
     `update_time` DATE,
-    `overdue_time` DATE,
     FOREIGN KEY (`cart_id`) REFERENCES `carts`(`id`),
     FOREIGN KEY (`customer_id`) REFERENCES `customers`(`id`),
     FOREIGN KEY (`employee_id`) REFERENCES `employees`(`id`),
-    FOREIGN KEY (`temp_address_id`) REFERENCES `temp_addresses`(`id`)
+    FOREIGN KEY (`address_id`) REFERENCES `addresses`(`id`)
 );

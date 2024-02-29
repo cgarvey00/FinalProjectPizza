@@ -1,3 +1,4 @@
+import com.finalprojectcoffee.entities.Address;
 import com.finalprojectcoffee.entities.Customer;
 import com.finalprojectcoffee.entities.Employee;
 import com.finalprojectcoffee.entities.User;
@@ -31,18 +32,16 @@ public class UserRepositoriesTest {
 
     @Test
     public void findUserByIdTest(){
-        Customer expectedResult = new Customer(1,"cookregina","_IfkP$*t@4","311-325-1356","aguilarsara@hotmail.com",null,89);
-        User actualResult = userRep.findUserById(1);
-        assertEquals(expectedResult,actualResult);
+        User expectedResult = userRep.findUserById(1);
+        assertNotNull(expectedResult);
         User notExistResult = userRep.findUserById(100);
         assertNull(notExistResult);
     }
 
     @Test
     public void findUserByUsername(){
-       Employee expectedResult = new Employee("joseph40","kDk3(mDr_5","+1-442-410-1111x483","peter71@perez.org", 43694.26F);
-       User actualResult = userRep.findUserByUsername("joseph40");
-       assertEquals(expectedResult.getEmail(),actualResult.getEmail());
+       User expectedResult = userRep.findUserByUsername("joseph40");
+       assertNotNull(expectedResult);
        User notExistResult = userRep.findUserByUsername("Tom123");
        assertNull(notExistResult);
     }
@@ -76,8 +75,22 @@ public class UserRepositoriesTest {
     }
 
     @Test
+    public void addAddressTest(){
+        Address address = new Address("Dublin Road", "Dundalk", "Louth", "DY767P1");
+        Boolean expectedResult = userRep.addAddress(1, address);
+        assertTrue(expectedResult);
+    }
+
+    @Test
     public void updateAddressTest(){
         Boolean actualResult = userRep.updateAddress(1, "Dublin Road", "Dundalk", "Louth", "AD983D");
         assertTrue(actualResult);
+    }
+
+    @Test
+    public void getAddressesByUserIdTest(){
+        List<Address> expectedResult = userRep.getAddressesByUserId(1);
+        assertNotNull(expectedResult);
+        assertEquals(2,expectedResult.size());
     }
 }

@@ -43,12 +43,13 @@ INSERT INTO `cart_items` (`id`, `cart_id`, `product_id`, `quantity`, `cost`) VAL
     (5, 2, 1, 4, 23.96),
     (6, 3, 1, 4, 23.96);
 
-INSERT INTO `orders` (`cart_id`, `customer_id`, `temp_address_id`, `balance`, `payment_status`, `status`, `create_time`) VALUES
-    (1, 1, null, 47.95,  'Pending', 'Pending', '2024-02-01'),
-    (2, 3, null, 0.0, 'Paid', 'Delivered', '2024-02-05');
+INSERT INTO `addresses`(`id`, `user_id`, `street`, `town`, `county`, `eir_code`) VALUES
+    (1, 1, 'Dublin Road', 'Dundalk', 'Louth', 'DT123F2'),
+    (2, 3, 'Dublin Road', 'Dundalk', 'Louth', 'A91DC99');
 
-INSERT INTO `temp_addresses`(`id`, `street`, `town`, `county`, `eir_code`) VALUES
-    (1, 'Dunblin Road', 'Dundalk', 'Louth', 'A91DC99');
+INSERT INTO `orders` (`cart_id`, `customer_id`, `address_id`, `balance`, `payment_status`, `status`, `create_time`) VALUES
+    (1, 1, 1, 47.95,  'Pending', 'Pending', '2024-02-01'),
+    (2, 3, 2, 0.0, 'Paid', 'Delivered', '2024-02-05');
 
 ALTER TABLE `cart_items`
     ADD CONSTRAINT `fk_cart_items_carts`

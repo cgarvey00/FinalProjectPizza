@@ -18,8 +18,7 @@ public class OrderRepositories implements OrderRepositoriesInterface {
         EntityManager entityManager = factory.createEntityManager();
 
         try {
-            Order order = entityManager.find(Order.class, orderId);
-            return order;
+            return entityManager.find(Order.class, orderId);
         } catch (Exception e) {
             System.err.println("An Exception occurred while searching: " + e.getMessage());
             return null;
@@ -34,14 +33,7 @@ public class OrderRepositories implements OrderRepositoriesInterface {
 
         try {
             TypedQuery<Order> query = entityManager.createQuery("SELECT o FROM Order o", Order.class);
-            try {
-                List<Order> orders = query.getResultList();
-                return orders;
-            } catch (NoResultException e) {
-                System.err.println(e.getMessage());
-                System.err.println("Orders are not found");
-                return Collections.emptyList();
-            }
+            return query.getResultList();
         } catch (Exception e) {
             System.err.println("An Exception occurred while searching " + e.getMessage());
             return Collections.emptyList();
@@ -57,14 +49,8 @@ public class OrderRepositories implements OrderRepositoriesInterface {
         try {
             TypedQuery<Order> query = entityManager.createQuery("SELECT o FROM Order o WHERE o.customer.id = :customerId", Order.class);
             query.setParameter("customerId", customerId);
-            try {
-                List<Order> orders = query.getResultList();
-                return orders;
-            } catch (NoResultException e) {
-                System.err.println(e.getMessage());
-                System.err.println("Orders are not found");
-                return Collections.emptyList();
-            }
+
+            return query.getResultList();
         } catch (Exception e) {
             System.err.println("An Exception occurred while searching: " + e.getMessage());
             return Collections.emptyList();
@@ -81,14 +67,7 @@ public class OrderRepositories implements OrderRepositoriesInterface {
             TypedQuery<Order> query = entityManager.createQuery("SELECT o FROM Order o WHERE o.employee.id = :employeeId", Order.class);
             query.setParameter("employeeId", employeeId);
 
-            try {
-                List<Order> orders = query.getResultList();
-                return orders;
-            } catch (NoResultException e) {
-                System.err.println(e.getMessage());
-                System.err.println("Orders are not found");
-                return Collections.emptyList();
-            }
+            return query.getResultList();
         } catch (Exception e) {
             System.err.println("An Exception occurred while searching: " + e.getMessage());
             return Collections.emptyList();
@@ -98,7 +77,7 @@ public class OrderRepositories implements OrderRepositoriesInterface {
     }
 
     @Override
-    public Boolean addOrder(int customerId, int cartId, int temporaryAddressId) {
+    public Boolean addOrder(int customerId, int cartId, int addressId) {
         EntityManager entityManager = factory.createEntityManager();
         EntityTransaction transaction = entityManager.getTransaction();
 
@@ -108,20 +87,16 @@ public class OrderRepositories implements OrderRepositoriesInterface {
             Order order = new Order();
             Cart cart = entityManager.find(Cart.class, cartId);
             Customer customer = entityManager.find(Customer.class, customerId);
+            Address address = entityManager.find(Address.class, addressId);
 
             if(customer != null && cart != null){
                 order.setCart(cart);
                 order.setCustomer(customer);
                 order.setCreateTime(LocalDateTime.now());
-                order.setOverdueTime(LocalDateTime.now().plusMinutes(30));
                 order.setPaymentStatus(Status.Pending);
                 order.setStatus(Status.Pending);
                 order.setBalance(cart.getTotalCost());
-
-                TemporaryAddress temporaryAddress = entityManager.find(TemporaryAddress.class, temporaryAddressId);
-                if(temporaryAddress != null){
-                    order.setTemporaryAddress(temporaryAddress);
-                }
+                order.setAddress(address);
 
                 entityManager.persist(order);
             }
@@ -206,7 +181,6 @@ public class OrderRepositories implements OrderRepositoriesInterface {
         try {
             transaction.begin();
 
-            List<Order> orders = new ArrayList<>();
             Employee employee = entityManager.find(Employee.class, employeeId);
 
             for(Integer orderId : orderIds){
@@ -216,7 +190,6 @@ public class OrderRepositories implements OrderRepositoriesInterface {
                     order.setEmployee(employee);
                     order.setStatus(Status.Delivering);
                     order.setUpdateTime(LocalDateTime.now());
-                    orders.add(order);
                 }
                 entityManager.merge(order);
             }
@@ -274,9 +247,8 @@ public class OrderRepositories implements OrderRepositoriesInterface {
                     order.setStatus(Status.Cancelled);
                     order.setPaymentStatus(Status.Refunded);
                     order.setUpdateTime(LocalDateTime.now());
+                    entityManager.merge(order);
                 }
-
-                entityManager.merge(order);
             }
 
             transaction.commit();
