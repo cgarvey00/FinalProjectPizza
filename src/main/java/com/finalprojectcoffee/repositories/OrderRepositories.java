@@ -77,7 +77,7 @@ public class OrderRepositories implements OrderRepositoriesInterface {
     }
 
     @Override
-    public Boolean addOrder(int customerId, int cartId, int addressId) {
+    public Order addOrder(int customerId, int cartId, int addressId) {
         EntityManager entityManager = factory.createEntityManager();
         EntityTransaction transaction = entityManager.getTransaction();
 
@@ -102,11 +102,11 @@ public class OrderRepositories implements OrderRepositoriesInterface {
             }
 
             transaction.commit();
-            return true;
+            return order;
         } catch (PersistenceException e) {
             transaction.rollback();
             System.err.println("A PersistenceException occurred while persisting: " + e.getMessage());
-            return false;
+            return null;
         } finally {
             entityManager.close();
         }

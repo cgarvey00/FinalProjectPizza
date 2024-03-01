@@ -12,12 +12,12 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
-public class DeliveryOrder implements Command{
+public class CancelOrder implements Command{
     private final HttpServletRequest request;
     private final HttpServletResponse response;
     private final EntityManagerFactory factory;
 
-    public DeliveryOrder(HttpServletRequest request, HttpServletResponse response, EntityManagerFactory factory) {
+    public CancelOrder(HttpServletRequest request, HttpServletResponse response, EntityManagerFactory factory) {
         this.request = request;
         this.response = response;
         this.factory = factory;
@@ -25,13 +25,11 @@ public class DeliveryOrder implements Command{
 
     @Override
     public String execute() {
-        String terminus = "order-admin";
+        String terminus = "order-page";
 
         HttpSession session = request.getSession(true);
-        Object orderIdsObj = session.getAttribute("order_ids");
-        Object employeeObj = session.getAttribute("employee_ids");
+        Object orderIdsObj = session.getAttribute("cancel_order_ids");
         List<Integer> orderIds = new ArrayList<>();
-        List<Integer> employeeIds = new ArrayList<>();
 
         if(orderIdsObj instanceof Integer[]){
             Integer[] orderIdsArray = (Integer[]) orderIdsObj;
@@ -39,26 +37,17 @@ public class DeliveryOrder implements Command{
             orderIds = Arrays.stream(orderIdsArray).filter(Objects::nonNull).collect(Collectors.toList());
         }
 
-        if(employeeObj instanceof  Integer[]){
-            Integer[] employeeArray = (Integer[]) employeeObj;
-            //Filter null elements
-            employeeIds = Arrays.stream(employeeArray).filter(Objects::nonNull).collect(Collectors.toList());
-        }
-
         try {
             OrderRepositories orderRep = new OrderRepositories(factory);
 
-            for(int employeeId : employeeIds){
-                //Call DeliverOrders function
-                Boolean deliverOrder = orderRep.deliverOrders(orderIds, employeeId);
-                if(deliverOrder){
-                    session.setAttribute("ds-message", "Deliver order successfully");
-                } else {
-                    session.setAttribute("de-message", "Failed to deliver order");
-                }
+            Boolean isCancelled = orderRep.cancelOrders(orderIds);
+            if (isCancelled) {
+                session.setAttribute("cos-message", "Cancel orders successfully");
+            } else {
+                session.setAttribute("coe-message", "Failed to cancel orders");
             }
         } catch (Exception e) {
-            System.err.println("An Exception occurred while delivering orders: " + e.getMessage());
+            System.err.println("An Exception occurred while cancelling orders: " + e.getMessage());
         }
         return terminus;
     }

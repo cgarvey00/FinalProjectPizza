@@ -53,10 +53,8 @@ public class OrderRepositoriesTest {
 
     @Test
     public void addOrderTest(){
-        Boolean expectedResult = orderRep.addOrder(3,3,1);
-        assertTrue(expectedResult);
-        Order order = orderRep.findOrderById(3);
-        assertNotNull(order);
+        Order expectedResult = orderRep.addOrder(3,3,1);
+        assertNotNull(expectedResult);
     }
 
     @Test

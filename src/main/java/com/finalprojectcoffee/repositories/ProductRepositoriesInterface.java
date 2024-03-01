@@ -6,7 +6,7 @@ import com.finalprojectcoffee.entities.ProductCategory;
 import java.util.List;
 
 /**
- * @author cgarvey00
+ * @author Yutang
  */
 public interface ProductRepositoriesInterface {
      Product findProductByID(int productId);
@@ -14,6 +14,6 @@ public interface ProductRepositoriesInterface {
      List<Product> findProductsByCategory(ProductCategory category);
      List<Product> findProductsByKeyword(String keyword);
      boolean addProducts(List<Product> products);
-     boolean updateProduct(int id, String name, ProductCategory category, String details, double price, int stock, String image);
+     boolean updateProduct(Product product);
      boolean deleteProduct(List<Product> products);
 }

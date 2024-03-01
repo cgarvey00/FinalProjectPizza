@@ -9,7 +9,10 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
 public class AddOrder implements Command{
     private final HttpServletRequest request;
@@ -24,27 +27,44 @@ public class AddOrder implements Command{
 
     @Override
     public String execute() {
-        String terminus = "order-customer.jsp";
+        String terminus = "search-menu.jsp";
         HttpSession session = request.getSession(true);
 
-        //The required values of adding cart item
-        Integer[] productIds = (Integer[]) session.getAttribute("product_ids");
-        Integer[] productQuantities = (Integer[]) session.getAttribute("product_quantities");
+        Object productIdsObj = session.getAttribute("product_ids");
+        Object quantitiesObj = session.getAttribute("product_quantities");
+        List<Integer> productIds = new ArrayList<>();
+        List<Integer> quantities = new ArrayList<>();
+
+        if(productIdsObj instanceof Integer[]){
+            Integer[] productIdsArray = (Integer[]) productIdsObj;
+            //Filter null elements
+            productIds = Arrays.stream(productIdsArray).filter(Objects::nonNull).collect(Collectors.toList());
+        }
+
+        if(quantitiesObj instanceof Integer[]){
+            Integer[] quantitiesArray = (Integer[]) quantitiesObj;
+            //Filter null elements
+            quantities = Arrays.stream(quantitiesArray).filter(Objects::nonNull).collect(Collectors.toList());
+        }
 
         //Active user
         User activeCustomer = (User) session.getAttribute("loggedInUser");
         int activeCustomerId = activeCustomer.getId();
+
         //Address
         int addressId = (int) session.getAttribute("address_id");
+
+        //Payment
+        Double payment = (Double) session.getAttribute("payment");
 
         try {
             CartRepositories cartRep = new CartRepositories(factory);
             OrderRepositories orderRep = new OrderRepositories(factory);
             List<CartItem> cartItems = new ArrayList<>();
 
-            if(productIds != null && productQuantities != null && productIds.length == productQuantities.length){
-                for (int i = 0; i< productIds.length; i++) {
-                    CartItem cartItem = cartRep.addItem(productIds[i], productQuantities[i]);
+            if(!productIds.isEmpty()&& !quantities.isEmpty() && productIds.size() == quantities.size()){
+                for (int i = 0; i< productIds.size(); i++) {
+                    CartItem cartItem = cartRep.addItem(productIds.get(i), quantities.get(i));
 
                     if (cartItem != null) {
                         cartItems.add(cartItem);
@@ -53,16 +73,19 @@ public class AddOrder implements Command{
                     }
                 }
             } else {
-                session.setAttribute("item_quantity_error", "Failed to select items");
+                session.setAttribute("iqe_message", "Failed to select items");
             }
 
             Cart cart = cartRep.addCart(cartItems);
             if(cart != null){
-                Boolean order = orderRep.addOrder(activeCustomerId, cart.getId(), addressId);
+                Order order = orderRep.addOrder(activeCustomerId, cart.getId(), addressId);
 
-                if(order){
-                    session.setAttribute("aos_message", "Add order successfully");
-                    terminus = "payment-page.jsp";
+                if(order != null){
+                    Boolean isPaid = orderRep.payOrder(order.getId(), payment);
+                    if(isPaid){
+                        session.setAttribute("aos_message", "Add order successfully");
+                        terminus = "index.jsp";
+                    }
                 } else {
                     session.setAttribute("aoe_message", "Failed to add order");
                 }

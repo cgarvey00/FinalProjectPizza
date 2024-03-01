@@ -112,21 +112,14 @@ public class ProductRepositories implements ProductRepositoriesInterface {
     }
 
     @Override
-    public boolean updateProduct(int id, String name, ProductCategory category, String details, double price, int stock, String image) {
+    public boolean updateProduct(Product product) {
         EntityManager entityManager = factory.createEntityManager();
         EntityTransaction transaction = entityManager.getTransaction();
+
         try {
             transaction.begin();
-            Product product = entityManager.find(Product.class, id);
 
-            product.setCategory(category);
-            product.setDetails(details);
-            product.setName(name);
-            product.setPrice(price);
-            product.setImage(image);
-            product.setStock(stock);
             entityManager.merge(product);
-
             transaction.commit();
             return true;
         } catch (PersistenceException e) {
