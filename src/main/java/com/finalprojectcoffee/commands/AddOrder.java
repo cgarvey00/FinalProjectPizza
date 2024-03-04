@@ -62,9 +62,12 @@ public class AddOrder implements Command{
             OrderRepositories orderRep = new OrderRepositories(factory);
             List<CartItem> cartItems = new ArrayList<>();
 
+            //Add empty cart
+            Cart cart = cartRep.addCart();
+
             if(!productIds.isEmpty()&& !quantities.isEmpty() && productIds.size() == quantities.size()){
                 for (int i = 0; i< productIds.size(); i++) {
-                    CartItem cartItem = cartRep.addItem(productIds.get(i), quantities.get(i));
+                    CartItem cartItem = cartRep.addItem(cart.getId(), productIds.get(i), quantities.get(i));
 
                     if (cartItem != null) {
                         cartItems.add(cartItem);
@@ -76,7 +79,8 @@ public class AddOrder implements Command{
                 session.setAttribute("iqe_message", "Failed to select items");
             }
 
-            Cart cart = cartRep.addCart(cartItems);
+            //Call createCart function
+            cart = cartRep.createCart(cartItems);
             if(cart != null){
                 Order order = orderRep.addOrder(activeCustomerId, cart.getId(), addressId);
 

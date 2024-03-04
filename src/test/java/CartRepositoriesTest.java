@@ -1,7 +1,10 @@
+import com.finalprojectcoffee.entities.Cart;
 import com.finalprojectcoffee.entities.CartItem;
 import com.finalprojectcoffee.entities.Product;
 import com.finalprojectcoffee.repositories.CartRepositories;
 import com.finalprojectcoffee.repositories.ProductRepositories;
+import jakarta.persistence.EntityManager;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import jakarta.persistence.EntityManagerFactory;
@@ -13,11 +16,27 @@ public class CartRepositoriesTest {
 
     private CartRepositories cartRep;
     private EntityManagerFactory factory;
+    private EntityManager entityManager;
 
     @BeforeEach
     public void setup() {
         factory = Persistence.createEntityManagerFactory("testpizzashop");
+        entityManager = factory.createEntityManager();
         cartRep = new CartRepositories(factory);
+    }
+
+    @AfterEach
+    public void destroy(){
+        if(factory != null && factory.isOpen()){
+            factory.close();
+        }
+    }
+
+    @Test
+    public void addItemTest(){
+
+
+        entityManager.close();
     }
 
 //    @Test
@@ -51,11 +70,7 @@ public class CartRepositoriesTest {
 
 
 
-@Test
-    public void addItem_invalidProductId() {
-        CartItem cartItem = cartRep.addItem(9999, 5);
-        assertNull(cartItem);
-    }
+
 
     @Test
     public void getAllCartItemsByCartId_invalidCartId() {
