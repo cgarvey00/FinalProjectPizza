@@ -33,9 +33,9 @@ public class ViewOrderCustomer implements Command{
 
             List<Order> orders = orderRep.getAllOrdersByCustomerId(activeCustomer.getId());
             if(!orders.isEmpty()){
-                session.setAttribute("orders", orders);
+                session.setAttribute("vos-msg", orders);
             } else {
-                session.setAttribute("voe-message", "Failed to view orders");
+                session.setAttribute("voe-msg", "Failed to view orders");
             }
         } catch (Exception e) {
             System.err.println("An Exception occurred while viewing orders: " + e.getMessage());

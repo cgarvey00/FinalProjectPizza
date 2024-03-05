@@ -55,9 +55,9 @@ public class UpdateProduct implements Command{
 
             boolean isUpdated = productRep.updateProduct(product);
             if(isUpdated){
-                session.setAttribute("pus-message", "Update successfully");
+                session.setAttribute("pus-msg", "Update successfully");
             } else {
-                session.setAttribute("pue-message", "Failed to update product");
+                session.setAttribute("pue-msg", "Failed to update product");
             }
 
         } catch (Exception e) {
