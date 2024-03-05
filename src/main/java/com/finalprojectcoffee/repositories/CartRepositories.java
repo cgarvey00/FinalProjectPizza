@@ -15,7 +15,28 @@ public class CartRepositories implements CartRepositoriesInterface {
     }
 
     @Override
-    public CartItem addItem(int productId, int quantity) {
+    public Cart addCart() {
+        EntityManager entityManager = factory.createEntityManager();
+        EntityTransaction  transaction = entityManager.getTransaction();
+
+        try {
+            transaction.begin();
+
+            Cart cart = new Cart();
+            entityManager.persist(cart);
+            transaction.commit();
+            return cart;
+        } catch (PersistenceException e) {
+            transaction.rollback();
+            System.err.println("A PersistenceException occurred while adding an empty cart: " + e.getMessage());
+            return null;
+        } finally {
+            entityManager.close();
+        }
+    }
+
+    @Override
+    public CartItem addItem(int cartId, int productId, int quantity) {
         EntityManager entityManager = factory.createEntityManager();
         EntityTransaction transaction = entityManager.getTransaction();
 
@@ -23,10 +44,12 @@ public class CartRepositories implements CartRepositoriesInterface {
             transaction.begin();
 
             Product product = entityManager.find(Product.class, productId);
+            Cart cart = entityManager.find(Cart.class, cartId);
             CartItem cartItem = new CartItem();
 
             cartItem.setProduct(product);
             cartItem.setQuantity(quantity);
+            cartItem.setCart(cart);
             cartItem.setCost(quantity * product.getPrice());
             product.setStock(product.getStock() - quantity);
 
@@ -44,7 +67,7 @@ public class CartRepositories implements CartRepositoriesInterface {
     }
 
     @Override
-    public Cart addCart(List<CartItem> cartItems) {
+    public Cart createCart(List<CartItem> cartItems) {
         EntityManager entityManager = factory.createEntityManager();
         EntityTransaction transaction = entityManager.getTransaction();
 
@@ -107,8 +130,7 @@ public class CartRepositories implements CartRepositoriesInterface {
         try {
             TypedQuery<CartItem> query = entityManager.createQuery("SELECT c.cartItems FROM Cart c WHERE c.id = :cartId", CartItem.class);
             query.setParameter("cartId", cartId);
-            List<CartItem> cartItems = query.getResultList();
-            return cartItems;
+            return query.getResultList();
         } catch (Exception e) {
             System.err.println("An Exception has occurred when retrieving cart items: " + e.getMessage());
             return Collections.emptyList();
