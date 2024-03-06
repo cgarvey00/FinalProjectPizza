@@ -44,6 +44,11 @@ public class CartRepositories implements CartRepositoriesInterface {
             transaction.begin();
 
             Product product = entityManager.find(Product.class, productId);
+            if (product == null) {
+                System.err.println("Product with ID " + productId + " does not exist.");
+                return null;
+            }
+
             Cart cart = entityManager.find(Cart.class, cartId);
             CartItem cartItem = new CartItem();
 
@@ -72,6 +77,9 @@ public class CartRepositories implements CartRepositoriesInterface {
         EntityTransaction transaction = entityManager.getTransaction();
 
         try {
+            if (cartItems.isEmpty()) {
+                return null;
+            }
             transaction.begin();
 
             Cart cart = new Cart();
@@ -106,6 +114,9 @@ public class CartRepositories implements CartRepositoriesInterface {
 
             for(int cartItemId : cartItemIds){
                 CartItem cartItem = entityManager.find(CartItem.class, cartItemId);
+                if (cartItem == null) {
+                    return false;
+                }
                 Product product = entityManager.find(Product.class, cartItem.getProduct().getId());
                 int stock = cartItem.getQuantity();
                 product.setStock(product.getStock() + stock);
@@ -150,6 +161,11 @@ public class CartRepositories implements CartRepositoriesInterface {
             transaction.begin();
 
             Cart cart = entityManager.find(Cart.class, cartId);
+            if (cart == null) {
+                return false;
+            }
+
+
             List<CartItem> cartItems = cart.getCartItems();
 
             for (CartItem cartItem : cartItems) {
