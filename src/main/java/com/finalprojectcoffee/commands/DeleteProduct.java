@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
-public class DeleteProduct implements Command{
+public class DeleteProduct implements Command {
     private final HttpServletRequest request;
     private final HttpServletResponse response;
     private final EntityManagerFactory factory;
@@ -26,27 +26,38 @@ public class DeleteProduct implements Command{
 
     @Override
     public String execute() {
-        String terminus = "";
+        String terminus = "view-stock.jsp";
 
         HttpSession session = request.getSession(true);
-        Object productsObj = session.getAttribute("product_ids");
-        List<Product> products = new ArrayList<>();
+//        Object productsObj = session.getAttribute("product_ids");
 
-        if(productsObj instanceof Product[]){
-            Product[] productIdsArray = (Product []) productsObj;
-            //Filter null elements
-            products = Arrays.stream(productIdsArray).filter(Objects::nonNull).collect(Collectors.toList());
-        }
+        int productId = Integer.parseInt(request.getParameter("product_id"));
+
+        //        if(productsObj instanceof Product[]){
+//            Product[] productIdsArray = (Product []) productsObj;
+//            //Filter null elements
+//            products = Arrays.stream(productIdsArray).filter(Objects::nonNull).collect(Collectors.toList());
+//        }
 
         try {
             ProductRepositories productRep = new ProductRepositories(factory);
-
+            Product p = productRep.findProductByID(productId);
+            List<Product> products = new ArrayList<>();
+            products.add(p);
             boolean isDeleted = productRep.deleteProduct(products);
-            if(isDeleted){
+            if (isDeleted) {
                 session.setAttribute("pds-message", "Delete products successfully");
             } else {
                 session.setAttribute("pde-message", "Failed to delete products");
             }
+
+            if (session.getAttribute("pds-message") != null) {
+                session.setAttribute("delete-product-success", true);
+
+            } else {
+                session.setAttribute("delete-product-success", false);
+            }
+
         } catch (Exception e) {
             System.err.println("An Exception occurred while deleting products: " + e.getMessage());
         }

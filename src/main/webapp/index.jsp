@@ -63,20 +63,7 @@
     </div>
 
 </section>
-<section class="footer container">
-
-    <a href="#" class="logo"> <i class="fa-solid fa-pizza-slice"></i> Pizza Shop </a>
-
-    <p class="credit"> created by <span>Conor,Tom and Matthew</span> | all rights reserved!  © 2024 </p>
-
-    <div class="share">
-        <a href="#" class="fab fa-facebook-f"></a>
-        <a href="#" class="fab fa-linkedin"></a>
-        <a href="#" class="fab fa-twitter"></a>
-        <a href="#" class="fab fa-github"></a>
-    </div>
-
-</section>
+<%@include file="footer.jsp"%>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js"></script>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css">

@@ -3,10 +3,6 @@ package com.finalprojectcoffee.commands;
 import com.finalprojectcoffee.entities.Product;
 import com.finalprojectcoffee.entities.User;
 import com.finalprojectcoffee.repositories.ProductRepositories;
-import com.finalprojectcoffee.repositories.UserRepositories;
-import com.finalprojectcoffee.utils.EmailUtil;
-import com.finalprojectcoffee.utils.JBCriptUtil;
-import com.finalprojectcoffee.utils.PhoneNumberUtil;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.servlet.http.HttpServletRequest;
@@ -15,12 +11,12 @@ import jakarta.servlet.http.HttpSession;
 
 import java.util.List;
 
-public class SearchKeyword implements Command {
+public class ViewSearch implements Command {
     private final HttpServletRequest request;
     private final HttpServletResponse response;
     private final EntityManagerFactory factory;
 
-    public SearchKeyword(HttpServletRequest request, HttpServletResponse response, EntityManagerFactory factory) {
+    public ViewSearch(HttpServletRequest request, HttpServletResponse response, EntityManagerFactory factory) {
         this.request = request;
         this.response = response;
         this.factory = factory;
@@ -29,19 +25,24 @@ public class SearchKeyword implements Command {
     @Override
     public String execute() {
         String terminus = "search.jsp";
+
         HttpSession session = request.getSession(true);
-        String keyword = request.getParameter("search_box");
-        if (keyword != null && !keyword.isEmpty()) {
-            EntityManager entityManager = factory.createEntityManager();
-            try {
-                ProductRepositories productRepos = new ProductRepositories(factory);
-                List<Product> productList = productRepos.findProductsByKeyword(keyword);
-                session.setAttribute("searchKeywordProducts", productList);
-            } finally {
-                entityManager.close();
+        if (session != null) {
+            User loggedInUser = (User) session.getAttribute("loggedInUser");
+
+            if (loggedInUser != null && "Customer".equals(loggedInUser.getUserType())) {
+                terminus = "search.jsp";
+
+            } else {
+                terminus = "index.jsp";
             }
+
+        } else {
+            terminus = "index.jsp";
         }
         return terminus;
+
     }
 }
+
 

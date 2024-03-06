@@ -27,24 +27,7 @@
     }
 </style>
 <body>
-<header class="header fixed-top">
-    <div class="container">
-
-        <div class="row align-items-center">
-
-            <a href="#" class="logo mr-auto"> <i class="fa-solid fa-pizza-slice"></i> Pizza Shop </a>
-
-            <nav class="nav">
-                <a href="controller?action=home">Home</a>
-                <a href="controller?action=view-login">Login</a>
-                <a href="controller?action=view-register">Register</a>
-            </nav>
-            <div class="icons">
-                <div class="fas fa-bars" id="menu-btn"></div>
-            </div>
-        </div>
-    </div>
-</header>
+<%@include file="customer-nav.jsp"%>
 <!-- home section starts  -->
 <br><br><br><br><br><br><br><br><br><br><br><br>
 <div class="show-products" id="products">
@@ -91,20 +74,7 @@
     <% } %>
 </div>
 
-<section class="footer container">
-
-    <a href="#" class="logo"> <i class="fa-solid fa-pizza-slice"></i> Pizza Shop </a>
-
-    <p class="credit"> created by <span>Conor,Tom and Matthew</span> | all rights reserved! © 2024 </p>
-
-    <div class="share">
-        <a href="#" class="fab fa-facebook-f"></a>
-        <a href="#" class="fab fa-linkedin"></a>
-        <a href="#" class="fab fa-twitter"></a>
-        <a href="#" class="fab fa-github"></a>
-    </div>
-
-</section>
+<%@include file="footer.jsp"%>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js"></script>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css">

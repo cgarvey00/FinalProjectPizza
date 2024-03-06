@@ -13,12 +13,12 @@ import jakarta.servlet.http.HttpSession;
 
 import java.util.List;
 
-public class ViewDashboard implements Command {
+public class EmployeePage implements Command {
     private final HttpServletRequest request;
     private final HttpServletResponse response;
     private final EntityManagerFactory factory;
 
-    public ViewDashboard(HttpServletRequest request, HttpServletResponse response, EntityManagerFactory factory) {
+    public EmployeePage(HttpServletRequest request, HttpServletResponse response, EntityManagerFactory factory) {
         this.request = request;
         this.response = response;
         this.factory = factory;
@@ -26,11 +26,14 @@ public class ViewDashboard implements Command {
 
     @Override
     public String execute() {
-        String terminus = "admin-dashboard.jsp";
+        String terminus = "employee-home.jsp";
+
         HttpSession session = request.getSession(true);
+
         if (session != null) {
             User loggedInUser = (User) session.getAttribute("loggedInUser");
-            if (loggedInUser != null && "Admin".equals(loggedInUser.getUserType())) {
+
+            if (loggedInUser != null && "Employee".equals(loggedInUser.getUserType())) {
 
                 ProductRepositories prodRepos = new ProductRepositories(factory);
                 UserRepositories userRepos = new UserRepositories(factory);
@@ -43,7 +46,8 @@ public class ViewDashboard implements Command {
                 session.setAttribute("productList", productList);
                 session.setAttribute("userList", userList);
                 session.setAttribute("orderList", orderList);
-                terminus = "admin-dashboard.jsp";
+
+                terminus = "employee-home.jsp";
 
             } else {
                 terminus = "index.jsp";

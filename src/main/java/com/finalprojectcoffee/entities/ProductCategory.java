@@ -1,5 +1,7 @@
 package com.finalprojectcoffee.entities;
-
+/**
+ * @author cgarvey00
+ */
 public enum ProductCategory {
     Sides,
     Pizzas,
