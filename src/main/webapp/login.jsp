@@ -29,7 +29,7 @@
         color: rgb(243, 74, 74);
         font-weight: bold;
         position: absolute;
-        top: 145px;
+        top: 205px;
         margin-bottom: 0;
         font-size: 13.5px;
     }

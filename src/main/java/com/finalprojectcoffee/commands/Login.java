@@ -1,6 +1,8 @@
 package com.finalprojectcoffee.commands;
 
+import com.finalprojectcoffee.entities.Product;
 import com.finalprojectcoffee.entities.User;
+import com.finalprojectcoffee.repositories.ProductRepositories;
 import com.finalprojectcoffee.repositories.UserRepositories;
 import com.finalprojectcoffee.utils.JBCriptUtil;
 import jakarta.persistence.DiscriminatorColumn;
@@ -10,6 +12,8 @@ import jakarta.persistence.EntityManagerFactory;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+
+import java.util.List;
 
 public class Login implements Command {
     private final HttpServletRequest request;
@@ -36,19 +40,20 @@ public class Login implements Command {
                 User user = UserRep.findUserByUsername(username);
                 if (user != null) {
                     if (JBCriptUtil.checkPw(user.getPassword(), password)) {
-                       session.setAttribute("loggedInUser", user);
+                        ProductRepositories productRepos = new ProductRepositories(factory);
+                        List<Product> productList = productRepos.getAllProducts();
+                        session.setAttribute("loggedInUser", user);
+                        session.setAttribute("productList", productList);
+                        switch (user.getUserType()) {
+                            case "Customer":
+                                return new CustomerPage(request, response, factory).execute();
+                            case "Employee":
+                                terminus = "employee-home.jsp";
+                                break;
+                            case "Admin":
+                                return new ViewDashboard(request, response, factory).execute();
 
-                       switch (user.getUserType()){
-                           case "Customer":
-                               terminus = "customer-home.jsp";
-                               break;
-                           case "Employee":
-                               terminus = "employee-home.jsp";
-                               break;
-                           case "Admin":
-                               terminus = "admin-home.jsp";
-                               break;
-                       }
+                        }
                     } else {
                         String errorMessage = "Wrong password";
                         session.setAttribute("errorMessage", errorMessage);

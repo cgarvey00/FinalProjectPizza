@@ -64,6 +64,21 @@ public class User {
         this.addresses = addresses;
     }
 
+    //Updating Purposes Only
+    public User(String username, String phoneNumber, String email, String image, List<Address> addresses) {
+        this.username = username;
+        this.phoneNumber = phoneNumber;
+        this.email = email;
+        this.image = image;
+        this.addresses = addresses;
+    }
+    public User(String username, String phoneNumber, String email) {
+        this.username = username;
+        this.phoneNumber = phoneNumber;
+        this.email = email;
+    }
+
+
     public User(int id, String username, String password, String phoneNumber, String email, String image, List<Address> addresses) {
         this.id = id;
         this.username = username;

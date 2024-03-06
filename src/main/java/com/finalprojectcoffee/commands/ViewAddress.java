@@ -23,7 +23,7 @@ public class ViewAddress implements Command{
 
     @Override
     public String execute() {
-        String terminus = "";
+        String terminus = "add-address.jsp";
 
         HttpSession session = request.getSession(true);
         //Active user

@@ -1,5 +1,6 @@
 package com.finalprojectcoffee.commands;
 
+import com.finalprojectcoffee.entities.Product;
 import com.finalprojectcoffee.entities.User;
 import com.finalprojectcoffee.repositories.ProductRepositories;
 import com.finalprojectcoffee.repositories.UserRepositories;
@@ -12,37 +13,35 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 
- public class SearchKeyword implements Command{
-        private final HttpServletRequest request;
-        private final HttpServletResponse response;
-        private final EntityManagerFactory factory;
+import java.util.List;
 
-        public SearchKeyword(HttpServletRequest request, HttpServletResponse response, EntityManagerFactory factory) {
-            this.request = request;
-            this.response = response;
-            this.factory = factory;
-        }
+public class SearchKeyword implements Command {
+    private final HttpServletRequest request;
+    private final HttpServletResponse response;
+    private final EntityManagerFactory factory;
 
-        @Override
-        public String execute() {
-            String terminus = "customer-home.jsp";
-            HttpSession session = request.getSession(true);
-            String keyword = request.getParameter("keyword");
-
-
-            if(keyword != null && !keyword.isEmpty() ){
-                EntityManager entityManager = factory.createEntityManager();
-
-                try {
-                    ProductRepositories productRepos = new ProductRepositories(factory);
-                    productRepos.findProductsByKeyword(keyword);
-
-
-                } finally {
-                    entityManager.close();
-                }
-            }
-            return terminus;
-        }
+    public SearchKeyword(HttpServletRequest request, HttpServletResponse response, EntityManagerFactory factory) {
+        this.request = request;
+        this.response = response;
+        this.factory = factory;
     }
+
+    @Override
+    public String execute() {
+        String terminus = "search.jsp";
+        HttpSession session = request.getSession(true);
+        String keyword = request.getParameter("search_box");
+        if (keyword != null && !keyword.isEmpty()) {
+            EntityManager entityManager = factory.createEntityManager();
+            try {
+                ProductRepositories productRepos = new ProductRepositories(factory);
+                List<Product> productList = productRepos.findProductsByKeyword(keyword);
+                session.setAttribute("searchKeywordProducts", productList);
+            } finally {
+                entityManager.close();
+            }
+        }
+        return terminus;
+    }
+}
 
