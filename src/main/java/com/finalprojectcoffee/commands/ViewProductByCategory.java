@@ -23,7 +23,7 @@ public class ViewProductByCategory implements Command{
 
     @Override
     public String execute() {
-        String terminus = "";
+        String terminus = "product-category.jsp";
 
         HttpSession session = request.getSession(true);
         ProductCategory category = ProductCategory.valueOf(request.getParameter("category"));
