@@ -23,9 +23,6 @@ public class ReviewRepository implements ReviewRepositoryInterface {
         EntityTransaction transaction = entityManager.getTransaction();
         try {
             transaction.begin();
-            if (hasProfanity(review.getComment())) {
-                return false;
-            }
             entityManager.persist(review);
             transaction.commit();
             return true;
@@ -87,17 +84,5 @@ public class ReviewRepository implements ReviewRepositoryInterface {
         } finally {
             entityManager.close();
         }
-    }
-
-    private boolean hasProfanity(String comment) {
-
-        List<String> profaneWords = List.of("fuck", "retard");
-
-        for (String word : profaneWords) {
-            if (comment.toLowerCase().contains(word)) {
-                return true;
-            }
-        }
-        return false;
     }
 }

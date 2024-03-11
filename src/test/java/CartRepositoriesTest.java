@@ -1,7 +1,9 @@
 import com.finalprojectcoffee.entities.Cart;
 import com.finalprojectcoffee.entities.CartItem;
 import com.finalprojectcoffee.entities.Product;
+import com.finalprojectcoffee.entities.ProductCategory;
 import com.finalprojectcoffee.repositories.CartRepositories;
+import com.finalprojectcoffee.repositories.ProductRepositories;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.Persistence;
 import org.junit.jupiter.api.AfterEach;
@@ -40,14 +42,29 @@ public class CartRepositoriesTest {
 
     @Test
     public void addItem_Success() {
-        Product product = new Product();
+        List<Product> products = new ArrayList<>();
+        products.add(new Product("Test Product 1", ProductCategory.Pizzas, "Test details", 10.0, 5, "test1.jpg"));
+        products.add(new Product("Test Product 2", ProductCategory.Pizzas, "Test details", 10.0, 10, "test2.jpg"));
+
+        ProductRepositories productRepositories = new ProductRepositories(factory);
+        productRepositories.addProducts(products);
+
+        int initialStock = products.get(0).getStock();
+
         int cartId = 1;
         int quantity = 2;
+        CartItem cartItem = cartRepositories.addItem(cartId, products.get(0).getId(), quantity);
 
-        CartItem cartItem = cartRepositories.addItem(cartId, product.getId(), quantity);
         assertNotNull(cartItem);
         assertEquals(quantity, cartItem.getQuantity());
+
+        Product updatedProduct = productRepositories.findProductByID(products.get(0).getId());
+
+        assertNotNull(updatedProduct);
+        assertEquals(initialStock - quantity, updatedProduct.getStock());
     }
+
+
 
     @Test
     public void createCart_Success() {
