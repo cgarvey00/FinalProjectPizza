@@ -42,9 +42,9 @@ public class CancelOrder implements Command{
 
             Boolean isCancelled = orderRep.cancelOrders(orderIds);
             if (isCancelled) {
-                session.setAttribute("cos-message", "Cancel orders successfully");
+                session.setAttribute("cos-msg", "Cancel orders successfully");
             } else {
-                session.setAttribute("coe-message", "Failed to cancel orders");
+                session.setAttribute("coe-msg", "Failed to cancel orders");
             }
         } catch (Exception e) {
             System.err.println("An Exception occurred while cancelling orders: " + e.getMessage());

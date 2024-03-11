@@ -29,9 +29,9 @@ public class CleanCart implements Command{
 
             Boolean isCleaned = cartRep.clearCart(cartId);
             if (isCleaned) {
-                session.setAttribute("ccs-message", "Clean cart successfully");
+                session.setAttribute("ccs-msg", "Clean cart successfully");
             } else {
-                session.setAttribute("cce-message", "Failed to clean cart");
+                session.setAttribute("cce-msg", "Failed to clean cart");
             }
         } catch (Exception e) {
             System.err.println("An Exception occurred while cleaning cart: " + e.getMessage());

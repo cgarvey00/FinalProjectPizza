@@ -54,9 +54,6 @@ public class AddOrder implements Command{
         //Address
         int addressId = (int) session.getAttribute("address_id");
 
-        //Payment
-        Double payment = (Double) session.getAttribute("payment");
-
         try {
             CartRepositories cartRep = new CartRepositories(factory);
             OrderRepositories orderRep = new OrderRepositories(factory);
@@ -83,15 +80,9 @@ public class AddOrder implements Command{
             cart = cartRep.createCart(cartItems);
             if(cart != null){
                 Order order = orderRep.addOrder(activeCustomerId, cart.getId(), addressId);
-
                 if(order != null){
-                    Boolean isPaid = orderRep.payOrder(order.getId(), payment);
-                    if(isPaid){
-                        session.setAttribute("aos_message", "Add order successfully");
-                        terminus = "index.jsp";
-                    }
-                } else {
-                    session.setAttribute("aoe_message", "Failed to add order");
+                    session.setAttribute("order", order);
+                    terminus = "payment.jsp";
                 }
             } else {
                 session.setAttribute("cart_error", "Failed to add cart");

@@ -1,6 +1,5 @@
 package com.finalprojectcoffee.commands;
 
-import com.finalprojectcoffee.entities.Address;
 import com.finalprojectcoffee.entities.User;
 import com.finalprojectcoffee.repositories.UserRepositories;
 import com.finalprojectcoffee.utils.EmailUtil;
@@ -28,17 +27,11 @@ public class UpdateUserProfile implements Command{
         HttpSession session = request.getSession(true);
         User activeUser = (User) session.getAttribute("loggedInUser");
         int activeUserId = activeUser.getId();
-        Address activeUserAddress = new Address();
-        activeUserAddress.setUser(activeUser);
         String newPassword = request.getParameter("newPassword");
         String passwordConfirmation = request.getParameter("passwordConfirmation");
         String newPhoneNumber = request.getParameter("phoneNumber");
         String newEmail = request.getParameter("email");
         String image = request.getParameter("image");
-        String street = request.getParameter("street");
-        String town = request.getParameter("town");
-        String county = request.getParameter("county");
-        String eirCode = request.getParameter("eirCode");
 
         try {
             UserRepositories userRep = new UserRepositories(factory);
@@ -49,10 +42,10 @@ public class UpdateUserProfile implements Command{
                     if(JBCriptUtil.validatePassword(newPassword)){
                         activeUser.setPassword(JBCriptUtil.getHashedPw(newPassword));
                     } else {
-                        session.setAttribute("update-pwvMsg", "Password format error");
+                        session.setAttribute("upw-msg", "Password format error");
                     }
                 } else {
-                    session.setAttribute("update-pwcMsg", "Password inconsistency");
+                    session.setAttribute("upwc-msg", "Password inconsistency");
                 }
             }
 
@@ -60,7 +53,7 @@ public class UpdateUserProfile implements Command{
                 if(PhoneNumberUtil.validationPhoneNumber(newPhoneNumber)){
                     activeUser.setPhoneNumber(newPhoneNumber);
                 } else {
-                    session.setAttribute("update-pnMsg", "Phone number format error");
+                    session.setAttribute("upe-msg", "Phone number format error");
                 }
             }
 
@@ -68,7 +61,7 @@ public class UpdateUserProfile implements Command{
                 if(EmailUtil.validateEmail(newEmail)){
                     activeUser.setEmail(newEmail);
                 } else {
-                    session.setAttribute("update-eMsg", "Email format error");
+                    session.setAttribute("uee-msg", "Email format error");
                 }
             }
 
@@ -78,38 +71,14 @@ public class UpdateUserProfile implements Command{
 
             Boolean isUpdated = userRep.updateUser(activeUserId, activeUser.getPassword(), activeUser.getPhoneNumber(), activeUser.getEmail(), activeUser.getImage());
             if(isUpdated){
-                session.setAttribute("user-profile-update-successful-msg", "Update successfully");
+                session.setAttribute("upus-msg", "Update successfully");
             } else {
-                session.setAttribute("user-profile-update-error-msg", "Failed to update");
-            }
-
-            if (street != null && !street.isEmpty()) {
-                activeUserAddress.setStreet(street);
-            }
-
-            if(town != null && !town.isEmpty()){
-                activeUserAddress.setTown(town);
-            }
-
-            if(county != null && !county.isEmpty()){
-                activeUserAddress.setCounty(county);
-            }
-
-            if(eirCode != null && !eirCode.isEmpty()){
-                activeUserAddress.setEirCode(eirCode);
-            }
-
-            Boolean isUpdatedAddress = userRep.updateAddress(activeUserId, activeUserAddress.getStreet(), activeUserAddress.getTown(), activeUserAddress.getCounty(), activeUserAddress.getEirCode());
-            if(isUpdatedAddress){
-                session.setAttribute("user-address-update-successful-msg", "Update successfully");
-            } else {
-                User refreshedUser = userRep.findUserById(activeUserId);
-                session.setAttribute("loggedInUser", refreshedUser);
-                session.setAttribute("user-address-update-error-msg", "Failed to update");
+                session.setAttribute("upue-msg", "Failed to update");
             }
         } catch (Exception e) {
             System.err.println("An Exception occurred: " + e.getMessage());
         }
+
         return terminus;
     }
 }

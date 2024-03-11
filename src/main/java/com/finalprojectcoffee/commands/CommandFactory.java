@@ -16,6 +16,9 @@ public class CommandFactory {
                 case "login":
                     command = new Login(request, response, factory);
                     break;
+                case "logout":
+                    command = new Logout(request, response, factory);
+                    break;
                 case "register":
                     command = new Register(request, response, factory);
                     break;
@@ -61,11 +64,17 @@ public class CommandFactory {
                 case "update-user-profile":
                     command = new UpdateUserProfile(request, response, factory);
                     break;
+                case "add-address":
+                    command = new AddAddress(request, response, factory);
+                    break;
                 case "view-address":
                     command = new ViewAddress(request, response, factory);
                     break;
                 case "view-all-orders":
                     command = new ViewAllOrders(request, response, factory);
+                    break;
+                case "add-order":
+                    command = new AddOrder(request, response, factory);
                     break;
                 case "accept-order":
                     command = new AcceptOrder(request, response,factory);

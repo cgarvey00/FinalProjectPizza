@@ -44,22 +44,17 @@ public class CartRepositories implements CartRepositoriesInterface {
             transaction.begin();
 
             Product product = entityManager.find(Product.class, productId);
-            if (product == null) {
-                System.err.println("Product with ID " + productId + " does not exist.");
-                return null;
-            }
-
             Cart cart = entityManager.find(Cart.class, cartId);
             CartItem cartItem = new CartItem();
 
             cartItem.setProduct(product);
             cartItem.setQuantity(quantity);
             cartItem.setCart(cart);
-            cartItem.setCost(quantity * product.getPrice());
-            product.setStock(product.getStock() - quantity);
+            //cartItem.setCost(quantity * product.getPrice());
+            //product.setStock(product.getStock() - quantity);
 
             entityManager.persist(cartItem);
-            entityManager.merge(product);
+            //entityManager.merge(product);
             transaction.commit();
             return cartItem;
         } catch (PersistenceException e) {
@@ -77,9 +72,6 @@ public class CartRepositories implements CartRepositoriesInterface {
         EntityTransaction transaction = entityManager.getTransaction();
 
         try {
-            if (cartItems.isEmpty()) {
-                return null;
-            }
             transaction.begin();
 
             Cart cart = new Cart();
@@ -114,12 +106,9 @@ public class CartRepositories implements CartRepositoriesInterface {
 
             for(int cartItemId : cartItemIds){
                 CartItem cartItem = entityManager.find(CartItem.class, cartItemId);
-                if (cartItem == null) {
-                    return false;
-                }
-                Product product = entityManager.find(Product.class, cartItem.getProduct().getId());
-                int stock = cartItem.getQuantity();
-                product.setStock(product.getStock() + stock);
+//                Product product = entityManager.find(Product.class, cartItem.getProduct().getId());
+//                int stock = cartItem.getQuantity();
+//                product.setStock(product.getStock() + stock);
                 entityManager.remove(cartItem);
             }
 
@@ -161,17 +150,12 @@ public class CartRepositories implements CartRepositoriesInterface {
             transaction.begin();
 
             Cart cart = entityManager.find(Cart.class, cartId);
-            if (cart == null) {
-                return false;
-            }
-
-
             List<CartItem> cartItems = cart.getCartItems();
 
             for (CartItem cartItem : cartItems) {
-                int quantity = cartItem.getQuantity();
+                //int quantity = cartItem.getQuantity();
                 Product product = cartItem.getProduct();
-                product.setStock(product.getStock() + quantity);
+                //product.setStock(product.getStock() + quantity);
                 entityManager.merge(product);
             }
 

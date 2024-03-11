@@ -47,7 +47,7 @@ public class OrderRepositories implements OrderRepositoriesInterface {
         EntityManager entityManager = factory.createEntityManager();
 
         try {
-            TypedQuery<Order> query = entityManager.createQuery("SELECT o FROM Order o WHERE o.customer.id = :customerId", Order.class);
+            TypedQuery<Order> query = entityManager.createQuery("SELECT o FROM Order o WHERE o.customer.id = :customerId ORDER BY o.createTime DESC", Order.class);
             query.setParameter("customerId", customerId);
 
             return query.getResultList();
@@ -64,7 +64,7 @@ public class OrderRepositories implements OrderRepositoriesInterface {
         EntityManager entityManager = factory.createEntityManager();
 
         try {
-            TypedQuery<Order> query = entityManager.createQuery("SELECT o FROM Order o WHERE o.employee.id = :employeeId", Order.class);
+            TypedQuery<Order> query = entityManager.createQuery("SELECT o FROM Order o WHERE o.employee.id = :employeeId ORDER BY o.createTime DESC", Order.class);
             query.setParameter("employeeId", employeeId);
 
             return query.getResultList();
