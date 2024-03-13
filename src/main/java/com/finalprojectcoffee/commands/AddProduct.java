@@ -28,7 +28,7 @@ public class AddProduct implements Command {
 
     @Override
     public String execute() {
-        String terminus = "view-stock.jsp";
+        String terminus = "product-page.jsp";
         HttpSession session = request.getSession(true);
 
         ProductCategory category = ProductCategory.valueOf(request.getParameter("category"));
@@ -37,37 +37,26 @@ public class AddProduct implements Command {
         int stock = Integer.parseInt(request.getParameter("stock"));
         String name = request.getParameter("name");
         String image = request.getParameter("image");
-        User loggedInUser = (User) session.getAttribute("loggedInUser");
-        // Object productsObj = new Product(name,category,details,price,stock,image);
-        // Object productsObj = session.getAttribute("products");
-        Product p = new Product(name, category, details, price, stock, image);
-        List<Product> products = new ArrayList<>();
-        //if(productsObj instanceof Product[]){
-        //Product[] productsArray = (Product[]) productsObj;
-        // //Filter null elements
-        // products = Arrays.stream(productsArray).filter(Objects::nonNull).collect(Collectors.toList());
-        // }
-        products.add(p);
+
         try {
             ProductRepositories productRep = new ProductRepositories(factory);
 
-            if (!products.isEmpty()) {
-                boolean isAdded = productRep.addProducts(products);
-                if (isAdded) {
-                    session.setAttribute("aps-message", "Add products successfully");
-                } else {
-                    session.setAttribute("ape-message", "Failed to add products");
-                }
+            Product product = new Product(name, category, details, price, stock, image);
+            List<Product> products = new ArrayList<>();
+            products.add(product);
+
+            boolean isAdded = productRep.addProducts(products);
+            if (isAdded) {
+                session.setAttribute("aps-message", "Add product successfully");
+            } else {
+                session.setAttribute("ape-message", "Failed to add product");
             }
 
             if (session.getAttribute("aps-message") != null) {
                 session.setAttribute("add-product-success", true);
-
             } else {
                 session.setAttribute("add-product-success", false);
             }
-
-
         } catch (Exception e) {
             System.err.println("An Exception occurred while adding products: " + e.getMessage());
         }

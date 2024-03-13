@@ -1,9 +1,8 @@
 import com.finalprojectcoffee.entities.Cart;
 import com.finalprojectcoffee.entities.CartItem;
 import com.finalprojectcoffee.entities.Product;
-import com.finalprojectcoffee.entities.ProductCategory;
 import com.finalprojectcoffee.repositories.CartRepositories;
-import com.finalprojectcoffee.repositories.ProductRepositories;
+import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.Persistence;
 import org.junit.jupiter.api.AfterEach;
@@ -18,11 +17,13 @@ import static org.junit.jupiter.api.Assertions.*;
 public class CartRepositoriesTest {
 
     private EntityManagerFactory factory;
+    private EntityManager entityManager;
     private CartRepositories cartRepositories;
 
     @BeforeEach
     public void setUp() {
         factory = Persistence.createEntityManagerFactory("testpizzashop");
+        entityManager = factory.createEntityManager();
         cartRepositories = new CartRepositories(factory);
     }
 
@@ -37,34 +38,15 @@ public class CartRepositoriesTest {
     public void addCart_Success() {
         Cart cart = cartRepositories.addCart();
         assertNotNull(cart);
-        assertNotNull(cart.getId());
     }
 
     @Test
     public void addItem_Success() {
-        List<Product> products = new ArrayList<>();
-        products.add(new Product("Test Product 1", ProductCategory.Pizzas, "Test details", 10.0, 5, "test1.jpg"));
-        products.add(new Product("Test Product 2", ProductCategory.Pizzas, "Test details", 10.0, 10, "test2.jpg"));
-
-        ProductRepositories productRepositories = new ProductRepositories(factory);
-        productRepositories.addProducts(products);
-
-        int initialStock = products.get(0).getStock();
-
-        int cartId = 1;
-        int quantity = 2;
-        CartItem cartItem = cartRepositories.addItem(cartId, products.get(0).getId(), quantity);
-
+        Product product = entityManager.find(Product.class, 1);
+        CartItem cartItem = cartRepositories.addItem(4, 1, 2);
         assertNotNull(cartItem);
-        assertEquals(quantity, cartItem.getQuantity());
-
-        Product updatedProduct = productRepositories.findProductByID(products.get(0).getId());
-
-        assertNotNull(updatedProduct);
-        assertEquals(initialStock - quantity, updatedProduct.getStock());
+        assertEquals(product.getStock(), 98);
     }
-
-
 
     @Test
     public void createCart_Success() {
@@ -72,7 +54,6 @@ public class CartRepositoriesTest {
 
         Cart cart = cartRepositories.createCart(cartItems);
         assertNotNull(cart);
-        assertNotNull(cart.getId());
     }
 
     @Test

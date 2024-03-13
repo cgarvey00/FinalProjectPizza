@@ -3,7 +3,7 @@
         <div class="row align-items-center">
             <a href="#" class="logo mr-auto"> <i class="fa-solid fa-pizza-slice"></i> Pizza Shop </a>
             <nav class="nav">
-                <a href="controller?action=admin-page">Dashboard</a>
+                <a href="controller?action=admin-dashboard">Dashboard</a>
                 <a href="controller?action=admin-product">View Orders</a>
                 <a href="controller?action=admin-product">View Products</a>
                 <a href="controller?action=logout">Logout</a>

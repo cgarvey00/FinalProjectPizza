@@ -5,8 +5,11 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" language="java" %>
 <%
     User loggedInUser = (User) request.getSession().getAttribute("loggedInUser");
+    @SuppressWarnings("unchecked")
     List<Product> productList = (List<Product>) request.getSession().getAttribute("productList");
+    @SuppressWarnings("unchecked")
     List<User> userList = (List<User>) request.getSession().getAttribute("userList");
+    @SuppressWarnings("unchecked")
     List<Order> orderList = (List<Order>) request.getSession().getAttribute("orderList");
 
     //Checking to ensure the User is logged in or not
@@ -74,7 +77,7 @@
         <div class="box">
             <h3><%=productList.size()%></h3>
             <p>products added</p>
-            <a href="controller?action=view-stock" class="btn">see products</a>
+            <a href="controller?action=view-products" class="btn">see products</a>
         </div>
 
         <!-- NUMBER OF USERS-->

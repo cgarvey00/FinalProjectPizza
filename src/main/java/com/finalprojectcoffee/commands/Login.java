@@ -1,7 +1,10 @@
 package com.finalprojectcoffee.commands;
 
+import com.finalprojectcoffee.entities.Address;
+import com.finalprojectcoffee.entities.Order;
 import com.finalprojectcoffee.entities.Product;
 import com.finalprojectcoffee.entities.User;
+import com.finalprojectcoffee.repositories.OrderRepositories;
 import com.finalprojectcoffee.repositories.ProductRepositories;
 import com.finalprojectcoffee.repositories.UserRepositories;
 import com.finalprojectcoffee.utils.JBCriptUtil;
@@ -34,26 +37,46 @@ public class Login implements Command {
         String password = request.getParameter("password");
 
         if (username != null && !username.isEmpty() && password != null && !password.isEmpty()) {
-            EntityManager entityManager = factory.createEntityManager();
             try {
-                UserRepositories UserRep = new UserRepositories(factory);
-                User user = UserRep.findUserByUsername(username);
+                UserRepositories userRep = new UserRepositories(factory);
+                OrderRepositories orderRep = new OrderRepositories(factory);
+                ProductRepositories productRep = new ProductRepositories(factory);
+                User user = userRep.findUserByUsername(username);
+
                 if (user != null) {
                     if (JBCriptUtil.checkPw(user.getPassword(), password)) {
-                        ProductRepositories productRepos = new ProductRepositories(factory);
-                        List<Product> productList = productRepos.getAllProducts();
-                        session.setAttribute("loggedInUser", user);
-                        session.setAttribute("productList", productList);
                         switch (user.getUserType()) {
                             case "Customer":
-                                return new CustomerPage(request, response, factory).execute();
+                                terminus = "customer-home.jsp";
+
+                                List<Address> addressList = userRep.getAddressesByUserId(user.getId());
+                                boolean addressed;
+
+                                if(addressList.isEmpty()){
+                                    addressed = false;
+                                    session.setAttribute("addressed", addressed);
+                                } else {
+                                    addressed = true;
+                                    session.setAttribute("addressed", addressed);
+                                }
+                                break;
                             case "Employee":
                                 terminus = "employee-home.jsp";
                                 break;
                             case "Admin":
-                                return new ViewDashboard(request, response, factory).execute();
+                                terminus = "admin-dashboard.jsp";
 
+                                List<User> userList = userRep.getAllUsers();
+                                session.setAttribute("userList", userList);
+
+                                List<Order> orderList = orderRep.getAllOrders();
+                                session.setAttribute("orderList", orderList);
+
+                                List<Product> productList = productRep.getAllProducts();
+                                session.setAttribute("productList", productList);
+                                break;
                         }
+                        session.setAttribute("loggedInUser", user);
                     } else {
                         String errorMessage = "Wrong password";
                         session.setAttribute("errorMessage", errorMessage);
@@ -62,8 +85,8 @@ public class Login implements Command {
                     String errorMessage = "User doesn't exist";
                     session.setAttribute("errorMessage", errorMessage);
                 }
-            } finally {
-                entityManager.close();
+            } catch (Exception e) {
+                System.err.println("An Exception occurred while logging: " + e.getMessage());
             }
         } else {
             String errorMessage = "Register for Account";

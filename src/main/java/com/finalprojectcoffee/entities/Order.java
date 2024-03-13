@@ -28,10 +28,10 @@ public class Order {
     @JoinColumn(name = "employee_id", referencedColumnName = "id")
     private Employee employee;
     @OneToOne
-    @JoinColumn(name = "address", referencedColumnName = "id", nullable = false)
+    @JoinColumn(name = "address_id", referencedColumnName = "id", nullable = false)
     private Address address;
 
-    @Column(name = "balance", columnDefinition = "0.0")
+    @Column(name = "balance")
     private double balance;
 
     @Enumerated(EnumType.STRING)

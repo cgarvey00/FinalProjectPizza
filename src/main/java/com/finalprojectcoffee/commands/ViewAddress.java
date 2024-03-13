@@ -8,6 +8,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 
+import java.util.Collections;
 import java.util.List;
 
 public class ViewAddress implements Command{
@@ -23,7 +24,7 @@ public class ViewAddress implements Command{
 
     @Override
     public String execute() {
-        String terminus = "add-address.jsp";
+        String terminus = "view-address.jsp";
 
         HttpSession session = request.getSession(true);
         //Active user
@@ -32,10 +33,12 @@ public class ViewAddress implements Command{
 
         try {
             UserRepositories userRep = new UserRepositories(factory);
-            List<Address> addresses = userRep.getAddressesByUserId(activeUserId);
+            List<Address> addressList = userRep.getAddressesByUserId(activeUserId);
 
-            if(!addresses.isEmpty()){
-                session.setAttribute("addresses", addresses);
+            if(addressList != null && !addressList.isEmpty()){
+                session.setAttribute("addressList", addressList);
+            } else {
+                session.setAttribute("emptyList", Collections.emptyList());
             }
         } catch (Exception e) {
             System.err.println("An Exception occurred while viewing addresses: " + e.getMessage());

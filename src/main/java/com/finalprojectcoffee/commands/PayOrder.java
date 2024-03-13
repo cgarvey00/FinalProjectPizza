@@ -30,7 +30,7 @@ public class PayOrder implements Command{
             OrderRepositories orderRep = new OrderRepositories(factory);
 
             if(payment >= order.getBalance()){
-                Boolean isPaid = orderRep.payOrder(order.getId(), payment);
+                Boolean isPaid = orderRep.payOrder(order.getId());
                 if(isPaid){
                     session.setAttribute("pos-msg", "Pay order successfully");
                     terminus = "orders.jsp";

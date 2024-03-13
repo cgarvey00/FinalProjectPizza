@@ -21,7 +21,7 @@ public class AddAddress implements Command{
 
     @Override
     public String execute() {
-        String terminus = "";
+        String terminus = "customer-home.jsp";
 
         HttpSession session = request.getSession(true);
         User activeUser = (User) session.getAttribute("loggedInUser");

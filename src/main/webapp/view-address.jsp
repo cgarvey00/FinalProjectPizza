@@ -4,9 +4,7 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%
     User loggedInUser = (User) request.getSession().getAttribute("loggedInUser");
-
     List<Address> addressList = (List<Address>) request.getSession().getAttribute("addressList");
-    session.setAttribute("addressList", addressList);
     //Checking to ensure the User is logged in or not
     if (request.getSession(false) == null || loggedInUser == null || !"Customer".equals(loggedInUser.getUserType())) {
         response.sendRedirect("index.jsp");
@@ -58,7 +56,7 @@
             </div>
             <div class="inputBox">
                 <span>EirCode</span>
-                <textarea name="eircode" type="text" placeholder="Enter EirCode" class="box" required
+                <textarea name="eirCode" type="text" placeholder="Enter EirCode" class="box" required
                           maxlength="500"
                           cols="30" rows="10"></textarea>
             </div>
@@ -77,11 +75,11 @@
                 <th>Town</th>
                 <th>County</th>
                 <th>EirCode</th>
-
             </tr>
             </thead>
             <tbody>
-            <% for (Address address : addressList) { %>
+            <% if(addressList !=null && !addressList.isEmpty()){
+                for (Address address : addressList) {%>
             <tr>
                 <td><%=address.getStreet() %>
                 </td>
@@ -93,7 +91,7 @@
                 </td>
             </tr>
 
-            <%} %>
+            <%}} %>
             </tbody>
         </table>
     </div>

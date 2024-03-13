@@ -10,8 +10,7 @@ public interface OrderRepositoriesInterface {
     List<Order> getAllOrdersByCustomerId(int CustomerId);
     List<Order> getAllOrdersByEmployeeId(int EmployeeId);
     Order addOrder(int customerId, int cartId, int addressId);
-    Boolean payOrder(int orderId, double payment);
-    Boolean acceptOrders(List<Integer> orderIds);
+    Boolean payOrder(int orderId);
     Boolean deliverOrders(List<Integer> orderIds, int employeeId);
     Boolean finishOrder(int orderId);
     Boolean cancelOrders(List<Integer> orderIds);
