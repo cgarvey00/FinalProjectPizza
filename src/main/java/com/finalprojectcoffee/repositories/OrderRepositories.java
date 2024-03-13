@@ -89,7 +89,7 @@ public class OrderRepositories implements OrderRepositoriesInterface {
             Customer customer = entityManager.find(Customer.class, customerId);
             Address address = entityManager.find(Address.class, addressId);
 
-            if(customer != null && cart != null){
+            if(customer != null && cart != null && address != null){
                 order.setCart(cart);
                 order.setCustomer(customer);
                 order.setCreateTime(LocalDateTime.now());
@@ -113,7 +113,7 @@ public class OrderRepositories implements OrderRepositoriesInterface {
     }
 
     @Override
-    public Boolean payOrder(int orderId, double payment) {
+    public Boolean payOrder(int orderId) {
         EntityManager entityManager = factory.createEntityManager();
         EntityTransaction transaction = entityManager.getTransaction();
 
@@ -126,8 +126,7 @@ public class OrderRepositories implements OrderRepositoriesInterface {
             Cart cart = (Cart) query.getSingleResult();
             double totalCost = order.getCart().getTotalCost();
 
-            order.setBalance(payment - totalCost);
-            order.setBalance(0.0);
+            order.setBalance(totalCost);
             order.setPaymentStatus(Status.Paid);
             order.setUpdateTime(LocalDateTime.now());
 
@@ -138,35 +137,6 @@ public class OrderRepositories implements OrderRepositoriesInterface {
         } catch (PersistenceException e) {
             transaction.rollback();
             System.out.println("A PersistenceException occurred while merging: " + e.getMessage());
-            return false;
-        } finally {
-            entityManager.close();
-        }
-    }
-
-    @Override
-    public Boolean acceptOrders(List<Integer> orderIds) {
-        EntityManager entityManager = factory.createEntityManager();
-        EntityTransaction transaction = entityManager.getTransaction();
-
-        try {
-            transaction.begin();
-
-            for(Integer orderId : orderIds){
-                Order order = entityManager.find(Order.class, orderId);
-
-                if(order.getStatus() == Status.Pending && order.getPaymentStatus() == Status.Paid){
-                    order.setStatus(Status.Accepted);
-                    order.setUpdateTime(LocalDateTime.now());
-                    entityManager.merge(order);
-                }
-            }
-
-            transaction.commit();
-            return true;
-        } catch (PersistenceException e) {
-            transaction.rollback();
-            System.err.println("A PersistenceException occurred while merging: " + e.getMessage());
             return false;
         } finally {
             entityManager.close();

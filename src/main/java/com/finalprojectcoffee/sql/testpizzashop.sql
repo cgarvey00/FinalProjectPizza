@@ -92,26 +92,9 @@ CREATE TABLE `orders` (
 CREATE TRIGGER UpdateLoyaltyPoints
     AFTER UPDATE ON orders FOR EACH ROW
 BEGIN
+    IF NEW.status = 'Finished' THEN
     UPDATE customers
     SET loyalty_points = loyalty_points + NEW.balance
     WHERE id = NEW.customer_id;
-END;
-
-CREATE TRIGGER DeductStock
-    AFTER UPDATE ON cart_items FOR EACH ROW
-BEGIN
-    UPDATE products
-    SET stock = stock - NEW.quantity
-    WHERE id = NEW.product_id;
-END;
-
-CREATE TRIGGER AddStock
-    AFTER UPDATE ON orders FOR EACH ROW
-BEGIN
-   IF OLD.status <> 'Cancelled' AND NEW.status = 'Cancelled' THEN
-   UPDATE products p
-   JOIN cart_items ci on p.id = ci.product_id
-   SET stock = p.stock + ci.quantity
-   WHERE ci.cart_id = OLD.cart_id;
-   end if;
+    END IF;
 END;

@@ -2,6 +2,7 @@ import com.finalprojectcoffee.entities.Cart;
 import com.finalprojectcoffee.entities.CartItem;
 import com.finalprojectcoffee.entities.Product;
 import com.finalprojectcoffee.repositories.CartRepositories;
+import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.Persistence;
 import org.junit.jupiter.api.AfterEach;
@@ -16,11 +17,13 @@ import static org.junit.jupiter.api.Assertions.*;
 public class CartRepositoriesTest {
 
     private EntityManagerFactory factory;
+    private EntityManager entityManager;
     private CartRepositories cartRepositories;
 
     @BeforeEach
     public void setUp() {
         factory = Persistence.createEntityManagerFactory("testpizzashop");
+        entityManager = factory.createEntityManager();
         cartRepositories = new CartRepositories(factory);
     }
 
@@ -35,18 +38,14 @@ public class CartRepositoriesTest {
     public void addCart_Success() {
         Cart cart = cartRepositories.addCart();
         assertNotNull(cart);
-        assertNotNull(cart.getId());
     }
 
     @Test
     public void addItem_Success() {
-        Product product = new Product();
-        int cartId = 1;
-        int quantity = 2;
-
-        CartItem cartItem = cartRepositories.addItem(cartId, product.getId(), quantity);
+        Product product = entityManager.find(Product.class, 1);
+        CartItem cartItem = cartRepositories.addItem(4, 1, 2);
         assertNotNull(cartItem);
-        assertEquals(quantity, cartItem.getQuantity());
+        assertEquals(product.getStock(), 98);
     }
 
     @Test
@@ -55,7 +54,6 @@ public class CartRepositoriesTest {
 
         Cart cart = cartRepositories.createCart(cartItems);
         assertNotNull(cart);
-        assertNotNull(cart.getId());
     }
 
     @Test

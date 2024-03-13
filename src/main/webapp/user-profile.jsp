@@ -34,14 +34,14 @@
 
 <body>
 
-<%if ("Admin".equals(loggedInUser.getUserType())) { %>
-<%@include file="admin-nav.jsp" %>
-<% } else if ("Customer".equals(loggedInUser.getUserType())) {%>
-<%@include file="customer-nav.jsp" %>
-<% } else if ("Employee".equals(loggedInUser.getUserType())) {%>
-<%@include file="employee-nav.jsp" %>
-#
-<% } %>
+<%--<%if ("Admin".equals(loggedInUser.getUserType())) { %>--%>
+<%--<%@include file="admin-nav.jsp" %>--%>
+<%--<% } else if ("Customer".equals(loggedInUser.getUserType())) {%>--%>
+<%--<%@include file="customer-nav.jsp" %>--%>
+<%--<% } else if ("Employee".equals(loggedInUser.getUserType())) {%>--%>
+<%--<%@include file="employee-nav.jsp" %>--%>
+<%--#--%>
+<%--<% } %>--%>
 <section class="edit-details">
     </br>
     </br>
@@ -49,10 +49,10 @@
     </br>
     <h1 class="heading">Update Profile Details</h1>
 
-    <% if ("Admin".equals(loggedInUser.getUserType()) || "Employee".equals(loggedInUser.getUserType())
-            || "Customer".equals(loggedInUser.getUserType())) {
-        response.sendRedirect("index.jsp");
-    } %>
+<%--    <% if ("Admin".equals(loggedInUser.getUserType()) || "Employee".equals(loggedInUser.getUserType())--%>
+<%--            || "Customer".equals(loggedInUser.getUserType())) {--%>
+<%--        response.sendRedirect("index.jsp");--%>
+<%--    } %>--%>
     <form action="controller" method="post" enctype="multipart/form-data">
         <input type="hidden" name="action" value="update-profile">
         <input type="hidden" name="user_id" value="<%=loggedInUser.getId() %>">
@@ -84,7 +84,7 @@
                onkeypress="if(this.value.length == 20) return false;" name="county">
 
         <span>EirCode</span>
-        <textarea name="eircode" type="text" placeholder="Enter EirCode" class="box" required
+        <textarea name="eirCode" type="text" placeholder="Enter EirCode" class="box" required
                   maxlength="500" cols="30" rows="10"></textarea>
 
 

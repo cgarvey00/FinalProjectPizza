@@ -4,7 +4,7 @@
         <div class="row align-items-center">
             <a href="#" class="logo mr-auto"> <i class="fa-solid fa-pizza-slice"></i> Pizza Shop </a>
             <nav class="nav">
-                <a href="controller?action=customer-page">Home</a>
+                <a href="customer-home.jsp">Home</a>
                 <a href="controller?action=view-menu">Menu</a>
                 <a href="controller?action=create-order">Create Order</a>
                 <a href="controller?action=logout">Logout</a>

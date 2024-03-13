@@ -1,8 +1,6 @@
 package com.finalprojectcoffee.commands;
 
 import com.finalprojectcoffee.entities.Product;
-import com.finalprojectcoffee.entities.ProductCategory;
-import com.finalprojectcoffee.entities.User;
 import com.finalprojectcoffee.repositories.ProductRepositories;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.servlet.http.HttpServletRequest;
@@ -11,12 +9,12 @@ import jakarta.servlet.http.HttpSession;
 
 import java.util.List;
 
-public class ViewStock implements Command{
+public class ViewProducts implements Command{
     private final HttpServletRequest request;
     private final HttpServletResponse response;
     private final EntityManagerFactory factory;
 
-    public ViewStock(HttpServletRequest request, HttpServletResponse response, EntityManagerFactory factory) {
+    public ViewProducts(HttpServletRequest request, HttpServletResponse response, EntityManagerFactory factory) {
         this.request = request;
         this.response = response;
         this.factory = factory;
@@ -24,30 +22,22 @@ public class ViewStock implements Command{
 
     @Override
     public String execute() {
-        String terminus = "view-stock.jsp";
+        String terminus = "product-page.jsp";
 
         HttpSession session = request.getSession(true);
 
-        if (session != null) {
-            User loggedInUser = (User) session.getAttribute("loggedInUser");
+        try {
+            ProductRepositories productRep = new ProductRepositories(factory);
 
-            if (loggedInUser != null && "Admin".equals(loggedInUser.getUserType())) {
-
-                ProductRepositories prodRepos = new ProductRepositories(factory);
-                List<Product> productList = prodRepos.getAllProducts();
+            List<Product> productList = productRep.getAllProducts();
+            if (productList != null && !productList.isEmpty()) {
                 session.setAttribute("productList", productList);
-
-                terminus = "view-stock.jsp";
-
             } else {
-                terminus = "index.jsp";
+                session.setAttribute("vpe-message", "Product list is empty");
             }
-
-        } else {
-            terminus = "index.jsp";
+        } catch (Exception e) {
+            System.err.println("An Exception occurred while viewing product list: " + e.getMessage());
         }
         return terminus;
-
-
     }
 }

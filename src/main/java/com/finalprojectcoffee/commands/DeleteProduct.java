@@ -26,7 +26,7 @@ public class DeleteProduct implements Command {
 
     @Override
     public String execute() {
-        String terminus = "view-stock.jsp";
+        String terminus = "product-page.jsp";
 
         HttpSession session = request.getSession(true);
 //        Object productsObj = session.getAttribute("product_ids");
@@ -41,9 +41,9 @@ public class DeleteProduct implements Command {
 
         try {
             ProductRepositories productRep = new ProductRepositories(factory);
-            Product p = productRep.findProductByID(productId);
+            Product product = productRep.findProductByID(productId);
             List<Product> products = new ArrayList<>();
-            products.add(p);
+            products.add(product);
             boolean isDeleted = productRep.deleteProduct(products);
             if (isDeleted) {
                 session.setAttribute("pds-message", "Delete products successfully");

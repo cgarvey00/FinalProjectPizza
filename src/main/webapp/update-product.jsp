@@ -5,7 +5,7 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" language="java" %>
 <%
     User loggedInUser = (User) request.getSession().getAttribute("loggedInUser");
-   Product product= (Product) request.getSession().getAttribute("product");
+    Product product = (Product) request.getSession().getAttribute("product");
 
 
     //Checking to ensure the User is logged in or not

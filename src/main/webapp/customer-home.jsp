@@ -2,12 +2,12 @@
 <%@ page import="com.finalprojectcoffee.entities.Address" %>
 <%@ page import="java.util.List" %>
 <%@ page import="java.util.Collections" %>
+<%@ page import="com.finalprojectcoffee.repositories.UserRepositories" %>
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%
     User loggedInUser = (User) request.getSession().getAttribute("loggedInUser");
 
-    List<Address> addressList = (List<Address>) request.getSession().getAttribute("addressList");
-
+    boolean addressed = (boolean) request.getSession().getAttribute("addressed");
     //Checking to ensure the User is logged in or not
     if (request.getSession(false) == null || loggedInUser == null || !"Customer".equals(loggedInUser.getUserType())) {
         response.sendRedirect("index.jsp");
@@ -57,10 +57,10 @@
 <body>
 <%@include file="customer-nav.jsp" %>
 <%
-    if (addressList.isEmpty()) {
+    if (!addressed) {
 %>
 <div class="message">
-    <span>Please Add an Address! <a href="controller?action=view-address">Address Page</a></span>
+    <span>Please Add an Address!<a href="controller?action=view-address">Address Page</a></span>
     <i class="fas fa-times" onclick="this.parentElement.remove();"></i>
 </div>
 <%

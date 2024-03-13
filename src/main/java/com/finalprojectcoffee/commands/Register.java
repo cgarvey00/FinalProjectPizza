@@ -67,7 +67,7 @@ public class Register implements Command{
                     session.setAttribute("errormsg", "Failed to register user");
                 }
             } catch (Exception e){
-                System.err.println("An Exception occurred " + e.getMessage());
+                System.err.println("An Exception occurred while registering" + e.getMessage());
             }
         }
         return terminus;

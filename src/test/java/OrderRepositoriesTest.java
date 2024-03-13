@@ -53,28 +53,16 @@ public class OrderRepositoriesTest {
 
     @Test
     public void addOrderTest(){
-        Order expectedResult = orderRep.addOrder(3,3,1);
+        Order expectedResult = orderRep.addOrder(1,1,1);
         assertNotNull(expectedResult);
     }
 
     @Test
     public void payOrderTest(){
-        Boolean expectedResult = orderRep.payOrder(3,23.96);
+        Boolean expectedResult = orderRep.payOrder(3);
         assertTrue(expectedResult);
         Order order = orderRep.findOrderById(3);
-        assertEquals(0.0,order.getBalance());
         assertEquals(Status.Paid, order.getPaymentStatus());
-    }
-
-    @Test
-    public void acceptOrdersTest(){
-        Integer orderId = 3;
-        List<Integer> orderIds = new ArrayList<>();
-        orderIds.add(orderId);
-        Boolean expectedResult = orderRep.acceptOrders(orderIds);
-        Order order = orderRep.findOrderById(3);
-        assertTrue(expectedResult);
-        assertEquals(Status.Accepted, order.getStatus());
     }
 
     @Test

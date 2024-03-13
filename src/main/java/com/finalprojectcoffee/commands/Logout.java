@@ -18,7 +18,7 @@ public class Logout implements Command{
 
     @Override
     public String execute() {
-        String terminus = "login.jsp";
+        String terminus = "index.jsp";
         HttpSession session = request.getSession(true);
         session.removeAttribute("LoggedInUser");
         return terminus;

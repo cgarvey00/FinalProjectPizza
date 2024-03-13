@@ -88,49 +88,50 @@
         <%
             List<Product> productList = (List<Product>) request.getSession().getAttribute("productList");
             if (productList != null && !productList.isEmpty()) {
-                for (Product p : productList) { %>
+                for (Product product : productList) {
+        %>
         <div class="box">
             <form action="controller" method='POST'>
-                <input type='hidden' name='product_id' value='<%= p.getId() %>'>
+                <input type='hidden' name='product_id' value='<%= product.getId() %>'>
 
-                <img src="../uploaded-images/<%= p.getImage() %>" alt="">
+                <img src="../uploaded-images/<%= product.getImage() %>" alt="">
                 <div class="name">
-                    <%= p.getName() %>
+                    <%= product.getName() %>
                 </div>
                 <div class="details">Category: <span>
-                        <%= p.getCategory() %>
+                        <%= product.getCategory() %>
                 </div>
                 <div class="price">&euro;<span>
-                         <%= p.getPrice() %>
+                         <%= product.getPrice() %>
                         </span>
                 </div>
                 <div class="details">Details: <span>
-                          <%= p.getDetails() %>
+                          <%= product.getDetails() %>
                         </span>
                 </div>
                 <div class="stock">Stock: <span>
-                            <%= p.getStock() %>
+                            <%= product.getStock() %>
                         </span>
                 </div>
                 <div class="flex-btn">
                     <input type='hidden' name='action' value='view-update-product'>
 
                     <button type="submit" name="view-update-product" class="option-btn">Update</button>
+                </div>
             </form>
             <form action="controller" method='POST'>
-                <input type='hidden' name='product_id' value='<%=p.getId() %>'>
+                <input type='hidden' name='product_id' value='<%=product.getId() %>'>
                 <input type='hidden' name='action' value='delete-product'>
                 <button type="submit" name="delete-product" class="delete-btn"
                         onclick="return confirm('delete this product?');">delete
                 </button>
             </form>
         </div>
+        <% } %>
+        <% } else { %>
+        <p class="empty">No Products Added Yet!</p>
+        <% } %>
     </div>
-    <% } %>
-    </div>
-    <% } else { %>
-    <p class="empty">No Products Added Yet!</p>
-    <% } %>
     <%--    </div>--%>
 
 </section>

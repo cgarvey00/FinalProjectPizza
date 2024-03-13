@@ -24,30 +24,16 @@ public class UpdateUserProfile implements Command{
     @Override
     public String execute() {
         String terminus = "user-profile.jsp";
+
         HttpSession session = request.getSession(true);
         User activeUser = (User) session.getAttribute("loggedInUser");
         int activeUserId = activeUser.getId();
-        String newPassword = request.getParameter("newPassword");
-        String passwordConfirmation = request.getParameter("passwordConfirmation");
         String newPhoneNumber = request.getParameter("phoneNumber");
         String newEmail = request.getParameter("email");
         String image = request.getParameter("image");
 
         try {
             UserRepositories userRep = new UserRepositories(factory);
-
-            if(newPassword != null && !newPassword.isEmpty() && passwordConfirmation != null && !passwordConfirmation.isEmpty()){
-
-                if(newPassword.equals(passwordConfirmation)){
-                    if(JBCriptUtil.validatePassword(newPassword)){
-                        activeUser.setPassword(JBCriptUtil.getHashedPw(newPassword));
-                    } else {
-                        session.setAttribute("upw-msg", "Password format error");
-                    }
-                } else {
-                    session.setAttribute("upwc-msg", "Password inconsistency");
-                }
-            }
 
             if(newPhoneNumber != null && !newPhoneNumber.isEmpty()){
                 if(PhoneNumberUtil.validationPhoneNumber(newPhoneNumber)){
@@ -72,6 +58,7 @@ public class UpdateUserProfile implements Command{
             Boolean isUpdated = userRep.updateUser(activeUserId, activeUser.getPassword(), activeUser.getPhoneNumber(), activeUser.getEmail(), activeUser.getImage());
             if(isUpdated){
                 session.setAttribute("upus-msg", "Update successfully");
+                terminus = "customer-home.jsp";
             } else {
                 session.setAttribute("upue-msg", "Failed to update");
             }

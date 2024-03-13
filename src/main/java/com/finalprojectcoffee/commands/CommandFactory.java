@@ -43,8 +43,8 @@ public class CommandFactory {
                 case "view-all-users":
                     command = new ViewAllUsers(request, response,factory);
                     break;
-                case "view-all-products":
-                    command = new ViewAllProducts(request, response, factory);
+                case "view-products":
+                    command = new ViewProducts(request, response, factory);
                     break;
                 case "view-products-category":
                     command = new ViewProductByCategory(request, response, factory);
@@ -75,9 +75,6 @@ public class CommandFactory {
                     break;
                 case "add-order":
                     command = new AddOrder(request, response, factory);
-                    break;
-                case "accept-order":
-                    command = new AcceptOrder(request, response,factory);
                     break;
                 case "finish-order":
                     command = new FinishOrder(request, response, factory);

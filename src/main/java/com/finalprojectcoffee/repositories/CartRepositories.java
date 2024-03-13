@@ -17,7 +17,7 @@ public class CartRepositories implements CartRepositoriesInterface {
     @Override
     public Cart addCart() {
         EntityManager entityManager = factory.createEntityManager();
-        EntityTransaction  transaction = entityManager.getTransaction();
+        EntityTransaction transaction = entityManager.getTransaction();
 
         try {
             transaction.begin();
@@ -50,11 +50,11 @@ public class CartRepositories implements CartRepositoriesInterface {
             cartItem.setProduct(product);
             cartItem.setQuantity(quantity);
             cartItem.setCart(cart);
-            //cartItem.setCost(quantity * product.getPrice());
-            //product.setStock(product.getStock() - quantity);
+            cartItem.setCost(quantity * product.getPrice());
+            product.setStock(product.getStock() - quantity);
 
             entityManager.persist(cartItem);
-            //entityManager.merge(product);
+            entityManager.merge(product);
             transaction.commit();
             return cartItem;
         } catch (PersistenceException e) {
@@ -106,9 +106,9 @@ public class CartRepositories implements CartRepositoriesInterface {
 
             for(int cartItemId : cartItemIds){
                 CartItem cartItem = entityManager.find(CartItem.class, cartItemId);
-//                Product product = entityManager.find(Product.class, cartItem.getProduct().getId());
-//                int stock = cartItem.getQuantity();
-//                product.setStock(product.getStock() + stock);
+                Product product = entityManager.find(Product.class, cartItem.getProduct().getId());
+                int stock = cartItem.getQuantity();
+                product.setStock(product.getStock() + stock);
                 entityManager.remove(cartItem);
             }
 
@@ -153,9 +153,9 @@ public class CartRepositories implements CartRepositoriesInterface {
             List<CartItem> cartItems = cart.getCartItems();
 
             for (CartItem cartItem : cartItems) {
-                //int quantity = cartItem.getQuantity();
+                int quantity = cartItem.getQuantity();
                 Product product = cartItem.getProduct();
-                //product.setStock(product.getStock() + quantity);
+                product.setStock(product.getStock() + quantity);
                 entityManager.merge(product);
             }
 
