@@ -61,6 +61,9 @@ public class CommandFactory {
                 case "admin-dashboard":
                     command = new ViewDashboard(request, response, factory);
                     break;
+                case "view-user-profile":
+                    command = new ViewUserProfile(request, response, factory);
+                    break;
                 case "update-user-profile":
                     command = new UpdateUserProfile(request, response, factory);
                     break;

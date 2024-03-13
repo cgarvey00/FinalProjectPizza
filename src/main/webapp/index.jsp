@@ -12,6 +12,7 @@
     <!-- bootstrap cdn link  -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/4.6.1/css/bootstrap.min.css">
     <!-- styles css link  -->
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/stylesheets/customer.css">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/stylesheets/styles2.css">
 </head>
 <style>
@@ -24,28 +25,7 @@
     }
 </style>
 <body>
-<header class="header fixed-top">
-    <div class="container">
-
-        <div class="row align-items-center">
-
-            <a href="#" class="logo mr-auto"> <i class="fa-solid fa-pizza-slice"></i> Pizza Shop </a>
-
-            <nav class="nav">
-                <a href="#">Home</a>
-                <a href="controller?action=view-login">Login</a>
-                <a href="controller?action=view-register">Register</a>
-            </nav>
-
-            <div class="icons">
-                <div class="fas fa-bars" id="menu-btn"></div>
-
-            </div>
-
-        </div>
-
-    </div>
-</header>
+<%@include file="normal-nav.jsp" %>
 <!-- home section starts  -->
 
 <section class="home" id="home">
@@ -56,7 +36,7 @@
             <div class="col-md-6">
                 <span>Welcome to the Pizza Shop</span>
                 <h3>Browse Our Menu </h3>
-                <a href="controller?action=view-menu" class="link-btn">Get Started</a>
+                <a href="#" class="link-btn">Get Started</a>
             </div>
         </div>
 

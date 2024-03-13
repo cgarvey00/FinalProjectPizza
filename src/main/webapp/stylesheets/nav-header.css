@@ -1,0 +1,201 @@
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@100;200;300;400;500;600&display=swap");
+
+* {
+    font-family: 'Montserrat', sans-serif;
+    margin: 0;
+    padding: 0;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+    outline: none;
+    border: none;
+    text-decoration: none !important;
+    -webkit-transition: all .2s linear;
+    transition: all .2s linear;
+}
+
+:root {
+    --main-color: #2980b9;
+    --orange: #f39c12;
+    --red: #e74c3c;
+    --black: #333;
+    --white: #fff;
+    --light-color: #666;
+    --light-bg: #eee;
+    --border: .2rem solid var(--black);
+    --box-shadow: 0 .5rem 1rem rgba(0, 0, 0, .1);
+}
+
+html {
+    font-size: 62.5%;
+    overflow-x: hidden;
+    scroll-behavior: smooth;
+    scroll-padding-top: 6rem;
+}
+
+html::-webkit-scrollbar {
+    width: 1rem;
+}
+
+html::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+html::-webkit-scrollbar-thumb {
+    background: rgba(255, 68, 68, 0.44);
+}
+
+section {
+    padding: 5rem 1rem;
+}
+
+.header .profile {
+    position: absolute;
+    top: 120%;
+    right: 2rem;
+    background-color: var(--white);
+    border-radius: .5rem;
+    box-shadow: var(--box-shadow);
+    border: var(--border);
+    padding: 2rem;
+    width: 30rem;
+    padding-top: 1.2rem;
+    display: none;
+    animation: fadeIn .2s linear;
+}
+
+.header .profile.active {
+    display: inline-block;
+}
+
+.header .profile p {
+    text-align: center;
+    color: var(--black);
+    font-size: 2rem;
+    margin-bottom: 1rem;
+}
+
+.heading {
+    text-align: center;
+    margin-bottom: 4rem;
+    font-size: 3rem;
+    text-transform: capitalize;
+    color: #222;
+}
+
+.header.fixed-top {
+    z-index: 1000;
+    padding: 1rem 0;
+    background: #691f1f;
+    position: fixed;
+    width: 100px;
+}
+
+.header.fixed-top .container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 1200px;
+    margin: 0 auto;
+
+}
+
+.header.active {
+    padding: 2rem 0;
+    background: #691f1f;
+    text-shadow: 2px 4px 4px rgba(46, 91, 173, 0.6);
+}
+
+.header.fixed-top .logo {
+    font-size: 2rem;
+    color: #fff;
+    font-weight: bolder;
+}
+
+.header.fixed-top .nav {
+    display: flex;
+    align-items: center;
+}
+
+
+.header.fixed-top .nav a {
+    font-size: 1.5rem;
+    margin-right: 1rem;
+    color: #fff;
+    position: relative;
+}
+
+.header .nav a:hover {
+    text-decoration: underline !important;
+    text-underline-offset: .5rem;
+}
+
+.header.fixed-top .icons div {
+    font-size: 1.8rem;
+    color: #fff;
+    margin-left: 1rem;
+    cursor: pointer;
+}
+
+.header #menu-btn {
+    display: none;
+}
+
+
+@media (max-width: 900px) {
+
+    .header.fixed-top .container {
+        padding: 0 1rem;
+    }
+
+    .header.fixed-top .nav a {
+        font-size: 1.2rem;
+        margin-right: 0.5rem;
+    }
+
+    .header.fixed-top .icons div {
+        font-size: 1.5rem;
+        margin-right: 0.5rem;
+    }
+
+    .header.active {
+        padding: 2rem;
+    }
+
+    .header #menu-btn {
+        display: inline-block;
+    }
+
+    .header #menu-btn.fa-times {
+        -webkit-transform: rotate(180deg);
+        transform: rotate(180deg);
+    }
+
+    .header .nav {
+        position: absolute;
+        top: 99%;
+        left: 0;
+        right: 0;
+        background: #fff;
+        -webkit-box-orient: vertical;
+        -webkit-box-direction: normal;
+        -ms-flex-flow: column;
+        flex-flow: column;
+        padding: 1rem 0;
+        -webkit-clip-path: polygon(0 0, 100% 0, 100% 0, 0 0);
+        clip-path: polygon(0 0, 100% 0, 100% 0, 0 0);
+    }
+
+    .header .nav.active {
+        -webkit-clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
+        clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
+    }
+
+    .header .nav a {
+        margin: 1rem 2rem;
+        color: #222;
+    }
+
+    .contact .map {
+        height: 25rem;
+    }
+}

@@ -10,7 +10,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 
-public class UpdateUserProfile implements Command{
+public class UpdateUserProfile implements Command {
     private final HttpServletRequest request;
     private final HttpServletResponse response;
     private final EntityManagerFactory factory;
@@ -35,23 +35,23 @@ public class UpdateUserProfile implements Command{
         try {
             UserRepositories userRep = new UserRepositories(factory);
 
-            if(newPhoneNumber != null && !newPhoneNumber.isEmpty()){
-                if(PhoneNumberUtil.validationPhoneNumber(newPhoneNumber)){
+            if (newPhoneNumber != null && !newPhoneNumber.isEmpty()) {
+                if (PhoneNumberUtil.validationPhoneNumber(newPhoneNumber)) {
                     activeUser.setPhoneNumber(newPhoneNumber);
                 } else {
                     session.setAttribute("upe-msg", "Phone number format error");
                 }
             }
 
-            if(newEmail != null && !newEmail.isEmpty()){
-                if(EmailUtil.validateEmail(newEmail)){
+            if (newEmail != null && !newEmail.isEmpty()) {
+                if (EmailUtil.validateEmail(newEmail)) {
                     activeUser.setEmail(newEmail);
                 } else {
                     session.setAttribute("uee-msg", "Email format error");
                 }
             }
 
-            if(image != null && !image.isEmpty()){
+            if (image != null && !image.isEmpty()) {
                 activeUser.setImage(image);
             }
 
