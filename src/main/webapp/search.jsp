@@ -1,6 +1,16 @@
 <%@ page import="com.finalprojectcoffee.entities.Product" %>
 <%@ page import="java.util.List" %>
+<%@ page import="com.finalprojectcoffee.entities.User" %>
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+
+<%
+  User loggedInUser = (User) request.getSession().getAttribute("loggedInUser");
+
+
+  if (request.getSession(false) == null || loggedInUser == null || !"Customer".equals(loggedInUser.getUserType())) {
+    response.sendRedirect("index.jsp");
+  }
+%>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
@@ -31,8 +41,8 @@
 <%@include file="customer-nav.jsp"%>
 <section class="search-form">
   <h3>Search for a Product Here...</h3>
- <form action="controller" method="POST">
-  <input type="hidden" name="action" value="search-keyword">
+  <form action="controller" method="POST">
+    <input type="hidden" name="action" value="search-keyword">
     <input type="text" name="search_box" placeholder="Search Here..." maxlength="100" class="box" required>
     <button type="submit" class="fas fa-search" name="search-keyword"></button>
   </form>
@@ -45,11 +55,11 @@
       List<Product> productList = (List<Product>) request.getSession().getAttribute("searchKeywordProducts");
       if (productList != null && !productList.isEmpty()) {
         for (Product p : productList) { %>
-    <form action="." method="post">
+    <form action="controller" method="post">
       <input type="hidden" name="action" value="add-to-cart">
       <input type="hidden" name="product_id" value=<%=p.getId()%>>
-      <input type="hidden" name="name" value=<%=p.getName()%>>
-      <input type="hidden" name="price" value=<%=p.getPrice()%>>
+
+      <input type="hidden" name="customer_id" value=<%=loggedInUser.getId() %>>
       <div class="box bg-light">
         <div class="image">
           <img src="${pageContext.request.contextPath}/uploaded-images/<%= p.getImage() %>" name="image" alt="image">
@@ -70,7 +80,13 @@
           <label>
             <input type="number" name="qty" style="font-size:15px;" required class="box" min="0" max="40" placeholder="enter quantity" value="1">
           </label>
+          <% if (p.getStock() <= 0) { %>
+          <h4 style="font-weight: bold;"class="text-red">Out Of Stock</h4>
+          <button type="submit" disabled name="view-product-customer" style="background-color:white;" class="cart-btn">View Item</button>
+          <% } else {%>
+          <h4 class="text-dark">Place cart quantity</h4>
           <button type="submit" name="add-to-cart" class="cart-btn">Add to Cart</button>
+          <% }%>
 
         </div>
       </div>

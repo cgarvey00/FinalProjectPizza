@@ -62,7 +62,13 @@
                     <label>
                         <input type="number" name="qty" style="font-size:15px;" required class="box" min="0" max="40" placeholder="enter quantity" value="1">
                     </label>
+                    <% if (p.getStock() <= 0) { %>
+                    <h4 style="font-weight: bold;"class="text-red">Out Of Stock</h4>
+                    <button type="submit" disabled name="view-product-customer" style="background-color:white;" class="cart-btn">View Item</button>
+                    <% } else {%>
+                    <h4 class="text-dark">Place cart quantity</h4>
                     <button type="submit" name="add-to-cart" class="cart-btn">Add to Cart</button>
+                    <% }%>
 
                 </div>
             </div>

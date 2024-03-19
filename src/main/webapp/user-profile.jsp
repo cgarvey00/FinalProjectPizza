@@ -7,8 +7,7 @@
     User loggedInUser = (User) request.getSession().getAttribute("loggedInUser");
 
     //Checking to ensure the User is logged in or not
-    if (request.getSession(false) == null || loggedInUser == null || !"Admin".equals(loggedInUser.getUserType()) || !"Employee".equals(loggedInUser.getUserType())
-            || !"Customer".equals(loggedInUser.getUserType())) {
+    if (request.getSession(false) == null || loggedInUser == null || !"Customer".equals(loggedInUser.getUserType())) {
         response.sendRedirect("index.jsp");
     }
 
@@ -34,25 +33,20 @@
 
 <body>
 
-<%if ("Admin".equals(loggedInUser.getUserType())) { %>
-<%@include file="admin-nav.jsp" %>
-<% } else if ("Customer".equals(loggedInUser.getUserType())) {%>
+<%if ("Customer".equals(loggedInUser.getUserType())) {%>
 <%@include file="customer-nav.jsp" %>
-<% } else if ("Employee".equals(loggedInUser.getUserType())) {%>
-<%@include file="employee-nav.jsp" %>
-#
 <% } %>
+
 <section class="edit-details">
     </br>
     </br>
     </br>
+    </br>    </br>
+    </br>
     </br>
     <h1 class="heading">Update Profile Details</h1>
-
-    <form action="controller" method="post" enctype="multipart/form-data">
+    <form action="controller" method="POST">
         <input type="hidden" name="action" value="update-profile">
-        <input type="hidden" name="user_id" value="<%=loggedInUser.getId() %>">
-        <input type="hidden" name="old_image" value="<%=loggedInUser.getImage() %>">
         <div class="image-container">
             <div class="main-image">
                 <center><img src="../uploaded-images/<%=loggedInUser.getId() %>" class="rounded-circle img-fluid"
@@ -60,17 +54,16 @@
             </div>
         </div>
         <span>Username</span>
-        <input disabled type="text" name="name" required class="box" maxlength="100" placeholder="Enter Username"
+        <input disabled type="text" name="username" required class="box" maxlength="100" placeholder="Enter Username"
                value="<%=loggedInUser.getUsername() %>">
         <span>Update Email</span>
         <input type="text" name="email" required class="box" maxlength="100" placeholder="Enter Email"
                value="<%=loggedInUser.getEmail() %>">
-        <span>Update PhoneNumber</span>
-        <input type="number" name="phoneNumber" required class="box" maxlength="100" placeholder="Enter Email"
+        <span>Update Phone Number</span>
+        <input type="number" name="phoneNumber" required class="box" maxlength="10" placeholder="Enter Email"
                value="<%=loggedInUser.getPhoneNumber() %>">
-
         <span>Update Image </span>
-        <input type="text" name="image" required class="box" maxlength="100" placeholder="Enter Image" --%>
+        <input type="text" name="image" required class="box" maxlength="20" placeholder="Enter Image"
         value="<%=loggedInUser.getImage() %>">
         <div class="flex-btn">
             <input type="submit" name="update-profile" class="btn" value="update">
