@@ -16,10 +16,6 @@ public class Order {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @OneToOne
-    @JoinColumn(name = "cart_id", referencedColumnName = "id", nullable = false)
-    private Cart cart;
-
     @ManyToOne
     @JoinColumn(name = "customer_id", referencedColumnName = "id", nullable = false)
     private Customer customer;
@@ -31,7 +27,7 @@ public class Order {
     @JoinColumn(name = "address_id", referencedColumnName = "id", nullable = false)
     private Address address;
 
-    @Column(name = "balance")
+    @Column(name = "balance", columnDefinition = "0.0")
     private double balance;
 
     @Enumerated(EnumType.STRING)
@@ -51,8 +47,7 @@ public class Order {
     public Order() {
     }
 
-    public Order(Cart cart, Customer customer, Employee employee, Address address, double balance, Status paymentStatus, Status status, LocalDateTime createTime, LocalDateTime updateTime) {
-        this.cart = cart;
+    public Order(Customer customer, Employee employee, Address address, double balance, Status paymentStatus, Status status, LocalDateTime createTime, LocalDateTime updateTime) {
         this.customer = customer;
         this.employee = employee;
         this.address = address;
@@ -63,9 +58,8 @@ public class Order {
         this.updateTime = updateTime;
     }
 
-    public Order(int id, Cart cart, Customer customer, Employee employee, Address address, double balance, Status paymentStatus, Status status, LocalDateTime createTime, LocalDateTime updateTime) {
+    public Order(int id, Customer customer, Employee employee, Address address, double balance, Status paymentStatus, Status status, LocalDateTime createTime, LocalDateTime updateTime) {
         this.id = id;
-        this.cart = cart;
         this.customer = customer;
         this.employee = employee;
         this.address = address;
@@ -83,15 +77,6 @@ public class Order {
     public void setId(int id) {
         this.id = id;
     }
-
-    public Cart getCart() {
-        return cart;
-    }
-
-    public void setCart(Cart cart) {
-        this.cart = cart;
-    }
-
     public Customer getCustomer() {
         return customer;
     }
@@ -160,7 +145,6 @@ public class Order {
     public String toString() {
         return "Order{" +
                 "id=" + id +
-                ", cart=" + cart +
                 ", customer=" + customer +
                 ", employee=" + employee +
                 ", address=" + address +
@@ -177,7 +161,7 @@ public class Order {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Order order = (Order) o;
-        return id == order.id;
+        return id == order.getId();
     }
 
     @Override
