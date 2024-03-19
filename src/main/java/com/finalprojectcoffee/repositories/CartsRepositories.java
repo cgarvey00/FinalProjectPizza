@@ -291,11 +291,10 @@ public class CartsRepositories implements CartsRepositoriesInterface {
     }
 
     /**
-     * This method will remove a Customers cart item of product they wish to delete using the customers id and product id
+     * This method will clear the entirety of the cart using the customer id
      *
      * @param customerId the customer who has a stored item pending deletion
-     * @return Boolean which indicates if the item have been deleted from the cart or not
-     * @throws PersistenceException where the cart item did not get deleted
+     * @throws PersistenceException where the carts did not get deleted
      */
     @Override
     public Boolean clearCart(int customerId) {
@@ -331,6 +330,26 @@ public class CartsRepositories implements CartsRepositoriesInterface {
             if (entityManager != null && entityManager.isOpen()) {
                 entityManager.close();
             }
+        }
+    }
+
+    public void resetAutoIncrement(String tableName) {
+        EntityManager entityManager = factory.createEntityManager();
+        EntityTransaction transaction = entityManager.getTransaction();
+
+        try {
+            transaction.begin();
+
+            entityManager.createNativeQuery("ALTER TABLE " + tableName + " AUTO_INCREMENT=1").executeUpdate();
+
+            transaction.commit();
+        } catch (PersistenceException e) {
+            System.err.println(e.getMessage());
+            System.err.println("An Exception occurred when AutoIncrementing the Product ID\n\t" + e);
+            transaction.rollback();
+
+        } finally {
+            entityManager.close();
         }
     }
 

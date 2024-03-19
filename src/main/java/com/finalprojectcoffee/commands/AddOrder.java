@@ -1,8 +1,9 @@
 package com.finalprojectcoffee.commands;
 
 import com.finalprojectcoffee.entities.*;
-import com.finalprojectcoffee.repositories.CartRepositories;
+import com.finalprojectcoffee.repositories.CartsRepositories;
 import com.finalprojectcoffee.repositories.OrderRepositories;
+import com.finalprojectcoffee.utils.PaymentUtil;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -14,7 +15,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
-public class AddOrder implements Command{
+public class AddOrder implements Command {
     private final HttpServletRequest request;
     private final HttpServletResponse response;
     private final EntityManagerFactory factory;
@@ -27,70 +28,53 @@ public class AddOrder implements Command{
 
     @Override
     public String execute() {
-        String terminus = "search-menu.jsp";
+        String terminus = "customer-home.jsp";
         HttpSession session = request.getSession(true);
 
-        Object productIdsObj = session.getAttribute("product_ids");
-        Object quantitiesObj = session.getAttribute("product_quantities");
-        List<Integer> productIds = new ArrayList<>();
-        List<Integer> quantities = new ArrayList<>();
-
-        if(productIdsObj instanceof Integer[]){
-            Integer[] productIdsArray = (Integer[]) productIdsObj;
-            //Filter null elements
-            productIds = Arrays.stream(productIdsArray).filter(Objects::nonNull).collect(Collectors.toList());
-        }
-
-        if(quantitiesObj instanceof Integer[]){
-            Integer[] quantitiesArray = (Integer[]) quantitiesObj;
-            //Filter null elements
-            quantities = Arrays.stream(quantitiesArray).filter(Objects::nonNull).collect(Collectors.toList());
-        }
-
-        //Active user
-        User activeCustomer = (User) session.getAttribute("loggedInUser");
-        int activeCustomerId = activeCustomer.getId();
-
-        //Address
-        int addressId = (int) session.getAttribute("address_id");
-
+        int addressID = Integer.parseInt(request.getParameter("address"));
+        String paymentMethod = request.getParameter("method");
+        String cardNumber = request.getParameter("cardNumber");
+        String expiryDate = request.getParameter("expdate");
+        double total = Double.parseDouble(request.getParameter("total"));
+        String cvv = request.getParameter("cvv");
         try {
-            CartRepositories cartRep = new CartRepositories(factory);
-            OrderRepositories orderRep = new OrderRepositories(factory);
-            List<CartItem> cartItems = new ArrayList<>();
+            if (PaymentUtil.validatePaymentInfo(paymentMethod, cardNumber, expiryDate, cvv)) {
+                User loggedInUser = (User) session.getAttribute("loggedInUser");
+                CartsRepositories cartRep = new CartsRepositories(factory);
 
-            //Add empty cart
-            Cart cart = cartRep.addCart();
+                List<Carts> cartItems = cartRep.getCartsByCustomerId(loggedInUser.getId());
 
-            if(!productIds.isEmpty()&& !quantities.isEmpty() && productIds.size() == quantities.size()){
-                for (int i = 0; i< productIds.size(); i++) {
-                    CartItem cartItem = cartRep.addItem(cart.getId(), productIds.get(i), quantities.get(i));
+                if (loggedInUser != null && cartItems != null && !cartItems.isEmpty()) {
+                    OrderRepositories orderRep = new OrderRepositories(factory);
+                    Order o = orderRep.addOrder(loggedInUser.getId(), addressID, cartItems);
 
-                    if (cartItem != null) {
-                        cartItems.add(cartItem);
+                    if (o != null) {
+                        session.setAttribute("ap3-message", "Order Added successfully");
+                        cartRep.clearCart(loggedInUser.getId());
+                        boolean payOrder = orderRep.payOrder(o.getId(), total);
+                        if (payOrder) {
+                            session.setAttribute("ap2-message", "Order Paid successfully");
+
+                            boolean accepted = orderRep.acceptOrders(o.getId());
+
+                            if (accepted) {
+                                session.setAttribute("ap1-message", "Order has been successfully accepted, await for delivery");
+                                terminus = "customer-home.jsp";
+                            }
+                        }
                     } else {
-                        session.setAttribute("item_error", "Failed to add item");
+                        session.setAttribute("aps-message", "Payment Failed");
+                        terminus = "view-cart.jsp";
                     }
-                }
-            } else {
-                session.setAttribute("iqe_message", "Failed to select items");
-            }
 
-            //Call createCart function
-            cart = cartRep.createCart(cartItems);
-            if(cart != null){
-                Order order = orderRep.addOrder(activeCustomerId, cart.getId(), addressId);
-                if(order != null){
-                    session.setAttribute("order", order);
-                    terminus = "payment.jsp";
                 }
-            } else {
-                session.setAttribute("cart_error", "Failed to add cart");
+
             }
         } catch (Exception e) {
-            System.err.println("An Exception occurred while adding order: " + e.getMessage());
+            System.err.println("An Exception occurred while adding products: " + e.getMessage());
         }
-
         return terminus;
+
+
     }
 }
