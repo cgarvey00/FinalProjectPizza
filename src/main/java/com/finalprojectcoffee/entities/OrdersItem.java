@@ -5,16 +5,15 @@ import jakarta.persistence.*;
 import java.util.Objects;
 
 @Entity
-@Table(name = "cart_items")
-public class CartItem {
+@Table(name = "order_items")
+public class OrdersItem {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
     private int id;
-
     @ManyToOne
-    @JoinColumn(name = "cart_id", nullable = false)
-    private Cart cart;
+    @JoinColumn(name = "order_id", nullable = false)
+    private Order orders;
     @OneToOne
     @JoinColumn(name = "product_id", nullable = false)
     private Product product;
@@ -23,20 +22,20 @@ public class CartItem {
     @Column(name = "cost")
     private double cost;
 
-    public CartItem() {
+    public OrdersItem() {
 
     }
 
-    public CartItem(Cart cart, Product product, int quantity, double cost) {
-        this.cart = cart;
+    public OrdersItem(Order orders, Product product, int quantity, double cost) {
+        this.orders = orders;
         this.product = product;
         this.quantity = quantity;
         this.cost = cost;
     }
 
-    public CartItem(int id, Cart cart, Product product, int quantity, double cost) {
+    public OrdersItem(int id, Order orders, Product product, int quantity, double cost) {
         this.id = id;
-        this.cart = cart;
+        this.orders = orders;
         this.product = product;
         this.quantity = quantity;
         this.cost = cost;
@@ -50,12 +49,12 @@ public class CartItem {
         this.id = id;
     }
 
-    public Cart getCart() {
-        return cart;
+    public Order getOrder() {
+        return orders;
     }
 
-    public void setCart(Cart cart) {
-        this.cart = cart;
+    public void setOrder(Order orders) {
+        this.orders =orders;
     }
 
     public Product getProduct() {
@@ -82,18 +81,13 @@ public class CartItem {
         this.cost = cost;
     }
 
-    public void setCartAndUpdateCost(Cart cart) {
-        this.cart = cart;
-        if (product != null) {
-            this.cost = this.quantity * this.product.getPrice();
-        }
-    }
+
 
     @Override
     public String toString() {
-        return "CartItem{" +
+        return "OrderItem{" +
                 "id=" + id +
-                ", cart=" + cart +
+                ", Order=" + orders +
                 ", product=" + product +
                 ", quantity=" + quantity +
                 ", cost=" + cost +
@@ -104,12 +98,13 @@ public class CartItem {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        CartItem cartItem = (CartItem) o;
-        return id == cartItem.id;
+        Order orderItem = (Order) o;
+        return id == orderItem.getId();
     }
 
     @Override
     public int hashCode() {
         return Objects.hash(id);
     }
+
 }

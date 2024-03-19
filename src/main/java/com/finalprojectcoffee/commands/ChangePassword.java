@@ -8,7 +8,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 
-public class ChangePassword implements Command{
+public class ChangePassword implements Command {
     private final HttpServletRequest request;
     private final HttpServletResponse response;
     private final EntityManagerFactory factory;
@@ -30,11 +30,15 @@ public class ChangePassword implements Command{
 
         try {
             UserRepositories userRep = new UserRepositories(factory);
-            if(newPassword != null && !newPassword.isEmpty() && passwordConfirmation != null && !passwordConfirmation.isEmpty()){
+            if (newPassword != null && !newPassword.isEmpty() && passwordConfirmation != null && !passwordConfirmation.isEmpty()) {
 
-                if(newPassword.equals(passwordConfirmation)){
-                    if(JBCriptUtil.validatePassword(newPassword)){
+                if (newPassword.equals(passwordConfirmation)) {
+                    if (JBCriptUtil.validatePassword(newPassword)) {
                         activeUser.setPassword(JBCriptUtil.getHashedPw(newPassword));
+
+                        userRep.updatePassword(activeUser.getId(), activeUser.getPassword());
+
+
                         terminus = "customer-home.jsp";
                     } else {
                         session.setAttribute("upw-msg", "Password format error");

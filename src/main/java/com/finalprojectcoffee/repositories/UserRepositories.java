@@ -22,7 +22,7 @@ public class UserRepositories implements UserRepositoryInterfaces {
         EntityManager entityManager = factory.createEntityManager();
 
         try {
-            return entityManager.find(User.class,userId);
+            return entityManager.find(User.class, userId);
         } catch (Exception e) {
             System.err.println("An Exception occurred while searching " + e.getMessage());
             return null;
@@ -36,8 +36,8 @@ public class UserRepositories implements UserRepositoryInterfaces {
         EntityManager entityManager = factory.createEntityManager();
 
         try {
-            Query query =entityManager.createQuery("SELECT u FROM User u WHERE u.username = :username");
-            query.setParameter("username",username);
+            Query query = entityManager.createQuery("SELECT u FROM User u WHERE u.username = :username");
+            query.setParameter("username", username);
             return (User) query.getSingleResult();
         } catch (Exception e) {
             System.err.println("An Exception occurred while searching " + e.getMessage());
@@ -83,19 +83,42 @@ public class UserRepositories implements UserRepositoryInterfaces {
     }
 
     @Override
-    public Boolean updateUser(int userId, String password, String phoneNumber, String email, String image) {
+    public Boolean updateUser(int userId, String phoneNumber, String email, String image) {
         EntityManager entityManager = factory.createEntityManager();
         EntityTransaction transaction = entityManager.getTransaction();
 
         try {
             transaction.begin();
 
-            User user = entityManager.find(User.class,userId);
-            user.setPassword(password);
+            User user = entityManager.find(User.class, userId);
+//            user.setPassword(password);
             user.setPhoneNumber(phoneNumber);
             user.setEmail(email);
             user.setImage(image);
 
+            entityManager.merge(user);
+            transaction.commit();
+            return true;
+        } catch (PersistenceException e) {
+            System.err.println("A PersistenceException occurred while merging " + e.getMessage());
+            transaction.rollback();
+            return false;
+        } finally {
+            entityManager.close();
+        }
+    }
+
+
+    @Override
+    public Boolean updatePassword(int userId, String password) {
+        EntityManager entityManager = factory.createEntityManager();
+        EntityTransaction transaction = entityManager.getTransaction();
+
+        try {
+            transaction.begin();
+
+            User user = entityManager.find(User.class, userId);
+            user.setPassword(password);
             entityManager.merge(user);
             transaction.commit();
             return true;
@@ -114,13 +137,20 @@ public class UserRepositories implements UserRepositoryInterfaces {
         EntityTransaction transaction = entityManager.getTransaction();
 
         try {
+
+
             transaction.begin();
 
-            User user = entityManager.find(User.class,userId);
+            User user = entityManager.find(User.class, userId);
 
-            entityManager.remove(user);
-            transaction.commit();
-            return true;
+            if (user != null) {
+                entityManager.remove(user);
+                transaction.commit();
+                return true;
+            } else {
+                return false;
+            }
+
         } catch (PersistenceException e) {
             System.err.println("A PersistenceException occurred while removing" + e.getMessage());
             transaction.rollback();
@@ -154,7 +184,7 @@ public class UserRepositories implements UserRepositoryInterfaces {
     }
 
     @Override
-    public Boolean updateAddress(int userId, String street, String town, String county, String eirCode) {
+    public Boolean updateAddress(int addressId,int userId, String street, String town, String county, String eirCode) {
         EntityManager entityManager = factory.createEntityManager();
         EntityTransaction transaction = entityManager.getTransaction();
 
@@ -162,8 +192,8 @@ public class UserRepositories implements UserRepositoryInterfaces {
             transaction.begin();
 
             User user = entityManager.find(User.class, userId);
-
-            Address address = new Address();
+            Address address = entityManager.find(Address.class, addressId);
+//            Address address = new Address();
             address.setUser(user);
             address.setStreet(street);
             address.setTown(town);
@@ -183,6 +213,28 @@ public class UserRepositories implements UserRepositoryInterfaces {
     }
 
     @Override
+    public Boolean deleteAddress(int addressId) {
+        EntityManager entityManager = factory.createEntityManager();
+        EntityTransaction transaction = entityManager.getTransaction();
+
+        try {
+            transaction.begin();
+
+            Address address = entityManager.find(Address.class, addressId);
+
+            entityManager.remove(address);
+            transaction.commit();
+            return true;
+        } catch (PersistenceException e) {
+            System.err.println("A PersistenceException occurred while removing" + e.getMessage());
+            transaction.rollback();
+            return false;
+        } finally {
+            entityManager.close();
+        }
+    }
+
+    @Override
     public List<Address> getAddressesByUserId(int userId) {
         EntityManager entityManager = factory.createEntityManager();
 
@@ -194,6 +246,46 @@ public class UserRepositories implements UserRepositoryInterfaces {
         } catch (NoResultException e) {
             System.err.println("A NoResultException occurred while searching: " + e.getMessage());
             return Collections.emptyList();
+        } finally {
+            entityManager.close();
+        }
+    }
+
+    public void resetAutoIncrement(String tableName) {
+        EntityManager entityManager = factory.createEntityManager();
+        EntityTransaction transaction = entityManager.getTransaction();
+
+        try {
+            transaction.begin();
+
+            entityManager.createNativeQuery("ALTER TABLE " + tableName + " AUTO_INCREMENT=10").executeUpdate();
+
+            transaction.commit();
+        } catch (PersistenceException e) {
+            System.err.println(e.getMessage());
+            System.err.println("An Exception occurred when AutoIncrementing the Product ID\n\t" + e);
+            transaction.rollback();
+
+        } finally {
+            entityManager.close();
+        }
+    }
+
+    public void resetAutoIncrementAddress(String tableName) {
+        EntityManager entityManager = factory.createEntityManager();
+        EntityTransaction transaction = entityManager.getTransaction();
+
+        try {
+            transaction.begin();
+
+            entityManager.createNativeQuery("ALTER TABLE "  + tableName + " AUTO_INCREMENT=2").executeUpdate();
+
+            transaction.commit();
+        } catch (PersistenceException e) {
+            System.err.println(e.getMessage());
+            System.err.println("An Exception occurred when AutoIncrementing the Product ID\n\t" + e);
+            transaction.rollback();
+
         } finally {
             entityManager.close();
         }

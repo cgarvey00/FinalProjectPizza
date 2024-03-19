@@ -1,7 +1,5 @@
 package com.finalprojectcoffee.commands;
 
-import com.finalprojectcoffee.entities.Address;
-import com.finalprojectcoffee.entities.Customer;
 import com.finalprojectcoffee.entities.Order;
 import com.finalprojectcoffee.entities.User;
 import com.finalprojectcoffee.repositories.OrderRepositories;
@@ -14,12 +12,12 @@ import jakarta.servlet.http.HttpSession;
 import java.util.Collections;
 import java.util.List;
 
-public class ViewOrderCustomer implements Command {
+public class ViewOrderItems implements Command {
     private final HttpServletRequest request;
     private final HttpServletResponse response;
     private final EntityManagerFactory factory;
 
-    public ViewOrderCustomer(HttpServletRequest request, HttpServletResponse response, EntityManagerFactory factory) {
+    public ViewOrderItems(HttpServletRequest request, HttpServletResponse response, EntityManagerFactory factory) {
         this.request = request;
         this.response = response;
         this.factory = factory;
@@ -27,7 +25,7 @@ public class ViewOrderCustomer implements Command {
 
     @Override
     public String execute() {
-        String terminus = "customer-orders.jsp";
+        String terminus = "order-items.jsp";
 
         HttpSession session = request.getSession(true);
 

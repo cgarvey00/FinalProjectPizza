@@ -28,19 +28,19 @@ public class Employee extends User {
         this.salary = salary;
     }
 
-    public Employee(String username, String password, String phoneNumber, String email, String image, List<Address> addresses, Float salary, Status status) {
-        super(username, password, phoneNumber, email, image, addresses);
+    public Employee(String username, String password, String phoneNumber, String email, String image, Float salary, Status status) {
+        super(username, password, phoneNumber, email, image);
         this.salary = salary;
         this.status = status;
     }
 
-    public Employee(int id, String username, String password, String phoneNumber, String email, String image, List<Address> addresses, Float salary) {
-        super(id, username, password, phoneNumber, email, image, addresses);
+    public Employee(int id, String username, String password, String phoneNumber, String email, String image, Float salary) {
+        super(id, username, password, phoneNumber, email, image);
         this.salary = salary;
     }
 
-    public Employee(int id, String username, String password, String phoneNumber, String email, String image, List<Address> addresses, Float salary, Status status) {
-        super(id, username, password, phoneNumber, email, image, addresses);
+    public Employee(int id, String username, String password, String phoneNumber, String email, String image, Float salary, Status status) {
+        super(id, username, password, phoneNumber, email, image);
         this.salary = salary;
         this.status = status;
     }

@@ -22,7 +22,7 @@ public class CommandFactory {
                 case "register":
                     command = new Register(request, response, factory);
                     break;
-                case "SearchKeyword":
+                case "search-keyword":
                     command = new SearchKeyword(request, response, factory);
                     break;
                 case "view-register":
@@ -31,20 +31,17 @@ public class CommandFactory {
                 case "view-login":
                     command = new ViewLogin(request, response, factory);
                     break;
+                case "view-search":
+                    command = new ViewSearch(request, response, factory);
+                    break;
                 case "view-menu":
                     command = new ViewMenu(request, response, factory);
                     break;
                 case "view-order-customer":
                     command = new ViewOrderCustomer(request, response, factory);
                     break;
-                case "view-order-employee":
-                    command = new ViewOrderEmployee(request, response, factory);
-                    break;
                 case "view-all-users":
-                    command = new ViewAllUsers(request, response,factory);
-                    break;
-                case "view-products":
-                    command = new ViewProducts(request, response, factory);
+                    command = new ViewAllUsers(request, response, factory);
                     break;
                 case "view-products-category":
                     command = new ViewProductByCategory(request, response, factory);
@@ -52,11 +49,35 @@ public class CommandFactory {
                 case "add-product":
                     command = new AddProduct(request, response, factory);
                     break;
+                case "view-cart":
+                    command = new ViewCart(request, response, factory);
+                    break;
+                case "add-to-cart":
+                    command = new AddCart(request, response, factory);
+                    break;
+                case "delete-cart-item":
+                    command = new DeleteCart(request, response, factory);
+                    break;
+                case "update-cart":
+                    command = new UpdateCart(request, response, factory);
+                    break;
                 case "update-product":
                     command = new UpdateProduct(request, response, factory);
                     break;
+                case "view-update-product":
+                    command = new ViewUpdateProduct(request, response, factory);
+                    break;
+                case "view-changepassword":
+                    command = new ViewChangePassword(request, response, factory);
+                    break;
+                case "change-password":
+                    command = new ChangePassword(request, response, factory);
+                    break;
                 case "delete-product":
                     command = new DeleteProduct(request, response, factory);
+                    break;
+                case "update-profile":
+                    command = new UpdateUserProfile(request, response, factory);
                     break;
                 case "admin-dashboard":
                     command = new ViewDashboard(request, response, factory);
@@ -64,8 +85,8 @@ public class CommandFactory {
                 case "view-user-profile":
                     command = new ViewUserProfile(request, response, factory);
                     break;
-                case "update-user-profile":
-                    command = new UpdateUserProfile(request, response, factory);
+                case "view-checkout":
+                    command = new ViewPayment(request, response, factory);
                     break;
                 case "add-address":
                     command = new AddAddress(request, response, factory);
@@ -79,20 +100,14 @@ public class CommandFactory {
                 case "add-order":
                     command = new AddOrder(request, response, factory);
                     break;
-                case "finish-order":
-                    command = new FinishOrder(request, response, factory);
-                    break;
-                case "cancel-order":
-                    command = new CancelOrder(request, response, factory);
-                    break;
-                case "remove-items":
-                    command = new RemoveItems(request, response, factory);
-                    break;
-                case "view-items":
-                    command = new ViewItems(request, response, factory);
-                    break;
-                case "clean-cart":
+                case "clear-cart":
                     command = new CleanCart(request, response, factory);
+                    break;
+                case "customer-page":
+                    command = new CustomerPage(request, response, factory);
+                    break;
+                case "employee-page":
+                    command = new EmployeePage(request, response, factory);
                     break;
                 default:
                     break;

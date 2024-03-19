@@ -54,8 +54,7 @@ public class UpdateUserProfile implements Command {
             if (image != null && !image.isEmpty()) {
                 activeUser.setImage(image);
             }
-
-            Boolean isUpdated = userRep.updateUser(activeUserId, activeUser.getPassword(), activeUser.getPhoneNumber(), activeUser.getEmail(), activeUser.getImage());
+            Boolean isUpdated = userRep.updateUser(activeUserId, activeUser.getPhoneNumber(), activeUser.getEmail(), activeUser.getImage());
             if(isUpdated){
                 session.setAttribute("upus-msg", "Update successfully");
                 terminus = "customer-home.jsp";

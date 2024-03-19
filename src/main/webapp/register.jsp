@@ -48,7 +48,7 @@
 <form id="register-form" action="controller" method="POST">
     <input type="hidden" name="action" value="register">
     <div class="title" style="text-align: center;">
-        <h2>Register as an Employee or Customer</h2>
+        <h2>Register and Grab A Slice!</h2>
         <h6 style="text-transform: none;">Choose a Strong password, at least 8 characters, one uppercase letter,
             lowercase, digit and special character</h6>
     </div>
@@ -107,19 +107,6 @@
         <i class="fas fa-check-circle"></i>
         <i class="fas fa-exclamation-circle"></i>
         <p>Error Message</p>
-    </div>
-    <!-- USERTYPE -->
-    <div class="form-outline form-white mb-4">
-        <label style="color:#fff;" for="usertype">User Type</label>
-        <select name="userType" id="usertype" class="required form-control form-control-lg"
-                onchange="enableSubmit()">
-            <option value="Customer">Customer</option>
-            <option value="Employee">Employee </option>
-
-            <i class="fas fa-check-circle"></i>
-            <i class="fas fa-exclamation-circle"></i>
-            <p>Error Message</p>
-        </select>
     </div>
     <button type="submit" name="register" class="btn">Register</button>
     <br><br> <br>

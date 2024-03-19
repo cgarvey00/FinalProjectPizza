@@ -10,12 +10,12 @@ import jakarta.servlet.http.HttpSession;
 
 import java.util.List;
 
-public class CleanCart implements Command {
+public class UpdateCart implements Command{
     private final HttpServletRequest request;
     private final HttpServletResponse response;
     private final EntityManagerFactory factory;
 
-    public CleanCart(HttpServletRequest request, HttpServletResponse response, EntityManagerFactory factory) {
+    public UpdateCart(HttpServletRequest request, HttpServletResponse response, EntityManagerFactory factory) {
         this.request = request;
         this.response = response;
         this.factory = factory;
@@ -26,21 +26,25 @@ public class CleanCart implements Command {
         String terminus = "view-cart.jsp";
 
         HttpSession session = request.getSession(true);
-        int cartId = Integer.parseInt(request.getParameter("customerID"));
+        int productId = Integer.parseInt(request.getParameter("productId"));
+        int quantity = Integer.parseInt(request.getParameter("quantity"));
 
         try {
+            User loggedInUser=(User)session.getAttribute("loggedInUser");
             CartsRepositories cartRep = new CartsRepositories(factory);
-            User loggedInUser = (User) session.getAttribute("loggedInUser");
-            Boolean isCleaned = cartRep.clearCart(cartId);
-            if (isCleaned) {
-                List<Carts> cartsList = cartRep.getCartsByCustomerId(loggedInUser.getId());
-                session.setAttribute("cartList", cartsList);
-                session.setAttribute("ccs-msg", "Clean cart successfully");
+
+            boolean isUpdated=cartRep.updateCartItem(loggedInUser.getId(),productId,quantity);
+            if(isUpdated){
+                List<Carts>cartList=cartRep.getCartsByCustomerId(loggedInUser.getId());
+                session.setAttribute("cartList", cartList);
+                session.setAttribute("pus-msg", "Product Updated successfully");
+                session.setAttribute("alertDisplayed", null);
             } else {
-                session.setAttribute("cce-msg", "Failed to clean cart");
+                session.setAttribute("pue-msg", "Failed to Update product");
             }
+
         } catch (Exception e) {
-            System.err.println("An Exception occurred while cleaning cart: " + e.getMessage());
+            System.err.println("An Exception occurred while updating product: " + e.getMessage());
         }
         return terminus;
     }

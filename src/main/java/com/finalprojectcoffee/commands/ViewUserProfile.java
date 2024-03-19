@@ -28,21 +28,23 @@ public class ViewUserProfile implements Command {
         String terminus = "user-profile.jsp";
 
         HttpSession session = request.getSession(true);
-        User activeUser = (User) session.getAttribute("LoggedInUser");
-//        int userID = Integer.parseInt(request.getParameter("userID"));
+        //Active user
+        User activeUser = (User) session.getAttribute("loggedInUser");
+        int activeUserId = activeUser.getId();
+
         try {
-            if (activeUser.getUserType().equals("Customer") || activeUser.getUserType().equals("Employee")
-                    || activeUser.getUserType().equals("Admin")) {
+            UserRepositories userRep = new UserRepositories(factory);
+            User u = userRep.findUserById(activeUserId);
 
-                session.setAttribute("loggedInUser", activeUser);
-                 terminus = "user-profile.jsp";
-
+            if (u != null) {
+                session.setAttribute("loggedInUser", u);
+                terminus = "user-profile.jsp";
 
             } else {
-                session.setAttribute("vup2-msg", "Failed to view User Profile ");
+                session.setAttribute("emptyUser", "User Not Found");
             }
         } catch (Exception e) {
-            System.err.println("An Exception occurred while Trying to Find the User Profile Page: " + e.getMessage());
+            System.err.println("An Exception occurred while viewing addresses: " + e.getMessage());
         }
         return terminus;
     }

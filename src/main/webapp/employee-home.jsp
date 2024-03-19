@@ -57,18 +57,18 @@
             </a>
             <%}%>
         </div>
-        <!-- NUMBER OF PENDING ORDERS-->
+        <!-- NUMBER OF EMPLOYEE ORDERS-->
         <div class="box">
             <h3><%=orderList.size()%></h3>
-            <p>pending orders placed</p>
+            <p>Current Orders</p>
             <a href="controller?action=view-orders" class="btn">see orders</a>
         </div>
 
-        <!-- NUMBER OF USERS-->
+        <!-- NUMBER OF  ORDERS-->
         <div class="box">
-            <h3><%=userList.size()%></h3>
-            <p>Users Present</p>
-            <a href="controller?action=view-users" class="btn">see users</a>
+            <h3><%=orderList.size()%></h3>
+            <p>Orders to Deliver</p>
+            <a href="controller?action=view-deliver-order" class="btn">See Orders</a>
         </div>
     </div>
 </section>

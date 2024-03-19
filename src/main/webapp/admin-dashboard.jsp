@@ -32,6 +32,8 @@
     <!-- bootstrap cdn link  -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/4.6.1/css/bootstrap.min.css">
     <!-- styles css link  -->
+
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/stylesheets/customer.css">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/stylesheets/styles2.css">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/stylesheets/styles.css">
 </head>
@@ -39,10 +41,6 @@
 <body>
 <%@include file="admin-nav.jsp" %>
 <section class="dashboard">
-    <br>
-    <br>
-    <br>
-    <br>
     <br>
     <br>
     <br>

@@ -30,7 +30,7 @@ public class Register implements Command{
         String passwordConfirmation = request.getParameter("passwordConfirmation");
         String email = request.getParameter("email");
         String phoneNumber = request.getParameter("phoneNumber");
-        String userType = request.getParameter("userType");
+        String userType = "Customer";
 
         if(username != null && !username.isEmpty() && password != null && !password.isEmpty() && passwordConfirmation != null && !passwordConfirmation.isEmpty() && email != null && !email.isEmpty() && phoneNumber != null && !phoneNumber.isEmpty()){
             try {

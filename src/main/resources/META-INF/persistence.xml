@@ -10,10 +10,12 @@
         <class>com.finalprojectcoffee.entities.Order</class>
         <class>com.finalprojectcoffee.entities.Product</class>
         <class>com.finalprojectcoffee.entities.Review</class>
-        <class>com.finalprojectcoffee.entities.Cart</class>
+        <class>com.finalprojectcoffee.entities.Carts</class>
+        <class>com.finalprojectcoffee.entities.OrdersItem</class>
+        <class>com.finalprojectcoffee.entities.Status</class>
         <properties>
             <property name="jakarta.persistence.jdbc.driver" value="com.mysql.cj.jdbc.Driver"/>
-            <property name="jakarta.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/pizzashop?createDatabaseIfNotExist=true"/>
+            <property name="jakarta.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/capizzashop?createDatabaseIfNotExist=true"/>
             <property name="jakarta.persistence.jdbc.user" value="root"/>
             <property name="jakarta.persistence.jdbc.password" value=""/>
 
@@ -24,10 +26,10 @@
         </properties>
     </persistence-unit>
 
-    <persistence-unit name="testpizzashop">
+    <persistence-unit name="testpizzadeliveryshop">
         <properties>
             <property name="jakarta.persistence.jdbc.driver" value="com.mysql.cj.jdbc.Driver"/>
-            <property name="jakarta.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/testpizzashop?createDatabaseIfNotExist=true"/>
+            <property name="jakarta.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/testpizzadeliveryshop?createDatabaseIfNotExist=true"/>
             <property name="jakarta.persistence.jdbc.user" value="root"/>
             <property name="jakarta.persistence.jdbc.password" value=""/>
 

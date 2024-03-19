@@ -57,7 +57,7 @@
     }
 </style>
 <form id="register-form" action="controller" method="POST">
-    <input type="hidden" name="action" value="reset-password">
+    <input type="hidden" name="action" value="change-password">
     <div class="title" style="text-align: center;">
         <h2>Reset Your Password</h2>
         <h6 style="text-transform: none;">Choose a Strong password, at least 8 characters, one uppercase letter,
@@ -65,20 +65,14 @@
     </div>
     <!-- PASSWORD -->
     <div class="input-group">
-        <c:if test="${not empty sessionScope.pwvmsg}">
-            <div class="s-error">${sessionScope.pwvmsg}</div>
-        </c:if>
         <label for="password">Change Password</label>
-        <input type="password" id="password" placeholder="Password" name="password">
+        <input type="password" id="password" placeholder="Password" name="newPassword">
         <i class="fas fa-check-circle"></i>
         <i class="fas fa-exclamation-circle"></i>
         <p>Error Message</p>
     </div>
     <!-- CONFIRM PASSWORD -->
     <div class="input-group">
-        <c:if test="${not empty sessionScope.pwcmsg}">
-            <div class="s-error">${sessionScope.pwcmsg}</div>
-        </c:if>
         <label for="confirm-password">Confirm Password</label>
         <input type="password" id="confirm-password" placeholder="Password" name="passwordConfirmation">
         <i class="fas fa-check-circle"></i>
