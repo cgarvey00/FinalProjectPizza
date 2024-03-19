@@ -33,8 +33,8 @@ public class User {
     @Column(name = "user_type", insertable = false, updatable = false)
     private String userType;
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Address> addresses;
+//    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+//    private List<Address> addresses;
 
 
     public User() {
@@ -55,23 +55,23 @@ public class User {
         this.image = image;
     }
 
-    public User(String username, String password, String phoneNumber, String email, String image, List<Address> addresses) {
-        this.username = username;
-        this.password = password;
-        this.phoneNumber = phoneNumber;
-        this.email = email;
-        this.image = image;
-        this.addresses = addresses;
-    }
-
-    //Updating Purposes Only
-    public User(String username, String phoneNumber, String email, String image, List<Address> addresses) {
-        this.username = username;
-        this.phoneNumber = phoneNumber;
-        this.email = email;
-        this.image = image;
-        this.addresses = addresses;
-    }
+//    public User(String username, String password, String phoneNumber, String email, String image, List<Address> addresses) {
+//        this.username = username;
+//        this.password = password;
+//        this.phoneNumber = phoneNumber;
+//        this.email = email;
+//        this.image = image;
+//        this.addresses = addresses;
+//    }
+//
+//    //Updating Purposes Only
+//    public User(String username, String phoneNumber, String email, String image, List<Address> addresses) {
+//        this.username = username;
+//        this.phoneNumber = phoneNumber;
+//        this.email = email;
+//        this.image = image;
+//        this.addresses = addresses;
+ //   }
     public User(String username, String phoneNumber, String email) {
         this.username = username;
         this.phoneNumber = phoneNumber;
@@ -79,14 +79,14 @@ public class User {
     }
 
 
-    public User(int id, String username, String password, String phoneNumber, String email, String image, List<Address> addresses) {
+    public User(int id, String username, String password, String phoneNumber, String email, String image) {
         this.id = id;
         this.username = username;
         this.password = password;
         this.phoneNumber = phoneNumber;
         this.email = email;
         this.image = image;
-        this.addresses = addresses;
+//        this.addresses = addresses;
     }
 
     public int getId() {
@@ -141,13 +141,13 @@ public class User {
         return userType;
     }
 
-    public List<Address> getAddresses() {
-        return addresses;
-    }
-
-    public void setAddresses(List<Address> addresses) {
-        this.addresses = addresses;
-    }
+//    public List<Address> getAddresses() {
+//        return addresses;
+//    }
+//
+//    public void setAddresses(List<Address> addresses) {
+//        this.addresses = addresses;
+//    }
 
     @Override
     public String toString() {
@@ -159,7 +159,7 @@ public class User {
                 ", email='" + email + '\'' +
                 ", image='" + image + '\'' +
                 ", userType='" + userType + '\'' +
-                ", addresses=" + addresses +
+//                ", addresses=" + addresses +
                 '}';
     }
 
