@@ -15,7 +15,9 @@ import java.util.logging.Level;
 import java.util.logging.LogManager;
 
 import static org.junit.jupiter.api.Assertions.*;
-
+/**
+ * @author cgarvey00
+ */
 public class ProductRepositoriesTest {
     private EntityManagerFactory factory;
     private ProductRepositories productRep;
