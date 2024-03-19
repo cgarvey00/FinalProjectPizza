@@ -2,6 +2,7 @@ package com.finalprojectcoffee.repositories;
 
 import com.finalprojectcoffee.entities.Product;
 import com.finalprojectcoffee.entities.ProductCategory;
+import com.finalprojectcoffee.repositories.ProductRepositoriesInterface;
 import jakarta.persistence.*;
 
 import java.util.Collections;
@@ -88,12 +89,12 @@ public class ProductRepositories implements ProductRepositoriesInterface {
         try {
             transaction.begin();
 
-            for(Product product : products){
+            for (Product product : products) {
                 TypedQuery<Product> query = entityManager.createQuery("SELECT p FROM Product p WHERE p.name = :name", Product.class);
                 query.setParameter("name", product.getName());
 
                 List<Product> existingProducts = query.getResultList();
-                if(existingProducts.isEmpty()){
+                if (existingProducts.isEmpty()) {
                     entityManager.persist(product);
                 } else {
                     System.err.println("Product exists: " + product.getName());
@@ -137,9 +138,14 @@ public class ProductRepositories implements ProductRepositoriesInterface {
         EntityTransaction transaction = entityManager.getTransaction();
 
         try {
+
+            if(products==null || products.isEmpty()){
+                return false;
+            }
+
             transaction.begin();
 
-            for(Product product : products){
+            for (Product product : products) {
                 TypedQuery<Product> query = entityManager.createQuery("SELECT p FROM Product p WHERE p.id = :id", Product.class);
                 query.setParameter("id", product.getId());
 
@@ -159,6 +165,26 @@ public class ProductRepositories implements ProductRepositoriesInterface {
             System.err.println("A Persistence Exception occurred while Deleting the Product\n\t" + e);
             transaction.rollback();
             return false;
+        } finally {
+            entityManager.close();
+        }
+    }
+
+    public void resetAutoIncrement(String tableName) {
+        EntityManager entityManager = factory.createEntityManager();
+        EntityTransaction transaction = entityManager.getTransaction();
+
+        try {
+            transaction.begin();
+
+            entityManager.createNativeQuery("ALTER TABLE "+ tableName +" AUTO_INCREMENT=2").executeUpdate();
+
+            transaction.commit();
+        } catch (PersistenceException e) {
+            System.err.println(e.getMessage());
+            System.err.println("An Exception occurred when AutoIncrementing the Product ID\n\t" + e);
+            transaction.rollback();
+
         } finally {
             entityManager.close();
         }
