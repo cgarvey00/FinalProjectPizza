@@ -73,16 +73,24 @@ public class ReviewRepository implements ReviewRepositoryInterface {
             transaction.begin();
 
             Review review = entityManager.find(Review.class, reviewId);
+            if (review == null) {
+                // Review with the given ID does not exist
+                System.err.println("Review with ID " + reviewId + " does not exist.");
+                return false;
+            }
 
             entityManager.remove(review);
             transaction.commit();
             return true;
         } catch (PersistenceException e) {
             System.err.println("An error occurred while removing a review: " + e.getMessage());
-            transaction.rollback();
+            if (transaction != null && transaction.isActive()) {
+                transaction.rollback();
+            }
             return false;
         } finally {
             entityManager.close();
         }
     }
+
 }
