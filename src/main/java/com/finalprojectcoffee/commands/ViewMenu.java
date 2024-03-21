@@ -23,18 +23,19 @@ public class ViewMenu implements Command {
 
     @Override
     public String execute() {
-        String terminus = "search-menu.jsp";
+        String terminus = "view-menu.jsp";
         HttpSession session = request.getSession(true);
-        EntityManager entityManager = factory.createEntityManager();
 
         try {
             ProductRepositories productRepos = new ProductRepositories(factory);
             List<Product> productList = productRepos.getAllProducts();
 
-            session.setAttribute("productList", productList);
+            if(productList != null && !productList.isEmpty()){
+                session.setAttribute("productList", productList);
+            }
 
-        } finally {
-            entityManager.close();
+        } catch (Exception e){
+            System.err.println("An Exception occurred while viewing menu: " + e.getMessage());
         }
 
         return terminus;

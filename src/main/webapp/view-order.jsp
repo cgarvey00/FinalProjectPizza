@@ -9,7 +9,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Order</title>
+    <title>Home</title>
 
     <!-- font awesome cdn link  -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css">
@@ -22,16 +22,55 @@
 </head>
 <body>
 <%@include file="customer-nav.jsp" %>
-<br><br><br><br><br><br><br><br><br><br><br><br>
-<h1 style="text-align: center;">Payment</h1>
-<c:if test="${not empty requestScope.itemList}">
-    <div class="content text-dark" style="text-align: center">
+<br><br><br><br><br><br><br><br><br><br>
+<div class="box-container">
+    <h1 style="text-align: center;">Orders</h1>
+    <c:if test="${not empty sessionScope.orderItemsInOrder and sessionScope.orders}">
+    <table class="table table-bordered">
+        <thead>
+        <tr>
+            <th>Create Time</th>
+            <th>Status</th>
+            <th>Payment Status</th>
+            <th>Balance</th>
+            <th>Action</th>
+        </tr>
+        </thead>
+        <tbody>
+        <c:forEach var="order" items="${sessionScope.orderItemsInOrder and sessionScope.orders}">
+        <tr>
+            <td><c:out value="${order.createTime}"/></td>
+            <td><c:out value="${order.status}"/></td>
+            <td><c:out value="${order.paymentStatus}"/></td>
+            <td><c:out value="${order.balance}"/></td>
+            <td>
+                <form action="controller" method="post">
+                    <button type="button" name="action" value="update-order">Update</button>
+                    <button type="button" name="action" onclick="cancelOrder('${order.getId()}')">Cancel</button>
+                </form>
+            </td>
+        </tr>
+        </c:forEach>
+        </tbody>
+    </table>
+    </c:if>
+</div>
 
-    </div>
-</c:if>
-<c:if test="${empty requestScope.itemList}">
-    <h1>No item found</h1>
-</c:if>
+<script>
+    function cancelOrder(orderId){
+        $.ajax({
+            url: 'controller',
+            type: 'POST',
+            data:{
+                ajax: true,
+                action: 'update-order',
+                orderId: orderId
+            }
+        })
+    }
+
+</script>
+
 <%@include file="footer.jsp" %>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js"></script>

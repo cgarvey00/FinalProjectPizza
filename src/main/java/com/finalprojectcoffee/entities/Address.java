@@ -12,6 +12,9 @@ public class Address {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
+    @Column(name = "is_default")
+    private int isDefault;
+
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
@@ -38,7 +41,8 @@ public class Address {
         this.eirCode = eirCode;
     }
 
-    public Address(User user, String street, String town, String county, String eirCode) {
+    public Address(int isDefault, User user, String street, String town, String county, String eirCode) {
+        this.isDefault = isDefault;
         this.user = user;
         this.street = street;
         this.town = town;
@@ -46,8 +50,9 @@ public class Address {
         this.eirCode = eirCode;
     }
 
-    public Address(int id, User user, String street, String town, String county, String eirCode) {
+    public Address(int id, int isDefault, User user, String street, String town, String county, String eirCode) {
         this.id = id;
+        this.isDefault = isDefault;
         this.user = user;
         this.street = street;
         this.town = town;
@@ -61,6 +66,14 @@ public class Address {
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    public int getIsDefault() {
+        return isDefault;
+    }
+
+    public void setIsDefault(int isDefault) {
+        this.isDefault = isDefault;
     }
 
     public User getUser() {
@@ -107,6 +120,7 @@ public class Address {
     public String toString() {
         return "Address{" +
                 "id=" + id +
+                ", isDefault=" + isDefault +
                 ", user=" + user +
                 ", street='" + street + '\'' +
                 ", town='" + town + '\'' +

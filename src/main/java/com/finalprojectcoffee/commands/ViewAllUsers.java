@@ -30,8 +30,8 @@ public class ViewAllUsers implements Command{
             UserRepositories userRep = new UserRepositories(factory);
 
             List<User> userList = userRep.getAllUsers();
-            if(!userList.isEmpty()){
-                session.setAttribute("users", userList);
+            if(userList != null && !userList.isEmpty()){
+                session.setAttribute("userList", userList);
             } else {
                 session.setAttribute("vue-message", "User list is empty");
             }

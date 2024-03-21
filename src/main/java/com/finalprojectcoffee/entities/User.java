@@ -55,38 +55,13 @@ public class User {
         this.image = image;
     }
 
-    public User(String username, String password, String phoneNumber, String email, String image, List<Address> addresses) {
-        this.username = username;
-        this.password = password;
-        this.phoneNumber = phoneNumber;
-        this.email = email;
-        this.image = image;
-        this.addresses = addresses;
-    }
-
-    //Updating Purposes Only
-    public User(String username, String phoneNumber, String email, String image, List<Address> addresses) {
-        this.username = username;
-        this.phoneNumber = phoneNumber;
-        this.email = email;
-        this.image = image;
-        this.addresses = addresses;
-    }
-    public User(String username, String phoneNumber, String email) {
-        this.username = username;
-        this.phoneNumber = phoneNumber;
-        this.email = email;
-    }
-
-
-    public User(int id, String username, String password, String phoneNumber, String email, String image, List<Address> addresses) {
+    public User(int id, String username, String password, String phoneNumber, String email, String image) {
         this.id = id;
         this.username = username;
         this.password = password;
         this.phoneNumber = phoneNumber;
         this.email = email;
         this.image = image;
-        this.addresses = addresses;
     }
 
     public int getId() {
@@ -159,9 +134,29 @@ public class User {
                 ", email='" + email + '\'' +
                 ", image='" + image + '\'' +
                 ", userType='" + userType + '\'' +
-                ", addresses=" + addresses +
+                ", addresses=" + getAddressesAsSimpleString() +
                 '}';
     }
+
+    private String getAddressesAsSimpleString() {
+        if (addresses == null) return "null";
+        StringBuilder sb = new StringBuilder("[");
+        for (Address address : addresses) {
+            sb.append("{id=").append(address.getId())
+                    .append(", street='").append(address.getStreet()).append('\'')
+                    .append(", town='").append(address.getTown()).append('\'')
+                    .append(", county='").append(address.getCounty()).append('\'')
+                    .append(", eirCode='").append(address.getEirCode()).append('\'')
+                    .append(", isDefault=").append(address.getIsDefault())
+                    .append("}, ");
+        }
+        if (!addresses.isEmpty()) {
+            sb.setLength(sb.length() - 2);
+        }
+        sb.append("]");
+        return sb.toString();
+    }
+
 
     @Override
     public boolean equals(Object o) {

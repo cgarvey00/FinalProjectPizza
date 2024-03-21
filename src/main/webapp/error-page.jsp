@@ -1,15 +1,11 @@
-<%@ page import="com.finalprojectcoffee.entities.Order" %>
-<%@ page import="java.util.List" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
-
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Order</title>
+    <title>Error</title>
 
     <!-- font awesome cdn link  -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css">
@@ -23,16 +19,12 @@
 <body>
 <%@include file="customer-nav.jsp" %>
 <br><br><br><br><br><br><br><br><br><br><br><br>
-<h1 style="text-align: center;">Payment</h1>
-<c:if test="${not empty requestScope.itemList}">
-    <div class="content text-dark" style="text-align: center">
+<div>
+    <h1 style="text-align: center;">Whoops! Something Went Wrong</h1><br>
+    <h2 style="text-align: center;">${error-msg}</h2>
+</div>
 
-    </div>
-</c:if>
-<c:if test="${empty requestScope.itemList}">
-    <h1>No item found</h1>
-</c:if>
-<%@include file="footer.jsp" %>
+<%@include file="footer.jsp"%>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js"></script>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">

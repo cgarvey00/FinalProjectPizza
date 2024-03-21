@@ -39,21 +39,6 @@ CREATE TABLE `products`
     `image`    VARCHAR(255)
 );
 
-CREATE TABLE `carts` (
-                         `id` INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
-                         `total_cost` DOUBLE DEFAULT 0.0
-);
-
-CREATE TABLE `cart_items`(
-                             `id` INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
-                             `cart_id` INT NOT NULL,
-                             `product_id` INT NOT NULL,
-                             `quantity` INT DEFAULT 0,
-                             `cost` DOUBLE DEFAULT 0.0,
-                             FOREIGN KEY (`cart_id`) REFERENCES `carts`(`id`),
-                             FOREIGN KEY (`product_id`) REFERENCES `products`(`id`)
-);
-
 CREATE TABLE `review` (
                           `id` INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
                           `user_id` INT NOT NULL,
@@ -64,6 +49,7 @@ CREATE TABLE `review` (
 
 CREATE TABLE `addresses`(
                             `id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+                            `is_default` TINYINT(1) DEFAULT 0,
                             `user_id` INT NOT NULL,
                             `street` VARCHAR(255),
                             `town` VARCHAR(255),
@@ -74,7 +60,6 @@ CREATE TABLE `addresses`(
 
 CREATE TABLE `orders` (
                           `id` INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
-                          `cart_id` INT NOT NULL,
                           `customer_id` INT NOT NULL,
                           `employee_id` INT,
                           `address_id` INT NOT NULL,
@@ -83,16 +68,45 @@ CREATE TABLE `orders` (
                           `status` VARCHAR(255) NOT NULL DEFAULT 'Pending',
                           `create_time` DATE NOT NULL,
                           `update_time` DATE,
-                          FOREIGN KEY (`cart_id`) REFERENCES `carts`(`id`),
                           FOREIGN KEY (`customer_id`) REFERENCES `customers`(`id`),
                           FOREIGN KEY (`employee_id`) REFERENCES `employees`(`id`),
                           FOREIGN KEY (`address_id`) REFERENCES `addresses`(`id`)
 );
 
+CREATE TABLE `order_items`(
+                              `id` INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+                              `order_id` INT NOT NULL,
+                              `product_id` INT NOT NULL,
+                              `quantity` INT DEFAULT 0,
+                              `cost` DOUBLE DEFAULT 0.0,
+                              FOREIGN KEY (`order_id`) REFERENCES `orders`(`id`),
+                              FOREIGN KEY (`product_id`) REFERENCES `products`(`id`)
+);
+
+DELIMITER //
+CREATE TRIGGER UpdateBalanceAfterInsert
+    AFTER INSERT ON order_items FOR EACH ROW
+BEGIN
+    UPDATE orders
+    SET balance = ROUND(balance + NEW.cost,2)
+    WHERE id = NEW.order_id;
+END;
+//
+CREATE TRIGGER UpdateBalanceAfterUpdate
+    AFTER UPDATE ON order_items FOR EACH ROW
+BEGIN
+    UPDATE orders
+    SET balance = ROUND(balance - OLD.cost + NEW.cost,2)
+    WHERE id = NEW.order_id;
+END;
+//
 CREATE TRIGGER UpdateLoyaltyPoints
     AFTER UPDATE ON orders FOR EACH ROW
 BEGIN
+    IF NEW.status = 'Finished' THEN
     UPDATE customers
     SET loyalty_points = loyalty_points + NEW.balance
     WHERE id = NEW.customer_id;
+END IF;
 END;
+DELIMITER ;

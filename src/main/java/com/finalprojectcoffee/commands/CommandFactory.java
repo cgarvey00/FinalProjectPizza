@@ -34,11 +34,8 @@ public class CommandFactory {
                 case "view-menu":
                     command = new ViewMenu(request, response, factory);
                     break;
-                case "view-order-customer":
-                    command = new ViewOrderCustomer(request, response, factory);
-                    break;
-                case "view-order-employee":
-                    command = new ViewOrderEmployee(request, response, factory);
+                case "view-orders":
+                    command = new ViewOrder(request, response, factory);
                     break;
                 case "view-all-users":
                     command = new ViewAllUsers(request, response,factory);
@@ -73,8 +70,14 @@ public class CommandFactory {
                 case "view-all-orders":
                     command = new ViewAllOrders(request, response, factory);
                     break;
+                case "add-to-cart":
+                    command = new AddToCart(request, response, factory);
+                    break;
                 case "add-order":
                     command = new AddOrder(request, response, factory);
+                    break;
+                case "update-order":
+                    command = new UpdateOrder(request, response, factory);
                     break;
                 case "finish-order":
                     command = new FinishOrder(request, response, factory);
@@ -82,11 +85,17 @@ public class CommandFactory {
                 case "cancel-order":
                     command = new CancelOrder(request, response, factory);
                     break;
-                case "remove-items":
-                    command = new RemoveItems(request, response, factory);
+                case "update-quantity":
+                    command = new UpdateQuantity(request, response, factory);
                     break;
-                case "view-items":
-                    command = new ViewItems(request, response, factory);
+                case "increment-quantity":
+                    command = new IncrementQuantity(request, response, factory);
+                    break;
+                case "decrement-quantity":
+                    command = new DecrementQuantity(request, response, factory);
+                    break;
+                case "delete-item":
+                    command = new DeleteItem(request, response, factory);
                     break;
                 case "clean-cart":
                     command = new CleanCart(request, response, factory);

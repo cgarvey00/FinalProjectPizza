@@ -1,18 +1,18 @@
 package com.finalprojectcoffee.commands;
 
+import com.finalprojectcoffee.dto.OrderItemDTO;
 import com.finalprojectcoffee.entities.*;
-import com.finalprojectcoffee.repositories.CartRepositories;
 import com.finalprojectcoffee.repositories.OrderRepositories;
+import com.finalprojectcoffee.repositories.ProductRepositories;
+import com.finalprojectcoffee.repositories.UserRepositories;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import java.util.Objects;
-import java.util.stream.Collectors;
 
 public class AddOrder implements Command{
     private final HttpServletRequest request;
@@ -27,68 +27,54 @@ public class AddOrder implements Command{
 
     @Override
     public String execute() {
-        String terminus = "search-menu.jsp";
+        String terminus;
         HttpSession session = request.getSession(true);
-
-        Object productIdsObj = session.getAttribute("product_ids");
-        Object quantitiesObj = session.getAttribute("product_quantities");
-        List<Integer> productIds = new ArrayList<>();
-        List<Integer> quantities = new ArrayList<>();
-
-        if(productIdsObj instanceof Integer[]){
-            Integer[] productIdsArray = (Integer[]) productIdsObj;
-            //Filter null elements
-            productIds = Arrays.stream(productIdsArray).filter(Objects::nonNull).collect(Collectors.toList());
-        }
-
-        if(quantitiesObj instanceof Integer[]){
-            Integer[] quantitiesArray = (Integer[]) quantitiesObj;
-            //Filter null elements
-            quantities = Arrays.stream(quantitiesArray).filter(Objects::nonNull).collect(Collectors.toList());
-        }
-
-        //Active user
         User activeCustomer = (User) session.getAttribute("loggedInUser");
         int activeCustomerId = activeCustomer.getId();
-
-        //Address
-        int addressId = (int) session.getAttribute("address_id");
+        @SuppressWarnings("unchecked")
+        List<OrderItemDTO> orderItemsDTO = (List<OrderItemDTO>) session.getAttribute("orderItems");
 
         try {
-            CartRepositories cartRep = new CartRepositories(factory);
+            UserRepositories userRep = new UserRepositories(factory);
             OrderRepositories orderRep = new OrderRepositories(factory);
-            List<CartItem> cartItems = new ArrayList<>();
+            ProductRepositories productRep = new ProductRepositories(factory);
 
-            //Add empty cart
-            Cart cart = cartRep.addCart();
+            //Get default address
+            Address defaultAddress = userRep.getDefaultAddress(activeCustomerId);
+            int addressId = defaultAddress.getIsDefault();
 
-            if(!productIds.isEmpty()&& !quantities.isEmpty() && productIds.size() == quantities.size()){
-                for (int i = 0; i< productIds.size(); i++) {
-                    CartItem cartItem = cartRep.addItem(cart.getId(), productIds.get(i), quantities.get(i));
+            Order order = orderRep.addOrder(activeCustomerId, addressId);
+            List<OrderItem> orderItemsInOrder = new ArrayList<>();
+            double balance = 0.0;
 
-                    if (cartItem != null) {
-                        cartItems.add(cartItem);
-                    } else {
-                        session.setAttribute("item_error", "Failed to add item");
-                    }
+            if(orderItemsDTO != null && !orderItemsDTO.isEmpty()){
+
+                for(OrderItemDTO orderItemDTO : orderItemsDTO){
+                    OrderItem orderItem = new OrderItem();
+                    Product product = productRep.findProductByID(orderItemDTO.getProductId());
+                    orderItem.setProduct(product);
+                    orderItem.setOrder(order);
+                    orderItem.setQuantity(orderItemDTO.getQuantity());
+                    orderItem.setCost(orderItemDTO.getCost());
+                    balance += orderItem.getCost();
+                    orderItemsInOrder.add(orderItem);
                 }
-            } else {
-                session.setAttribute("iqe_message", "Failed to select items");
             }
-
-            //Call createCart function
-            cart = cartRep.createCart(cartItems);
-            if(cart != null){
-                Order order = orderRep.addOrder(activeCustomerId, cart.getId(), addressId);
-                if(order != null){
-                    session.setAttribute("order", order);
-                    terminus = "payment.jsp";
-                }
+            //Add order items
+            Boolean isAdded = orderRep.addOrderItem(orderItemsInOrder);
+            if(!orderItemsInOrder.isEmpty() && isAdded){
+                session.setAttribute("orderItemsInOrder", orderItemsInOrder);
+                session.setAttribute("defaultAddress", defaultAddress);
+                session.setAttribute("balance", balance);
+                terminus = "order-page.jsp";
             } else {
-                session.setAttribute("cart_error", "Failed to add cart");
+                session.setAttribute("errorMessage", "Failed to add to order");
+                return "error.jsp";
             }
         } catch (Exception e) {
             System.err.println("An Exception occurred while adding order: " + e.getMessage());
+            session.setAttribute("errorMessage", "Something went wrong");
+            return "error.jsp";
         }
 
         return terminus;

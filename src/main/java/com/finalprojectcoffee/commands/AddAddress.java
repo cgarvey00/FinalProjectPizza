@@ -8,6 +8,8 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 
+import java.util.List;
+
 public class AddAddress implements Command{
     private final HttpServletRequest request;
     private final HttpServletResponse response;
@@ -51,10 +53,17 @@ public class AddAddress implements Command{
                 address.setEirCode(eirCode);
             }
 
+            //Set default address
+            List<Address> addresses = userRep.getAddressesByUserId(activeUserId);
+            if(addresses == null || addresses.isEmpty()){
+                address.setIsDefault(1);
+            }
+
             address.setUser(activeUser);
             Boolean isAdded = userRep.addAddress(activeUserId, address);
             if(isAdded){
                 session.setAttribute("aas-msg", "Update successfully");
+                session.setAttribute("addressed", isAdded);
             } else {
                 session.setAttribute("aae-msg", "Failed to update");
             }

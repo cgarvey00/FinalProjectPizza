@@ -15,4 +15,5 @@ public interface UserRepositoryInterfaces {
     Boolean addAddress(int userId, Address address);
     Boolean updateAddress(int userId, String street, String town, String county, String eirCode);
     List<Address> getAddressesByUserId(int userId);
+    Address getDefaultAddress(int userId);
 }

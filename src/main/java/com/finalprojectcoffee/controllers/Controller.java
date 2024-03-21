@@ -29,9 +29,18 @@ public class Controller extends HttpServlet {
 
     public void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String action =request.getParameter("action");
+        boolean isAjax = "true".equals(request.getParameter("ajax"));
         Command command = CommandFactory.getCommand(action,request,response,factory);
-        String terminus = command.execute();
-        response.sendRedirect(terminus);
+
+        if (isAjax) {
+            response.setContentType("application/json");
+            response.setCharacterEncoding("UTF-8");
+            String jsonData = command.execute();
+            response.getWriter().write(jsonData);
+        } else {
+            String terminus = command.execute();
+            response.sendRedirect(terminus);
+        }
     }
 
     public void destroy(){

@@ -3,6 +3,7 @@ package com.finalprojectcoffee.entities;
 import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Objects;
 
 /**
@@ -16,10 +17,6 @@ public class Order {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @OneToOne
-    @JoinColumn(name = "cart_id", referencedColumnName = "id", nullable = false)
-    private Cart cart;
-
     @ManyToOne
     @JoinColumn(name = "customer_id", referencedColumnName = "id", nullable = false)
     private Customer customer;
@@ -30,6 +27,9 @@ public class Order {
     @OneToOne
     @JoinColumn(name = "address_id", referencedColumnName = "id", nullable = false)
     private Address address;
+
+    @OneToMany(mappedBy = "order",cascade = CascadeType.ALL,orphanRemoval = true)
+    private List<OrderItem> orderItems;
 
     @Column(name = "balance")
     private double balance;
@@ -51,11 +51,11 @@ public class Order {
     public Order() {
     }
 
-    public Order(Cart cart, Customer customer, Employee employee, Address address, double balance, Status paymentStatus, Status status, LocalDateTime createTime, LocalDateTime updateTime) {
-        this.cart = cart;
+    public Order(Customer customer, Employee employee, Address address, List<OrderItem> orderItems, double balance, Status paymentStatus, Status status, LocalDateTime createTime, LocalDateTime updateTime) {
         this.customer = customer;
         this.employee = employee;
         this.address = address;
+        this.orderItems = orderItems;
         this.balance = balance;
         this.paymentStatus = paymentStatus;
         this.status = status;
@@ -63,12 +63,12 @@ public class Order {
         this.updateTime = updateTime;
     }
 
-    public Order(int id, Cart cart, Customer customer, Employee employee, Address address, double balance, Status paymentStatus, Status status, LocalDateTime createTime, LocalDateTime updateTime) {
+    public Order(int id, Customer customer, Employee employee, Address address, List<OrderItem> orderItems, double balance, Status paymentStatus, Status status, LocalDateTime createTime, LocalDateTime updateTime) {
         this.id = id;
-        this.cart = cart;
         this.customer = customer;
         this.employee = employee;
         this.address = address;
+        this.orderItems = orderItems;
         this.balance = balance;
         this.paymentStatus = paymentStatus;
         this.status = status;
@@ -82,14 +82,6 @@ public class Order {
 
     public void setId(int id) {
         this.id = id;
-    }
-
-    public Cart getCart() {
-        return cart;
-    }
-
-    public void setCart(Cart cart) {
-        this.cart = cart;
     }
 
     public Customer getCustomer() {
@@ -114,6 +106,14 @@ public class Order {
 
     public void setAddress(Address address) {
         this.address = address;
+    }
+
+    public List<OrderItem> getOrderItems() {
+        return orderItems;
+    }
+
+    public void setOrderItems(List<OrderItem> orderItems) {
+        this.orderItems = orderItems;
     }
 
     public double getBalance() {
@@ -160,10 +160,10 @@ public class Order {
     public String toString() {
         return "Order{" +
                 "id=" + id +
-                ", cart=" + cart +
                 ", customer=" + customer +
                 ", employee=" + employee +
                 ", address=" + address +
+                ", orderItems=" + orderItems +
                 ", balance=" + balance +
                 ", paymentStatus=" + paymentStatus +
                 ", status=" + status +

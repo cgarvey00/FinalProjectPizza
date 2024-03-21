@@ -27,32 +27,20 @@ INSERT INTO `employees` (`id`, `salary`) VALUES
     (10, 34917.29);
 
 INSERT INTO `products` (`id`, `name`, `category`, `details`, `price`, `stock`, `image`) VALUES
-    (1, 'Pepperoni Deluxe', 'Pizzas', 'Pepperoni and Cheese 10`', 5.99, 100, 'pizza1.jpg'),
-    (2, 'Pepperoni Family Meal Deal', 'Meal_Deals', '5 Pizzas and Kids Meal Included', 18, 100, 'mealdeal.png');
+    (1, 'Pepperoni Deluxe', 'Pizzas', 'Pepperoni and Cheese 10`', 5.99, 100, 'PepperoniDeluxe.png'),
+    (2, 'Pepperoni Family Meal Deal', 'Meal_Deals', '5 Pizzas and Kids Meal Included', 18, 100, 'PepperoniFamilyMealDeal.png');
 
-INSERT INTO `carts` (`id`, `total_cost`) VALUES
-    (1, 47.95),
-    (2, 59.96),
-    (3, 23.96);
+INSERT INTO `addresses`(`id`, `is_default`, `user_id`, `street`, `town`, `county`, `eir_code`) VALUES
+    (1, 1, 1, 'Dublin Road', 'Dundalk', 'Louth', 'DT123F2'),
+    (2, 1, 3, 'Dublin Road', 'Dundalk', 'Louth', 'A91DC99');
 
-INSERT INTO `cart_items` (`id`, `cart_id`, `product_id`, `quantity`, `cost`) VALUES
+INSERT INTO `orders` (`customer_id`, `address_id`, `balance`, `payment_status`, `status`, `create_time`) VALUES
+    (1, 1, 47.95,  'Pending', 'Pending', '2024-02-01'),
+    (3, 2, 0.0, 'Paid', 'Delivered', '2024-02-05');
+
+INSERT INTO `order_items` (`id`, `order_id`, `product_id`, `quantity`, `cost`) VALUES
     (1, 1, 1, 2, 11.98),
     (2, 1, 2, 1, 18.00),
     (3, 1, 1, 3, 17.97),
     (4, 2, 2, 2, 36.00),
-    (5, 2, 1, 4, 23.96),
-    (6, 3, 1, 4, 23.96);
-
-INSERT INTO `addresses`(`id`, `user_id`, `street`, `town`, `county`, `eir_code`) VALUES
-    (1, 1, 'Dublin Road', 'Dundalk', 'Louth', 'DT123F2'),
-    (2, 3, 'Dublin Road', 'Dundalk', 'Louth', 'A91DC99');
-
-INSERT INTO `orders` (`cart_id`, `customer_id`, `address_id`, `balance`, `payment_status`, `status`, `create_time`) VALUES
-    (1, 1, 1, 47.95,  'Pending', 'Pending', '2024-02-01'),
-    (2, 3, 2, 0.0, 'Paid', 'Delivered', '2024-02-05');
-
-ALTER TABLE `cart_items`
-    ADD CONSTRAINT `fk_cart_items_carts`
-        FOREIGN KEY (`cart_id`) REFERENCES `carts` (`id`)
-            ON DELETE CASCADE
-            ON UPDATE CASCADE;
+    (5, 2, 1, 4, 23.96);

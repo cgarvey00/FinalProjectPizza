@@ -108,19 +108,8 @@
         <i class="fas fa-exclamation-circle"></i>
         <p>Error Message</p>
     </div>
-    <!-- USERTYPE -->
-    <div class="form-outline form-white mb-4">
-        <label style="color:#fff;" for="usertype">User Type</label>
-        <select name="userType" id="usertype" class="required form-control form-control-lg"
-                onchange="enableSubmit()">
-            <option value="Customer">Customer</option>
-            <option value="Employee">Employee </option>
-
-            <i class="fas fa-check-circle"></i>
-            <i class="fas fa-exclamation-circle"></i>
-            <p>Error Message</p>
-        </select>
-    </div>
+    <%--  Default user type: Customer  --%>
+    <input type="hidden" name="userType" id="usertype" value="Customer">
     <button type="submit" name="register" class="btn">Register</button>
     <br><br> <br>
     <div class="card-footer">

@@ -77,7 +77,7 @@ public class OrderRepositories implements OrderRepositoriesInterface {
     }
 
     @Override
-    public Order addOrder(int customerId, int cartId, int addressId) {
+    public Order addOrder(int customerId, int addressId) {
         EntityManager entityManager = factory.createEntityManager();
         EntityTransaction transaction = entityManager.getTransaction();
 
@@ -85,17 +85,14 @@ public class OrderRepositories implements OrderRepositoriesInterface {
             transaction.begin();
 
             Order order = new Order();
-            Cart cart = entityManager.find(Cart.class, cartId);
             Customer customer = entityManager.find(Customer.class, customerId);
             Address address = entityManager.find(Address.class, addressId);
 
-            if(customer != null && cart != null && address != null){
-                order.setCart(cart);
+            if(customer != null && address != null){
                 order.setCustomer(customer);
                 order.setCreateTime(LocalDateTime.now());
                 order.setPaymentStatus(Status.Pending);
                 order.setStatus(Status.Pending);
-                order.setBalance(cart.getTotalCost());
                 order.setAddress(address);
 
                 entityManager.persist(order);
@@ -113,6 +110,32 @@ public class OrderRepositories implements OrderRepositoriesInterface {
     }
 
     @Override
+    public Boolean addOrderItem(List<OrderItem> orderItems) {
+        EntityManager entityManager = factory.createEntityManager();
+        EntityTransaction transaction = entityManager.getTransaction();
+
+        try {
+            transaction.begin();
+
+            if(orderItems != null && !orderItems.isEmpty()){
+
+                for(OrderItem orderItem : orderItems){
+                    entityManager.persist(orderItem);
+                }
+            }
+
+            transaction.commit();
+            return true;
+        } catch (PersistenceException e) {
+            System.err.println("A PersistenceException occurred while adding order item: " + e.getMessage());
+            transaction.rollback();
+            return false;
+        } finally {
+            entityManager.close();
+        }
+    }
+
+    @Override
     public Boolean payOrder(int orderId) {
         EntityManager entityManager = factory.createEntityManager();
         EntityTransaction transaction = entityManager.getTransaction();
@@ -121,16 +144,12 @@ public class OrderRepositories implements OrderRepositoriesInterface {
             transaction.begin();
 
             Order order = entityManager.find(Order.class, orderId);
-            Query query = entityManager.createQuery("SELECT c FROM Cart c WHERE c.id = :orderId");
+            Query query = entityManager.createQuery("SELECT o FROM Order o WHERE o.id = :orderId");
             query.setParameter("orderId", orderId);
-            Cart cart = (Cart) query.getSingleResult();
-            double totalCost = order.getCart().getTotalCost();
 
-            order.setBalance(totalCost);
             order.setPaymentStatus(Status.Paid);
             order.setUpdateTime(LocalDateTime.now());
 
-            entityManager.merge(cart);
             entityManager.merge(order);
             transaction.commit();
             return true;
@@ -199,26 +218,22 @@ public class OrderRepositories implements OrderRepositoriesInterface {
     }
 
     @Override
-    public Boolean cancelOrders(List<Integer> orderIds) {
+    public Boolean cancelOrder(int orderId) {
         EntityManager  entityManager = factory.createEntityManager();
         EntityTransaction transaction = entityManager.getTransaction();
 
         try {
             transaction.begin();
 
-            for(Integer orderId: orderIds){
-                Order order = entityManager.find(Order.class, orderId);
-                Query query = entityManager.createQuery("SELECT c FROM Cart c WHERE c.id = :orderId");
-                query.setParameter("orderId", orderId);
-                Cart cart = (Cart) query.getSingleResult();
+            Order order = entityManager.find(Order.class, orderId);
+            Query query = entityManager.createQuery("SELECT o FROM Order o WHERE o.id = :orderId");
+            query.setParameter("orderId", orderId);
 
-                if(order != null){
-                    order.setBalance(cart.getTotalCost());
-                    order.setStatus(Status.Cancelled);
-                    order.setPaymentStatus(Status.Refunded);
-                    order.setUpdateTime(LocalDateTime.now());
-                    entityManager.merge(order);
-                }
+            if(order != null){
+                order.setStatus(Status.Cancelled);
+                order.setPaymentStatus(Status.Refunded);
+                order.setUpdateTime(LocalDateTime.now());
+                entityManager.merge(order);
             }
 
             transaction.commit();

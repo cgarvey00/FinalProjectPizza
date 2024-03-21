@@ -12,7 +12,6 @@
     if (request.getSession(false) == null || loggedInUser == null || !"Customer".equals(loggedInUser.getUserType())) {
         response.sendRedirect("index.jsp");
     }
-
 %>
 <html lang="en">
 <head>
@@ -51,8 +50,6 @@
         background-position: center;
         background-attachment: fixed;
     }
-
-
 </style>
 <body>
 <%@include file="customer-nav.jsp" %>
@@ -60,19 +57,16 @@
     if (!addressed) {
 %>
 <div class="message">
-    <span>Please Add an Address!<a href="controller?action=view-address">Address Page</a></span>
+    <span>Please Add an Address!<a href="add-address.jsp">Address Page</a></span>
     <i class="fas fa-times" onclick="this.parentElement.remove();"></i>
 </div>
 <%
     }
 %>
-<%--</c:if>--%>
 <!-- home section starts  -->
 
 <section class="home" id="home">
-
     <div class="container">
-
         <div class="row align-items-center text-center text-md-left min-vh-100">
             <div class="col-md-6">
                 <span>Welcome to the Pizza Shop</span>
@@ -80,9 +74,7 @@
                 <a href="#" class="link-btn">Get Started</a>
             </div>
         </div>
-
     </div>
-
 </section>
 
 <%@include file="footer.jsp" %>
@@ -92,5 +84,4 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css">
 <script src="${pageContext.request.contextPath}/scripts/menu.js" type="text/javascript"></script>
 </body>
-
 </html>

@@ -53,7 +53,7 @@ public class OrderRepositoriesTest {
 
     @Test
     public void addOrderTest(){
-        Order expectedResult = orderRep.addOrder(1,1,1);
+        Order expectedResult = orderRep.addOrder(1,1);
         assertNotNull(expectedResult);
     }
 
@@ -96,7 +96,7 @@ public class OrderRepositoriesTest {
         Integer orderId = 1;
         List<Integer> orderIds = new ArrayList<>();
         orderIds.add(orderId);
-        Boolean expectedResult = orderRep.cancelOrders(orderIds);
+        Boolean expectedResult = orderRep.cancelOrder(orderId);
         assertTrue(expectedResult);
         Order order = orderRep.findOrderById(1);
         assertEquals(Status.Cancelled, order.getStatus());

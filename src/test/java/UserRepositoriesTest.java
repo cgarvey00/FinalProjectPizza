@@ -93,4 +93,11 @@ public class UserRepositoriesTest {
         assertNotNull(expectedResult);
         assertEquals(2,expectedResult.size());
     }
+
+    @Test
+    public void getDefaultAddressTest(){
+        Address expectedResult = userRep.getDefaultAddress(1);
+        assertNotNull(expectedResult);
+        assertEquals(expectedResult.getId(),1);
+    }
 }

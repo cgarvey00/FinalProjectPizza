@@ -198,4 +198,13 @@ public class UserRepositories implements UserRepositoryInterfaces {
             entityManager.close();
         }
     }
+
+    @Override
+    public Address getDefaultAddress(int userId) {
+        EntityManager entityManager = factory.createEntityManager();
+
+        Query query = entityManager.createQuery("SELECT a FROM Address a WHERE a.user.id = :userId and a.isDefault = 1");
+        query.setParameter("userId", userId);
+        return (Address) query.getSingleResult();
+    }
 }
