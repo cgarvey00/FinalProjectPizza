@@ -1,6 +1,5 @@
 <%@ page import="com.finalprojectcoffee.entities.User" %>
 <%@ page import="com.finalprojectcoffee.entities.Address" %>
-<%@ page import="java.util.List" %>
 
 <%
     User loggedInUser = (User) request.getSession().getAttribute("loggedInUser");
@@ -8,8 +7,7 @@
     if (request.getSession(false) == null || loggedInUser == null || !"Customer".equals(loggedInUser.getUserType())) {
         response.sendRedirect("index.jsp");
     }
-    @SuppressWarnings("unchecked")
-    List<Address> addressList = (List<Address>) request.getSession().getAttribute("addressList");
+    Address addressEcho = (Address) session.getAttribute("addressEcho");
 %>
 
 <html lang="en">
@@ -31,32 +29,38 @@
 <body>
 <%@include file="customer-nav.jsp" %>
 <br><br><br><br><br><br><br><br><br><br>
-<h1 class="heading">Add Address</h1>
-<section class="add-products">
+<h1 class="heading">Update Address</h1>
+<% if(addressEcho != null && addressEcho.getIsDefault() == 0) { %>
+<form action="controller" method="POST">
+    <button type="submit" name="action" value="update-default-address" class="default-btn">Set Default</button>
+</form>
+<br>
+<% } %>
+<section class="add-products" style="position: relative;">
     <form action="controller" method="POST">
         <div class="flex">
             <div class="inputBox">
-                <span>Street (required)</span>
-                <input type="text" class="box" required maxlength="100" placeholder="Enter Street" name="street">
+                <span>Street</span>
+                <input type="text" class="box"  maxlength="100" placeholder="<%= addressEcho != null ? addressEcho.getStreet() : "Enter Street" %>" name="street">
             </div>
             <div class="inputBox">
-                <span>Town (required)</span>
-                <input type="text" class="box" required maxlength="100" placeholder="Enter Town" name="town">
+                <span>Town</span>
+                <input type="text" class="box"  maxlength="100" placeholder="<%= addressEcho != null ? addressEcho.getTown() : "Enter Town" %>" name="town">
             </div>
             <div class="inputBox">
-                <span>County (required)</span>
-                <input type="text" minlength="0" class="box" required maxlength="100" placeholder="Enter County"
+                <span>County</span>
+                <input type="text" minlength="0" class="box"  maxlength="100" placeholder="<%= addressEcho != null ? addressEcho.getCounty() : "Enter County" %>"
                        onkeypress="if(this.value.length === 20) return false;" name="county">
             </div>
             <div class="inputBox">
                 <span>EirCode</span>
-                <label>
-                    <textarea name="eirCode" type="text" placeholder="Enter EirCode" class="box" required maxlength="500" cols="30" rows="10"></textarea>
-                </label>
+                <textarea name="eirCode" type="text" placeholder="<%= addressEcho != null ? addressEcho.getEirCode() : "Enter EirCode" %>" class="box"
+                          maxlength="500"
+                          cols="30" rows="10"></textarea>
             </div>
         </div>
         <br>
-        <button type="submit" name="action" value="add-address" class="add-btn">Add</button>
+        <button type="submit" name="action" value="update-address" class="update-btn">Update</button>
     </form>
 </section>
 
@@ -69,10 +73,10 @@
 </body>
 
 <style>
-    .add-btn {
+    .update-btn {
         background-color: #109acb;
         color: white;
-        padding: 10px 310px;
+        padding: 10px 295px;
         font-size: 18px;
         border: none;
         cursor: pointer;
@@ -82,8 +86,25 @@
         margin: 0 auto;
     }
 
-    .add-btn:hover {
+    .update-btn:hover {
         background-color: #017fbd;
+    }
+
+    .default-btn {
+        background-color: #4CAF50;
+        color: white;
+        padding: 4px 8px;
+        font-size: 14px;
+        border: none;
+        cursor: pointer;
+        min-width: 60px;
+        border-radius: 5px;
+        position: absolute;
+        right: 286px;
+    }
+
+    .default-btn:hover {
+        background-color: #0c8612;
     }
 </style>
 </html>

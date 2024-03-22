@@ -10,12 +10,12 @@ import jakarta.servlet.http.HttpSession;
 
 import java.util.List;
 
-public class AddAddress implements Command{
+public class UpdateAddress implements Command{
     private final HttpServletRequest request;
     private final HttpServletResponse response;
     private final EntityManagerFactory factory;
 
-    public AddAddress(HttpServletRequest request, HttpServletResponse response, EntityManagerFactory factory) {
+    public UpdateAddress(HttpServletRequest request, HttpServletResponse response, EntityManagerFactory factory) {
         this.request = request;
         this.response = response;
         this.factory = factory;
@@ -24,7 +24,6 @@ public class AddAddress implements Command{
     @Override
     public String execute() {
         String terminus = "view-address.jsp";
-
         HttpSession session = request.getSession(true);
         User activeUser = (User) session.getAttribute("loggedInUser");
         int activeUserId = activeUser.getId();
@@ -32,45 +31,31 @@ public class AddAddress implements Command{
         String town = request.getParameter("town");
         String county = request.getParameter("county");
         String eirCode = request.getParameter("eirCode");
-        Address address = new Address();
+        Address addressEcho = (Address) session.getAttribute("addressEcho");
+
+        if(street != null && !street.isEmpty()){
+            addressEcho.setStreet(street);
+        }
+        if(town != null && !town.isEmpty()){
+            addressEcho.setTown(town);
+        }
+        if(county != null && !county.isEmpty()){
+            addressEcho.setCounty(county);
+        }
+        if(eirCode != null && !eirCode.isEmpty()){
+            addressEcho.setEirCode(eirCode);
+        }
 
         try {
             UserRepositories userRep = new UserRepositories(factory);
 
-            if (street != null && !street.isEmpty()) {
-                address.setStreet(street);
-            }
-
-            if(town != null && !town.isEmpty()){
-                address.setTown(town);
-            }
-
-            if(county != null && !county.isEmpty()){
-                address.setCounty(county);
-            }
-
-            if(eirCode != null && !eirCode.isEmpty()){
-                address.setEirCode(eirCode);
-            }
-
-            //Set default address
-            List<Address> addressList = userRep.getAddressesByUserId(activeUserId);
-            if(addressList == null || addressList.isEmpty()){
-                address.setIsDefault(1);
-            }
-
-            address.setUser(activeUser);
-            Boolean isAdded = userRep.addAddress(activeUserId, address);
-            if(isAdded){
-                session.setAttribute("aas-msg", "Add successfully");
-                session.setAttribute("addressed", isAdded);
-                addressList = userRep.getAddressesByUserId(activeUserId);
+            Boolean isUpdated = userRep.updateAddress(addressEcho);
+            if (isUpdated) {
+                List<Address> addressList = userRep.getAddressesByUserId(activeUserId);
                 session.setAttribute("addressList", addressList);
-            } else {
-                session.setAttribute("aae-msg", "Failed to update");
             }
         } catch (Exception e) {
-            System.err.println("An Exception occurred: " + e.getMessage());
+            System.err.println("An Exception occurred while updating address: " + e.getMessage());
         }
 
         return terminus;

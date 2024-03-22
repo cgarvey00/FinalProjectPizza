@@ -189,7 +189,7 @@
     .delete-btn {
         background-color: #ff4d4d;
         color: white;
-        padding: 10px 20px;
+        padding: 8px 16px;
         font-size: 16px;
         border: none;
         cursor: pointer;

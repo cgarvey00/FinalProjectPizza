@@ -11,6 +11,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -63,9 +64,10 @@ public class AddOrder implements Command{
             //Add order items
             Boolean isAdded = orderRep.addOrderItem(orderItemsInOrder);
             if(!orderItemsInOrder.isEmpty() && isAdded){
+                BigDecimal balanceDecimal = new BigDecimal(balance).setScale(2, RoundingMode.HALF_UP);
                 session.setAttribute("orderItemsInOrder", orderItemsInOrder);
                 session.setAttribute("defaultAddress", defaultAddress);
-                session.setAttribute("balance", balance);
+                session.setAttribute("balance", balanceDecimal.doubleValue());
                 terminus = "order-page.jsp";
             } else {
                 session.setAttribute("errorMessage", "Failed to add to order");

@@ -64,11 +64,23 @@ public class CommandFactory {
                 case "add-address":
                     command = new AddAddress(request, response, factory);
                     break;
+                case "to-update-address":
+                    command = new ToUpdateAddress(request, response, factory);
+                    break;
+                case "update-default-address":
+                    command = new UpdateDefaultAddress(request, response, factory);
+                    break;
+                case "update-address":
+                    command = new UpdateAddress(request, response, factory);
+                    break;
+                case "delete-address":
+                    command = new DeleteAddress(request, response, factory);
+                    break;
                 case "view-address":
                     command = new ViewAddress(request, response, factory);
                     break;
                 case "view-all-orders":
-                    command = new ViewAllOrders(request, response, factory);
+                    command = new ViewOrderCustomer(request, response, factory);
                     break;
                 case "add-to-cart":
                     command = new AddToCart(request, response, factory);

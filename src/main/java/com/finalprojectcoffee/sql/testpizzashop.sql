@@ -83,7 +83,6 @@ CREATE TABLE `order_items`(
     FOREIGN KEY (`product_id`) REFERENCES `products`(`id`)
 );
 
-DELIMITER //
 CREATE TRIGGER UpdateBalanceAfterInsert
     AFTER INSERT ON order_items FOR EACH ROW
 BEGIN
@@ -91,7 +90,7 @@ BEGIN
     SET balance = ROUND(balance + NEW.cost,2)
     WHERE id = NEW.order_id;
 END;
-//
+
 CREATE TRIGGER UpdateBalanceAfterUpdate
     AFTER UPDATE ON order_items FOR EACH ROW
 BEGIN
@@ -99,7 +98,7 @@ BEGIN
     SET balance = ROUND(balance - OLD.cost + NEW.cost,2)
     WHERE id = NEW.order_id;
 END;
-//
+
 CREATE TRIGGER UpdateLoyaltyPoints
     AFTER UPDATE ON orders FOR EACH ROW
 BEGIN
@@ -109,4 +108,3 @@ BEGIN
     WHERE id = NEW.customer_id;
     END IF;
 END;
-DELIMITER ;

@@ -1,5 +1,3 @@
-<%@ page import="com.finalprojectcoffee.entities.Order" %>
-<%@ page import="java.util.List" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
@@ -25,10 +23,11 @@
 <br><br><br><br><br><br><br><br><br><br>
 <div class="box-container">
     <h1 style="text-align: center;">Orders</h1>
-    <c:if test="${not empty sessionScope.orderItemsInOrder and sessionScope.orders}">
+    <c:if test="${not empty sessionScope.ordersCustomer}">
     <table class="table table-bordered">
         <thead>
         <tr>
+            <th>ID</th>
             <th>Create Time</th>
             <th>Status</th>
             <th>Payment Status</th>
@@ -37,16 +36,17 @@
         </tr>
         </thead>
         <tbody>
-        <c:forEach var="order" items="${sessionScope.orderItemsInOrder and sessionScope.orders}">
+        <c:forEach var="order" items="${sessionScope.ordersCustomer}">
         <tr>
-            <td><c:out value="${order.createTime}"/></td>
-            <td><c:out value="${order.status}"/></td>
-            <td><c:out value="${order.paymentStatus}"/></td>
-            <td><c:out value="${order.balance}"/></td>
+            <td><c:out value="${order.get()}"/></td>
+            <td><c:out value="${order.getCreateTime()}"/></td>
+            <td><c:out value="${order.getStatus()}"/></td>
+            <td><c:out value="${order.getPaymentStatus}"/></td>
+            <td><c:out value="${order.getBalance()}"/></td>
             <td>
                 <form action="controller" method="post">
-                    <button type="button" name="action" value="update-order">Update</button>
-                    <button type="button" name="action" onclick="cancelOrder('${order.getId()}')">Cancel</button>
+                    <button type="button" name="action" value="update-order" class="update-btn">Update</button>
+                    <button type="button" name="action" onclick="cancelOrder('${order.getId()}')" class="cancel-btn">Cancel</button>
                 </form>
             </td>
         </tr>
@@ -78,4 +78,31 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css">
 <script src="${pageContext.request.contextPath}/scripts/menu.js" type="text/javascript"></script>
 </body>
+<style>
+    .update-btn {
+        background-color: #109acb;
+        color: white;
+        padding: 5px 10px;
+        font-size: 18px;
+        border: none;
+        cursor: pointer;
+        min-width: 60px;
+        border-radius: 5px;
+    }
+
+    .cancel-btn {
+        background-color: #ff4d4d;
+        color: white;
+        padding: 10px 20px;
+        font-size: 16px;
+        border: none;
+        cursor: pointer;
+        border-radius: 5px;
+        transition: background-color 0.3s;
+        display: block;
+        width: 100%;
+        box-sizing:border-box;
+        margin:0;
+    }
+</style>
 </html>

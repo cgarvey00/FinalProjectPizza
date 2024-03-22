@@ -8,8 +8,9 @@ import java.util.List;
 public interface OrderRepositoriesInterface {
     Order findOrderById(int orderId);
     List<Order> getAllOrders();
-    List<Order> getAllOrdersByCustomerId(int CustomerId);
-    List<Order> getAllOrdersByEmployeeId(int EmployeeId);
+    List<Order> getAllOrdersByCustomerId(int customerId);
+    List<Order> getAllOrdersByEmployeeId(int employeeId);
+    List<OrderItem> getOrderItemByOrderId(int orderId);
     Order addOrder(int customerId, int addressId);
     Boolean addOrderItem(List<OrderItem> orderItems);
     Boolean payOrder(int orderId);

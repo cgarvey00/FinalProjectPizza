@@ -3,6 +3,7 @@ package com.finalprojectcoffee.repositories;
 import com.finalprojectcoffee.entities.*;
 import jakarta.persistence.*;
 
+import javax.security.auth.kerberos.EncryptionKey;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -67,6 +68,22 @@ public class OrderRepositories implements OrderRepositoriesInterface {
             TypedQuery<Order> query = entityManager.createQuery("SELECT o FROM Order o WHERE o.employee.id = :employeeId ORDER BY o.createTime DESC", Order.class);
             query.setParameter("employeeId", employeeId);
 
+            return query.getResultList();
+        } catch (Exception e) {
+            System.err.println("An Exception occurred while searching: " + e.getMessage());
+            return Collections.emptyList();
+        } finally {
+            entityManager.close();
+        }
+    }
+
+    @Override
+    public List<OrderItem> getOrderItemByOrderId(int orderId) {
+        EntityManager entityManager = factory.createEntityManager();
+
+        try {
+            TypedQuery<OrderItem> query = entityManager.createQuery("SELECT oi FROM OrderItem oi WHERE oi.order.id = :orderId", OrderItem.class);
+            query.setParameter("orderId", orderId);
             return query.getResultList();
         } catch (Exception e) {
             System.err.println("An Exception occurred while searching: " + e.getMessage());

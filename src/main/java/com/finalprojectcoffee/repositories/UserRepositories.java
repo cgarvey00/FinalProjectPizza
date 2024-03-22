@@ -154,21 +154,12 @@ public class UserRepositories implements UserRepositoryInterfaces {
     }
 
     @Override
-    public Boolean updateAddress(int userId, String street, String town, String county, String eirCode) {
+    public Boolean updateAddress(Address address) {
         EntityManager entityManager = factory.createEntityManager();
         EntityTransaction transaction = entityManager.getTransaction();
 
         try {
             transaction.begin();
-
-            User user = entityManager.find(User.class, userId);
-
-            Address address = new Address();
-            address.setUser(user);
-            address.setStreet(street);
-            address.setTown(town);
-            address.setCounty(county);
-            address.setEirCode(eirCode);
 
             entityManager.merge(address);
             transaction.commit();
@@ -176,6 +167,31 @@ public class UserRepositories implements UserRepositoryInterfaces {
         } catch (PersistenceException e) {
             System.err.println("A PersistenceException occurred while merging: " + e.getMessage());
             transaction.rollback();
+            return false;
+        } finally {
+            entityManager.close();
+        }
+    }
+
+    @Override
+    public Boolean setDefaultAddress(Address address) {
+        EntityManager entityManager = factory.createEntityManager();
+        EntityTransaction transaction = entityManager.getTransaction();
+
+        try {
+            transaction.begin();
+
+            if(address.getIsDefault() == 0){
+                address.setIsDefault(1);
+            } else {
+                address.setIsDefault(0);
+            }
+
+            entityManager.merge(address);
+            transaction.commit();
+            return true;
+        } catch (PersistenceException e) {
+            System.err.println("A PersistenceException occurred while merging: " + e.getMessage());
             return false;
         } finally {
             entityManager.close();
@@ -194,6 +210,57 @@ public class UserRepositories implements UserRepositoryInterfaces {
         } catch (NoResultException e) {
             System.err.println("A NoResultException occurred while searching: " + e.getMessage());
             return Collections.emptyList();
+        } finally {
+            entityManager.close();
+        }
+    }
+
+    @Override
+    public Address getAddressById(int addressId) {
+        EntityManager entityManager = factory.createEntityManager();
+
+        try {
+            return entityManager.find(Address.class, addressId);
+        } catch (Exception e) {
+            System.err.println("An Exception occurred while searching: " + e.getMessage());
+            return null;
+        } finally {
+            entityManager.close();
+        }
+    }
+
+    @Override
+    public Boolean deleteAddress(int userId, int addressId) {
+        EntityManager entityManager = factory.createEntityManager();
+        EntityTransaction transaction = entityManager.getTransaction();
+
+        try {
+            transaction.begin();
+
+            Address address = entityManager.find(Address.class, addressId);
+            TypedQuery<Long> countQuery = entityManager.createQuery("SELECT COUNT(a) FROM Address a WHERE a.user.id = :userId", Long.class);
+            countQuery.setParameter("userId", userId);
+            long count = countQuery.getSingleResult();
+
+            if(address.getIsDefault() == 1 && count > 1){
+                TypedQuery<Address> query = entityManager.createQuery("SELECT a FROM Address a WHERE a.user.id = :userId AND a.id != :addressId ORDER BY a.id ASC", Address.class);
+                query.setParameter("userId", userId);
+                query.setParameter("addressId", addressId);
+                List<Address> addresses = query.getResultList();
+                if(!addresses.isEmpty()){
+                    Address newDefaultAddress = addresses.get(0);
+                    newDefaultAddress.setIsDefault(1);
+                    entityManager.merge(newDefaultAddress);
+                }
+            }
+
+            entityManager.remove(address);
+            transaction.commit();
+            return true;
+        } catch (PersistenceException e) {
+            System.err.println("A PersistenceException occurred while removing address: " + e.getMessage());
+            transaction.rollback();
+            return false;
         } finally {
             entityManager.close();
         }

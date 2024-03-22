@@ -13,7 +13,10 @@ public interface UserRepositoryInterfaces {
     Boolean updateUser(int userId, String password, String phoneNumber, String email, String image);
     Boolean deleteUser(int userId);
     Boolean addAddress(int userId, Address address);
-    Boolean updateAddress(int userId, String street, String town, String county, String eirCode);
+    Boolean updateAddress(Address address);
+    Boolean setDefaultAddress(Address address);
     List<Address> getAddressesByUserId(int userId);
+    Address getAddressById(int addressId);
+    Boolean deleteAddress(int userId, int addressId);
     Address getDefaultAddress(int userId);
 }
