@@ -34,9 +34,6 @@ public class CommandFactory {
                 case "view-menu":
                     command = new ViewMenu(request, response, factory);
                     break;
-                case "view-orders":
-                    command = new ViewOrder(request, response, factory);
-                    break;
                 case "view-all-users":
                     command = new ViewAllUsers(request, response,factory);
                     break;
@@ -79,17 +76,17 @@ public class CommandFactory {
                 case "view-address":
                     command = new ViewAddress(request, response, factory);
                     break;
-                case "view-all-orders":
-                    command = new ViewOrderCustomer(request, response, factory);
-                    break;
                 case "add-to-cart":
                     command = new AddToCart(request, response, factory);
                     break;
                 case "add-order":
                     command = new AddOrder(request, response, factory);
                     break;
-                case "update-order":
-                    command = new UpdateOrder(request, response, factory);
+                case "view-order":
+                    command = new ViewOrder(request, response, factory);
+                    break;
+                case "view-orderList-customer":
+                    command = new ViewOrderListCustomer(request, response, factory);
                     break;
                 case "finish-order":
                     command = new FinishOrder(request, response, factory);

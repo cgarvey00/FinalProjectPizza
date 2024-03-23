@@ -136,6 +136,11 @@ public class Order {
         return status;
     }
 
+    //Check if cancelled
+    public boolean isCancelled() {
+        return this.status == Status.Cancelled;
+    }
+
     public void setStatus(Status status) {
         this.status = status;
     }

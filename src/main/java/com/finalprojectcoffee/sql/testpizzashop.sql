@@ -66,8 +66,8 @@ CREATE TABLE `orders` (
     `balance` DOUBLE DEFAULT 0.0,
     `payment_status` VARCHAR(255) NOT NULL DEFAULT 'Pending',
     `status` VARCHAR(255) NOT NULL DEFAULT 'Pending',
-    `create_time` DATE NOT NULL,
-    `update_time` DATE,
+    `create_time` DATETIME NOT NULL,
+    `update_time` DATETIME,
     FOREIGN KEY (`customer_id`) REFERENCES `customers`(`id`),
     FOREIGN KEY (`employee_id`) REFERENCES `employees`(`id`),
     FOREIGN KEY (`address_id`) REFERENCES `addresses`(`id`)
@@ -87,8 +87,8 @@ CREATE TRIGGER UpdateBalanceAfterInsert
     AFTER INSERT ON order_items FOR EACH ROW
 BEGIN
     UPDATE orders
-    SET balance = ROUND(balance + NEW.cost,2)
-    WHERE id = NEW.order_id;
+        SET balance = ROUND(balance + NEW.cost,2)
+        WHERE id = NEW.order_id;
 END;
 
 CREATE TRIGGER UpdateBalanceAfterUpdate
@@ -97,6 +97,22 @@ BEGIN
     UPDATE orders
     SET balance = ROUND(balance - OLD.cost + NEW.cost,2)
     WHERE id = NEW.order_id;
+END;
+
+CREATE TRIGGER UpdateStockAfterInsert
+    AFTER INSERT ON order_items FOR EACH ROW
+BEGIN
+    UPDATE products
+    SET stock = stock - NEW.quantity
+    WHERE id = NEW.product_id;
+END;
+
+CREATE TRIGGER UpdateStockAfterDelete
+    AFTER DELETE ON order_items FOR EACH ROW
+BEGIN
+    UPDATE products
+    SET stock = stock + OLD.quantity
+    WHERE id = OLD.product_id;
 END;
 
 CREATE TRIGGER UpdateLoyaltyPoints

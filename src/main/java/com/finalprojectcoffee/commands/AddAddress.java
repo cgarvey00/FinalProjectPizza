@@ -62,12 +62,12 @@ public class AddAddress implements Command{
             address.setUser(activeUser);
             Boolean isAdded = userRep.addAddress(activeUserId, address);
             if(isAdded){
-                session.setAttribute("aas-msg", "Add successfully");
                 session.setAttribute("addressed", isAdded);
                 addressList = userRep.getAddressesByUserId(activeUserId);
                 session.setAttribute("addressList", addressList);
             } else {
-                session.setAttribute("aae-msg", "Failed to update");
+                session.setAttribute("errorMessage", "Whoops! Something went wrong. Failed to add address, Please try again later.");
+                terminus = "error.jsp";
             }
         } catch (Exception e) {
             System.err.println("An Exception occurred: " + e.getMessage());

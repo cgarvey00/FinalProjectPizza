@@ -53,7 +53,7 @@ public class AddToCart implements Command{
         for(OrderItemDTO existingItem : orderItems){
             if(existingItem.getProductId() == productId){
                 int newQuantity = existingItem.getQuantity() + quantity;
-                existingItem.setQuantity(existingItem.getQuantity() + quantity);
+                existingItem.setQuantity(newQuantity);
                 existingItem.setCost(newQuantity * product.getPrice());
                 found = true;
                 break;

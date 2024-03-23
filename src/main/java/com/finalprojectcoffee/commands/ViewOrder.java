@@ -1,7 +1,6 @@
 package com.finalprojectcoffee.commands;
 
-import com.finalprojectcoffee.entities.Order;
-import com.finalprojectcoffee.entities.User;
+import com.finalprojectcoffee.entities.OrderItem;
 import com.finalprojectcoffee.repositories.OrderRepositories;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.servlet.http.HttpServletRequest;
@@ -23,19 +22,21 @@ public class ViewOrder implements Command{
 
     @Override
     public String execute() {
-        String terminus = "view-order.jsp";
+        String terminus = "order-page.jsp";
 
         HttpSession session = request.getSession(true);
-        User activeUser = (User) session.getAttribute("LoggedInUser");
+        int orderId = Integer.parseInt(request.getParameter("orderId"));
 
         try {
             OrderRepositories orderRep = new OrderRepositories(factory);
 
-            List<Order> orderList = orderRep.getAllOrdersByCustomerId(activeUser.getId());
-            if(orderList != null && !orderList.isEmpty()){
-                session.setAttribute("orderList", orderList);
+            List<OrderItem> orderItemsInOrder = orderRep.getOrderItemByOrderId(orderId);
+            if (orderItemsInOrder != null && !orderItemsInOrder.isEmpty()) {
+                session.setAttribute("orderId", orderId);
+                session.setAttribute("orderItemsInOrder", orderItemsInOrder);
             } else {
-                session.setAttribute("voe-msg", "Failed to view orders");
+                session.setAttribute("errorMessage", "Whoops! Something went wrong.");
+                terminus = "error.jsp";
             }
         } catch (Exception e) {
             System.err.println("An Exception occurred while viewing orders: " + e.getMessage());

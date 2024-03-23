@@ -22,10 +22,7 @@
 <body>
 <%@include file="admin-nav.jsp" %>
 <section class="add-products">
-    </br>
-    </br>
-    </br>
-    </br>  <br>
+    <br>
     <br>
     <br>
     <h1 class="heading">Add Product</h1>

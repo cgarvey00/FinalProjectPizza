@@ -6,7 +6,7 @@
             <nav class="nav">
                 <a href="customer-home.jsp">Home</a>
                 <a href="controller?action=view-menu">Menu</a>
-                <a href="controller?action=view-orders">Orders</a>
+                <a href="controller?action=view-orderList-customer">Orders</a>
             </nav>
             <div class="icons">
                 <div class="fas fa-bars" id="menu-btn"></div>

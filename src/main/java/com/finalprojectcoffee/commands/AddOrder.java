@@ -42,7 +42,7 @@ public class AddOrder implements Command{
 
             //Get default address
             Address defaultAddress = userRep.getDefaultAddress(activeCustomerId);
-            int addressId = defaultAddress.getIsDefault();
+            int addressId = defaultAddress.getId();
 
             Order order = orderRep.addOrder(activeCustomerId, addressId);
             List<OrderItem> orderItemsInOrder = new ArrayList<>();
@@ -67,11 +67,13 @@ public class AddOrder implements Command{
                 BigDecimal balanceDecimal = new BigDecimal(balance).setScale(2, RoundingMode.HALF_UP);
                 session.setAttribute("orderItemsInOrder", orderItemsInOrder);
                 session.setAttribute("defaultAddress", defaultAddress);
+                session.setAttribute("orderId", order.getId());
                 session.setAttribute("balance", balanceDecimal.doubleValue());
+                session.removeAttribute("orderItems");
                 terminus = "order-page.jsp";
             } else {
-                session.setAttribute("errorMessage", "Failed to add to order");
-                return "error.jsp";
+                session.setAttribute("errorMessage", "Whoops! Something went wrong, failed to add order. Please try again later.");
+                terminus = "error.jsp";
             }
         } catch (Exception e) {
             System.err.println("An Exception occurred while adding order: " + e.getMessage());

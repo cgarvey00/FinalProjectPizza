@@ -1,7 +1,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="my" uri="http://localhost:8080/FinalProjectCoffee_war_exploded/tags" %>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
-
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -23,7 +23,7 @@
 <br><br><br><br><br><br><br><br><br><br>
 <div class="box-container">
     <h1 style="text-align: center;">Orders</h1>
-    <c:if test="${not empty sessionScope.ordersCustomer}">
+    <c:if test="${not empty sessionScope.orderListCustomer}">
     <table class="table table-bordered">
         <thead>
         <tr>
@@ -32,21 +32,31 @@
             <th>Status</th>
             <th>Payment Status</th>
             <th>Balance</th>
-            <th>Action</th>
+            <th>Address</th>
+            <th class="action-column">Action</th>
         </tr>
         </thead>
         <tbody>
-        <c:forEach var="order" items="${sessionScope.ordersCustomer}">
+        <c:forEach var="order" items="${sessionScope.orderListCustomer}">
         <tr>
-            <td><c:out value="${order.get()}"/></td>
-            <td><c:out value="${order.getCreateTime()}"/></td>
+            <td><c:out value="${order.getId()}"/></td>
+            <td>${my:formatLocalDateTime(order.getCreateTime(), "yyyy-MM-dd HH:mm:ss")}</td>
             <td><c:out value="${order.getStatus()}"/></td>
-            <td><c:out value="${order.getPaymentStatus}"/></td>
-            <td><c:out value="${order.getBalance()}"/></td>
+            <td><c:out value="${order.getPaymentStatus()}"/></td>
+            <td><c:out value="${order.getBalance()}"/>&euro;</td>
+            <td><c:out value="${order.getAddress().getEirCode()}"/></td>
             <td>
+                    <%--                    <button type="submit" name="action" value="cancel-order" class="cancel-btn ${not order.cancelled ? 'active' : 'cancelled'}" ${order.cancelled  ? 'disabled' : ''}>Cancel</button>--%>
                 <form action="controller" method="post">
-                    <button type="button" name="action" value="update-order" class="update-btn">Update</button>
-                    <button type="button" name="action" onclick="cancelOrder('${order.getId()}')" class="cancel-btn">Cancel</button>
+                <c:choose>
+                    <c:when test="${not order.cancelled}">
+                        <button type="submit" name="action" value="view-order" class="detail-btn">Detail</button>
+                    </c:when>
+                    <c:otherwise>
+                        <button type="button" class="cancelled-btn">Cancelled</button>
+                    </c:otherwise>
+                </c:choose>
+                    <input type="hidden" name="orderId" value="${order.getId()}"/>
                 </form>
             </td>
         </tr>
@@ -56,21 +66,6 @@
     </c:if>
 </div>
 
-<script>
-    function cancelOrder(orderId){
-        $.ajax({
-            url: 'controller',
-            type: 'POST',
-            data:{
-                ajax: true,
-                action: 'update-order',
-                orderId: orderId
-            }
-        })
-    }
-
-</script>
-
 <%@include file="footer.jsp" %>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js"></script>
@@ -79,21 +74,20 @@
 <script src="${pageContext.request.contextPath}/scripts/menu.js" type="text/javascript"></script>
 </body>
 <style>
-    .update-btn {
+    table {
+        table-layout: fixed;
+        width: 100%;
+    }
+
+    th.action-column, td.action-column {
+        width: 120px;
+        max-width: 120px;
+    }
+
+    .detail-btn {
         background-color: #109acb;
         color: white;
         padding: 5px 10px;
-        font-size: 18px;
-        border: none;
-        cursor: pointer;
-        min-width: 60px;
-        border-radius: 5px;
-    }
-
-    .cancel-btn {
-        background-color: #ff4d4d;
-        color: white;
-        padding: 10px 20px;
         font-size: 16px;
         border: none;
         cursor: pointer;
@@ -104,5 +98,34 @@
         box-sizing:border-box;
         margin:0;
     }
+
+    .detail-btn:hover {
+        background-color: #017fbd;
+    }
+
+    .cancelled-btn{
+        background-color: #ff4d4d;
+        color: white;
+        padding: 5px 10px;
+        font-size: 16px;
+        border: none;
+        cursor: not-allowed;
+        border-radius: 5px;
+        transition: background-color 0.3s;
+        display: block;
+        width: 100%;
+        box-sizing:border-box;
+        margin:0;
+    }
+
+    /*.cancel-btn.active :hover {*/
+    /*    background-color: #cc0000;*/
+    /*}*/
+
+    /*.cancelled {*/
+    /*    background-color: #ff8b8b;*/
+    /*    color: white;*/
+    /*    cursor: not-allowed;*/
+    /*}*/
 </style>
 </html>

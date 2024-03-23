@@ -51,7 +51,7 @@
             <tr>
                 <td><c:out value="${orderItem.name}"/></td>
                 <td><fmt:formatNumber value="${orderItem.price}" maxFractionDigits="2"/> &euro;</td>
-                <td><fmt:formatNumber value="${orderItem.cost * orderItem.quantity}" maxFractionDigits="2"/> &euro;</td>
+                <td><fmt:formatNumber value="${orderItem.cost}" maxFractionDigits="2"/> &euro;</td>
                 <td>
                     <form action="controller" method="post">
                         <div class="button-container">

@@ -1,5 +1,3 @@
-<%@ page import="com.finalprojectcoffee.entities.Order" %>
-<%@ page import="java.util.List" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
@@ -24,7 +22,7 @@
 <%@include file="customer-nav.jsp" %>
 <br><br><br><br><br><br><br><br><br><br>
 <h1 style="text-align: center;">Order Page</h1>
-<c:if test="${not empty sessionScope.orderItems}">
+<c:if test="${not empty sessionScope.orderItemsInOrder}">
     <div class="show-products">
         <div class="box-container">
             <div class="box bg-light">
@@ -42,11 +40,13 @@
                     <c:if test="${not empty sessionScope.balance}">
                     <h1>Balance: <c:out value="${sessionScope.balance}"/> &euro;</h1>
                     </c:if>
-                    <div class="payment-container">
-                        <form name="controller" method="post">
-                            <button type="submit" name="action" class="btn toPay-btn" value="pay-order">To pay</button>
-                        </form>
-                    </div>
+                    <form action="controller" method="post">
+                        <div class="payment-container">
+                            <button type="submit" name="action" value="cancel-order" class="btn cancel-btn">Cancel</button>
+                            <button type="submit" name="action" value="pay-order" class="btn toPay-btn">To pay</button>
+                            <input type="hidden" name="orderId" value="${sessionScope.orderId}">
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>
@@ -67,20 +67,34 @@
 
     .payment-container {
         display: flex;
-        justify-content: center; /* Center the button horizontally */
-        align-items: center; /* Center the button vertically if needed */
-        margin-top: 20px; /* Add some space above the button */
+        justify-content: space-between;
+        align-items: center;
+        margin-top: 20px;
+        margin-bottom: 20px;
     }
 
-    .toPay-btn {
-        background-color: #109acb;
+    .btn {
         color: white;
-        padding: 10px 30px; /* Increase padding to make the button bigger */
+        padding: 10px 20px;
         font-size: 18px;
         border: none;
         cursor: pointer;
         border-radius: 5px;
-        /* Removed width: auto; if you need a specific size, set it here */
+        box-sizing: border-box;
+        width: 44%;
+        margin-inside: 6%;
+    }
+
+    .cancel-btn {
+        background-color: #ff4d4d;
+    }
+
+    .cancel-btn:hover {
+        background-color: #cc0000;
+    }
+
+    .toPay-btn {
+        background-color: #109acb;
     }
 
     .toPay-btn:hover {
