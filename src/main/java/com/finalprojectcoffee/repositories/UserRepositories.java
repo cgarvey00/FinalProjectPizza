@@ -1,6 +1,7 @@
 package com.finalprojectcoffee.repositories;
 
 import com.finalprojectcoffee.entities.Address;
+import com.finalprojectcoffee.entities.Order;
 import com.finalprojectcoffee.entities.User;
 import jakarta.persistence.*;
 

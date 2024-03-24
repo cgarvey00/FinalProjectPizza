@@ -13,12 +13,12 @@ import jakarta.servlet.http.HttpSession;
 
 import java.util.List;
 
-public class ViewOrderListCustomer implements Command{
+public class UpdateAddressInOrder implements Command{
     private final HttpServletRequest request;
     private final HttpServletResponse response;
     private final EntityManagerFactory factory;
 
-    public ViewOrderListCustomer(HttpServletRequest request, HttpServletResponse response, EntityManagerFactory factory) {
+    public UpdateAddressInOrder(HttpServletRequest request, HttpServletResponse response, EntityManagerFactory factory) {
         this.request = request;
         this.response = response;
         this.factory = factory;
@@ -27,31 +27,36 @@ public class ViewOrderListCustomer implements Command{
     @Override
     public String execute() {
         String terminus = "view-order-customer.jsp";
-
         HttpSession session = request.getSession(true);
         User activeUser  = (User) session.getAttribute("loggedInUser");
         int activeUserId = activeUser.getId();
+        int orderId = Integer.parseInt(request.getParameter("orderId"));
+        int addressId = Integer.parseInt(request.getParameter("selectedAddressId"));
 
         try {
             OrderRepositories orderRep = new OrderRepositories(factory);
             UserRepositories userRep = new UserRepositories(factory);
 
-            if(activeUser instanceof Customer){
-                Customer activeCustomer = (Customer) activeUser;
-                List<Address> addressList = userRep.getAddressesByUserId(activeUserId);
-                List<Order> orderListCustomer = orderRep.getAllOrdersByCustomerId(activeCustomer.getId());
+            if (activeUser instanceof Customer) {
 
-                if(!orderListCustomer.isEmpty()){
+                Customer activeCustomer = (Customer) activeUser;
+                Boolean isUpdated = orderRep.updateAddressInOrder(orderId, addressId);
+                if (isUpdated) {
+                    List<Address> addressList = userRep.getAddressesByUserId(activeUserId);
+                    List<Order> orderListCustomer = orderRep.getAllOrdersByCustomerId(activeCustomer.getId());
                     session.setAttribute("orderListCustomer", orderListCustomer);
                     session.setAttribute("addressList", addressList);
                 } else {
-                    session.setAttribute("errorMessage", "Order list is empty");
+                    session.setAttribute("errorMessage", "Failed to update address in order. Please try again later.\"");
                     terminus = "error.jsp";
                 }
             }
         } catch (Exception e) {
-            System.err.println("An Exception occurred while viewing order list: " + e.getMessage());
+            System.err.println("An Exception occurred while updating address in order: " + e.getMessage());
+            session.setAttribute("errorMessage", "Something went wrong");
+            terminus = "error.jsp";
         }
+
         return terminus;
     }
 }

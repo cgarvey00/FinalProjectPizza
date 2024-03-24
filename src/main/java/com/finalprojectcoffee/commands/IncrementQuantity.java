@@ -1,6 +1,8 @@
 package com.finalprojectcoffee.commands;
 
 import com.finalprojectcoffee.dto.OrderItemDTO;
+import com.finalprojectcoffee.entities.Product;
+import com.finalprojectcoffee.repositories.ProductRepositories;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -29,8 +31,11 @@ public class IncrementQuantity implements Command{
 
         for(OrderItemDTO orderItem : orderItems){
             if(orderItem.getProductId() == productId){
+                ProductRepositories productRep = new ProductRepositories(factory);
+                Product product = productRep.findProductByID(productId);
                 int currentQuantity = orderItem.getQuantity();
                 orderItem.setQuantity(currentQuantity + 1);
+                orderItem.setCost(product.getPrice() * orderItem.getQuantity());
                 isIncremented = true;
                 break;
             }

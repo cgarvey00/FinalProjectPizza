@@ -13,6 +13,7 @@ public interface OrderRepositoriesInterface {
     List<OrderItem> getOrderItemByOrderId(int orderId);
     Order addOrder(int customerId, int addressId);
     Boolean addOrderItem(List<OrderItem> orderItems);
+    Boolean updateAddressInOrder(int orderId, int addressId);
     Boolean payOrder(int orderId);
     Boolean deliverOrders(List<Integer> orderIds, int employeeId);
     Boolean finishOrder(int orderId);

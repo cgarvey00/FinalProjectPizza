@@ -5,7 +5,7 @@ form.addEventListener('submit', (event) => {
 
     validateForm();
     console.log(isFormValid());
-    if (isFormValid() == true) {
+    if (isFormValid() === true) {
         form.submit();
     } else {
         event.preventDefault();
@@ -27,7 +27,7 @@ function isFormValid() {
 function validateForm() {
 
     // USERNAME
-    if (usernameInput.value.trim() == '') {
+    if (usernameInput.value.trim() === '') {
         setError(usernameInput, 'Username cant be empty');
     } else if (usernameInput.value.trim().length < 5 || usernameInput.value.trim().length > 15) {
         setError(usernameInput, 'Username must be min 5 and max 15 charecters');
@@ -36,7 +36,7 @@ function validateForm() {
     }
 
     //Password Checker which checks the password for many different cases
-    if (passwordInput.value.trim() == '') {
+    if (passwordInput.value.trim() === '') {
         setError(passwordInput, 'Password can not be empty');
     } else {
         const passwordValue = passwordInput.value.trim();

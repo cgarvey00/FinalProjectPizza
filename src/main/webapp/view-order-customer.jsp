@@ -37,14 +37,39 @@
         </tr>
         </thead>
         <tbody>
-        <c:forEach var="order" items="${sessionScope.orderListCustomer}">
+        <c:forEach var="order" items="${sessionScope.orderListCustomer}" varStatus="status">
         <tr>
             <td><c:out value="${order.getId()}"/></td>
             <td>${my:formatLocalDateTime(order.getCreateTime(), "yyyy-MM-dd HH:mm:ss")}</td>
             <td><c:out value="${order.getStatus()}"/></td>
             <td><c:out value="${order.getPaymentStatus()}"/></td>
             <td><c:out value="${order.getBalance()}"/>&euro;</td>
-            <td><c:out value="${order.getAddress().getEirCode()}"/></td>
+<%--            <td><c:out value="${order.getAddress().getEirCode()}"/></td>--%>
+            <td>
+                <c:choose>
+                    <c:when test="${order.pending}">
+                        <form action="controller" method="post">
+                            <label>
+                                <select id="addressSelect${status.index}" name="selectedAddressId" data-initial-id="${order.getAddress().getId()}" onchange="checkAddressId(${status.index})">
+                                    <option value="${order.getAddress().getId()}" selected><c:out value="${order.getAddress().getEirCode()}"/></option>
+                                    <c:if test="${not empty sessionScope.addressList}">
+                                        <c:forEach var="address" items="${sessionScope.addressList}">
+                                            <c:if test="${address.getEirCode() ne order.getAddress().getEirCode()}">
+                                            <option value="${address.getId()}"><c:out value="${address.getEirCode()}"/></option>
+                                            </c:if>
+                                        </c:forEach>
+                                    </c:if>
+                                </select>
+                            </label>
+                            <button type="submit" name="action" value="update-address-in-order" id="updateBtn${status.index}" class="update-address" style="display: none">Update</button>
+                            <input type="hidden" name="orderId" value="${order.getId()}">
+                        </form>
+                    </c:when>
+                <c:otherwise>
+                    <c:out value="${order.getAddress().getEirCode()}"/>
+                </c:otherwise>
+                </c:choose>
+            </td>
             <td>
                     <%--                    <button type="submit" name="action" value="cancel-order" class="cancel-btn ${not order.cancelled ? 'active' : 'cancelled'}" ${order.cancelled  ? 'disabled' : ''}>Cancel</button>--%>
                 <form action="controller" method="post">
@@ -67,6 +92,20 @@
 </div>
 
 <%@include file="footer.jsp" %>
+
+<script>
+    function checkAddressId(index){
+        var initialAddressId = document.getElementById('addressSelect' + index).getAttribute('data-initial-id');
+        var selectedAddressId = document.getElementById('addressSelect' + index).value;
+        var updateBtn = document.getElementById('updateBtn' + index);
+
+        if(initialAddressId !== selectedAddressId){
+            updateBtn.style.display = 'inline';
+        } else {
+            updateBtn.style.display = 'none';
+        }
+    }
+</script>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js"></script>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
@@ -116,6 +155,15 @@
         width: 100%;
         box-sizing:border-box;
         margin:0;
+    }
+
+    .update-address {
+        background-color: #4CAF50;
+        color: white;
+        padding: 3px 6px;
+        margin-left: 10px;
+        border-radius: 3px;
+        font-size: 0.8em;
     }
 
     /*.cancel-btn.active :hover {*/

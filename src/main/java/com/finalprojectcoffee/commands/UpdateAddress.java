@@ -53,6 +53,9 @@ public class UpdateAddress implements Command{
             if (isUpdated) {
                 List<Address> addressList = userRep.getAddressesByUserId(activeUserId);
                 session.setAttribute("addressList", addressList);
+            } else {
+                session.setAttribute("errorMessage", "Failed to update address. Please try again later.\"");
+                terminus = "error.jsp";
             }
         } catch (Exception e) {
             System.err.println("An Exception occurred while updating address: " + e.getMessage());

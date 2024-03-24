@@ -1,4 +1,5 @@
 <%@page contentType="text/html" pageEncoding="UTF-8" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -24,35 +25,6 @@
 </head>
 
 <body>
-<style>
-    .s-error {
-        color: rgb(243, 74, 74);
-        font-weight: bold;
-        position: absolute;
-        top: 205px;
-        margin-bottom: 0;
-        font-size: 13.5px;
-    }
-
-    .s-success {
-        color: rgb(138, 255, 64);
-        font-weight: bold;
-        position: absolute;
-        top: 165px;
-        margin-bottom: 0;
-        font-size: 13.5px;
-    }
-    body {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        min-height: 100vh;
-        background-color: rgb(0, 0, 0);
-        background-image: url('${pageContext.request.contextPath}/images/login.jpg');
-        background-size: cover;
-        background-repeat: no-repeat;
-    }
-</style>
 <form id="login-form" action="controller" method="POST">
     <input type="hidden" name="action" value="login">
     <c:if test="${not empty sessionScope.successmsg}">
@@ -94,5 +66,35 @@
 </form>
 </body>
 <script src="${pageContext.request.contextPath}/scripts/login.js" type="text/javascript"></script>
+
+<style>
+    .s-error {
+        color: rgb(243, 74, 74);
+        font-weight: bold;
+        position: absolute;
+        top: 205px;
+        margin-bottom: 0;
+        font-size: 13.5px;
+    }
+
+    .s-success {
+        color: rgb(138, 255, 64);
+        font-weight: bold;
+        position: absolute;
+        top: 165px;
+        margin-bottom: 0;
+        font-size: 13.5px;
+    }
+    body {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+        background-color: rgb(0, 0, 0);
+        background-image: url('${pageContext.request.contextPath}/images/login.jpg');
+        background-size: cover;
+        background-repeat: no-repeat;
+    }
+</style>
 
 </html>

@@ -38,12 +38,12 @@ public class CancelOrder implements Command{
                 session.setAttribute("orderListCustomer", orderListCustomer);
                 terminus = "view-order-customer.jsp";
             } else {
-                session.setAttribute("errorMessage", "Whoops! Something went wrong, failed to cancel order. Please try again later.");
+                session.setAttribute("errorMessage", "Failed to cancel order. Please try again later.");
                 terminus = "error.jsp";
             }
         } catch (Exception e) {
             System.err.println("An Exception occurred while cancelling order: " + e.getMessage());
-            session.setAttribute("errorMessage", "Whoops! Something went wrong.");
+            session.setAttribute("errorMessage", "Something went wrong.");
             terminus = "error.jsp";
         }
 

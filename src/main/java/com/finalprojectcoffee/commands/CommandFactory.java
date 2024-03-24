@@ -88,6 +88,15 @@ public class CommandFactory {
                 case "view-orderList-customer":
                     command = new ViewOrderListCustomer(request, response, factory);
                     break;
+                case "update-address-in-order":
+                    command = new UpdateAddressInOrder(request, response, factory);
+                    break;
+                case "to-payment":
+                    command = new ToPayment(request, response, factory);
+                    break;
+                case "pay-order":
+                    command = new PayOrder(request, response, factory);
+                    break;
                 case "finish-order":
                     command = new FinishOrder(request, response, factory);
                     break;

@@ -54,9 +54,7 @@
             </div>
             <div class="inputBox">
                 <span>EirCode</span>
-                <textarea name="eirCode" type="text" placeholder="<%= addressEcho != null ? addressEcho.getEirCode() : "Enter EirCode" %>" class="box"
-                          maxlength="500"
-                          cols="30" rows="10"></textarea>
+                <input name="eirCode" type="text" placeholder="<%= addressEcho != null ? addressEcho.getEirCode() : "Enter EirCode" %>" class="box" maxlength="100">
             </div>
         </div>
         <br>

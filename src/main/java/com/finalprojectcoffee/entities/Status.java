@@ -17,7 +17,6 @@ public enum Status {
     PaymentFailed("Payment Failed"),
     Refunded("Refund");
 
-
     private final String description;
 
     Status(String description) {

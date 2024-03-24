@@ -18,6 +18,4 @@ public class ViewUserPage implements Command {
     public String execute() {
         return "customer-home.jsp";
     }
-
-
 }

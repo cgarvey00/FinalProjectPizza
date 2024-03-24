@@ -6,6 +6,7 @@ import com.finalprojectcoffee.repositories.OrderRepositories;
 import com.finalprojectcoffee.repositories.ProductRepositories;
 import com.finalprojectcoffee.repositories.UserRepositories;
 import jakarta.persistence.EntityManagerFactory;
+import jakarta.persistence.NoResultException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
@@ -30,8 +31,8 @@ public class AddOrder implements Command{
     public String execute() {
         String terminus;
         HttpSession session = request.getSession(true);
-        User activeCustomer = (User) session.getAttribute("loggedInUser");
-        int activeCustomerId = activeCustomer.getId();
+        User activeUser = (User) session.getAttribute("loggedInUser");
+        int activeUserId = activeUser.getId();
         @SuppressWarnings("unchecked")
         List<OrderItemDTO> orderItemsDTO = (List<OrderItemDTO>) session.getAttribute("orderItems");
 
@@ -41,10 +42,10 @@ public class AddOrder implements Command{
             ProductRepositories productRep = new ProductRepositories(factory);
 
             //Get default address
-            Address defaultAddress = userRep.getDefaultAddress(activeCustomerId);
+            Address defaultAddress = userRep.getDefaultAddress(activeUserId);
             int addressId = defaultAddress.getId();
 
-            Order order = orderRep.addOrder(activeCustomerId, addressId);
+            Order order = orderRep.addOrder(activeUserId, addressId);
             List<OrderItem> orderItemsInOrder = new ArrayList<>();
             double balance = 0.0;
 
@@ -66,15 +67,18 @@ public class AddOrder implements Command{
             if(!orderItemsInOrder.isEmpty() && isAdded){
                 BigDecimal balanceDecimal = new BigDecimal(balance).setScale(2, RoundingMode.HALF_UP);
                 session.setAttribute("orderItemsInOrder", orderItemsInOrder);
-                session.setAttribute("defaultAddress", defaultAddress);
+                session.setAttribute("addressInorder", defaultAddress);
                 session.setAttribute("orderId", order.getId());
                 session.setAttribute("balance", balanceDecimal.doubleValue());
                 session.removeAttribute("orderItems");
                 terminus = "order-page.jsp";
             } else {
-                session.setAttribute("errorMessage", "Whoops! Something went wrong, failed to add order. Please try again later.");
+                session.setAttribute("errorMessage", "Failed to add order. Please try again later.");
                 terminus = "error.jsp";
             }
+        } catch (NoResultException e){
+            session.setAttribute("errorMessage", "Please add an <a href='add-address.jsp'>address</a> first.");
+            return "error.jsp";
         } catch (Exception e) {
             System.err.println("An Exception occurred while adding order: " + e.getMessage());
             session.setAttribute("errorMessage", "Something went wrong");

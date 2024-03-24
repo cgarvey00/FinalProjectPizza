@@ -28,25 +28,34 @@
             <div class="box bg-light">
                 <div class="content text-dark">
                     <c:forEach var="orderItem" items="${sessionScope.orderItemsInOrder}">
-                    <h3 class="text-dark"><c:out value="${orderItem.getProduct().getName()}"/></h3>
-                        <img src="<c:url value='/images/${orderItem.getProduct().getImage()}' />" alt="image" class="img-size">
+                        <h3 class="text-dark"><c:out value="${orderItem.getProduct().getName()}"/></h3>
+                        <img src="<c:url value='/images/${orderItem.getProduct().getImage()}' />" alt="image"
+                             class="img-size">
                         <span style="font-size: 20px;"> x ${orderItem.getQuantity()} = ${orderItem.getCost()} &euro;</span>
                     </c:forEach>
-                    <c:if test="${not empty sessionScope.defaultAddress}">
-                    <h1 class="text-dark">Address</h1>
-                    <h3>Street: <c:out value="${sessionScope.defaultAddress.getStreet()}"/></h3>
-                    <h3>Eir Code: <c:out value="${sessionScope.defaultAddress.getEirCode()}"/></h3>
+                    <c:if test="${not empty sessionScope.addressInorder}">
+                        <h1 class="text-dark">Address</h1>
+                        <h3>Street: <c:out value="${sessionScope.addressInorder.getStreet()}"/></h3>
+                        <h3>Eir Code: <c:out value="${sessionScope.addressInorder.getEirCode()}"/></h3>
                     </c:if>
-                    <c:if test="${not empty sessionScope.balance}">
-                    <h1>Balance: <c:out value="${sessionScope.balance}"/> &euro;</h1>
+                    <c:if test="${not empty sessionScope.order}">
+                        <h1>Balance: <c:out value="${sessionScope.order.getBalance()}"/> &euro;</h1>
                     </c:if>
-                    <form action="controller" method="post">
-                        <div class="payment-container">
-                            <button type="submit" name="action" value="cancel-order" class="btn cancel-btn">Cancel</button>
-                            <button type="submit" name="action" value="pay-order" class="btn toPay-btn">To pay</button>
-                            <input type="hidden" name="orderId" value="${sessionScope.orderId}">
-                        </div>
-                    </form>
+                    <c:choose>
+                        <c:when test="${sessionScope.order.pending}">
+                            <form action="controller" method="post">
+                                <div class="button-container">
+                                    <button type="submit" name="action" value="cancel-order" class="btn cancel-btn">
+                                        Cancel
+                                    </button>
+                                    <button type="submit" name="action" value="to-payment" class="btn toPay-btn">To
+                                        Pay
+                                    </button>
+                                    <input type="hidden" name="orderId" value="${sessionScope.order.getId()}">
+                                </div>
+                            </form>
+                        </c:when>
+                    </c:choose>
                 </div>
             </div>
         </div>
@@ -65,7 +74,7 @@
         height: auto !important;
     }
 
-    .payment-container {
+    .button-container {
         display: flex;
         justify-content: space-between;
         align-items: center;

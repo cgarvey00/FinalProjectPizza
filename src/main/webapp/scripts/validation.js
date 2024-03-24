@@ -10,7 +10,7 @@ form.addEventListener('submit', (event) => {
 
     validateForm();
     console.log(isFormValid());
-    if (isFormValid() == true) {
+    if (isFormValid() === true) {
         form.submit();
     } else {
         event.preventDefault();
@@ -33,7 +33,7 @@ function validateForm() {
 
 
     //USERNAME
-    if (usernameInput.value.trim() == '') {
+    if (usernameInput.value.trim() === '') {
         setError(usernameInput, 'Username cant be empty');
     } else if (usernameInput.value.trim().length < 5 || usernameInput.value.trim().length > 15) {
         setError(usernameInput, 'Username must be min 5 and max 15 characters');
@@ -42,7 +42,7 @@ function validateForm() {
     }
 
     //PHONE
-    if (phoneInput.value.trim() == '') {
+    if (phoneInput.value.trim() === '') {
         setError(phoneInput, 'Mobile Phone cant be empty');
     } else if (isMobileValid(phoneInput.value)) {
         setSuccess(phoneInput);
@@ -51,7 +51,7 @@ function validateForm() {
     }
 
     //EMAIL
-    if (emailInput.value.trim() == '') {
+    if (emailInput.value.trim() === '') {
         setError(emailInput, 'Please Provide an Email Address');
     } else if (isEmailValid(emailInput.value)) {
         setSuccess(emailInput);
@@ -60,7 +60,7 @@ function validateForm() {
     }
 
     //Password Checker
-    if (passwordInput.value.trim() == '') {
+    if (passwordInput.value.trim() === '') {
         setError(passwordInput, 'Password can not be empty');
     } else {
         const passwordValue = passwordInput.value.trim();
@@ -84,7 +84,7 @@ function validateForm() {
         }
     }
     //CONFIRM PASSWORD
-    if (confirmPasswordInput.value.trim() == '') {
+    if (confirmPasswordInput.value.trim() === '') {
         setError(confirmPasswordInput, 'Confirm Password can not be empty');
     } else if (confirmPasswordInput.value !== passwordInput.value) {
         setError(confirmPasswordInput, 'Password does not match');
@@ -93,7 +93,7 @@ function validateForm() {
     }
 
     //USERTYPE
-    if (usertypeInput.value.trim() == '') {
+    if (usertypeInput.value.trim() === '') {
         setError(usertypeInput, 'The User Type cannot be empty');
     }else {
         setSuccess(usertypeInput);
@@ -119,7 +119,7 @@ function setSuccess(element) {
 }
 
 function isEmailValid(email) {
-    const reg = /^(([^<>()[\]\.,;:\s@\"]+(\.[^<>()[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i;
+    const reg = /^(([^<>()[\].,;:\s@"]+(\.[^<>()[\].,;:\s@"]+)*)|(".+"))@(([^<>()[\].,;:\s@"]+\.)+[^<>()[\].,;:\s@"]{2,})$/i;
 
     return reg.test(email);
 }

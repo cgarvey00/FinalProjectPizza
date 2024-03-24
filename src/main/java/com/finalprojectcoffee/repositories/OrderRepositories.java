@@ -118,8 +118,8 @@ public class OrderRepositories implements OrderRepositoriesInterface {
             transaction.commit();
             return order;
         } catch (PersistenceException e) {
-            transaction.rollback();
             System.err.println("A PersistenceException occurred while persisting: " + e.getMessage());
+            transaction.rollback();
             return null;
         } finally {
             entityManager.close();
@@ -153,6 +153,33 @@ public class OrderRepositories implements OrderRepositoriesInterface {
     }
 
     @Override
+    public Boolean updateAddressInOrder(int orderId, int addressId) {
+        EntityManager entityManager = factory.createEntityManager();
+        EntityTransaction transaction = entityManager.getTransaction();
+
+        try {
+            transaction.begin();
+
+            Order order = entityManager.find(Order.class, orderId);
+            Address address = entityManager.find(Address.class, addressId);
+
+            if (order != null && address != null) {
+                order.setAddress(address);
+                entityManager.merge(order);
+            }
+
+            transaction.commit();
+            return true;
+        } catch (PersistenceException e) {
+            System.err.println("A PersistenceException occurred while merging: " + e.getMessage());
+            transaction.rollback();
+            return false;
+        } finally {
+            entityManager.close();
+        }
+    }
+
+    @Override
     public Boolean payOrder(int orderId) {
         EntityManager entityManager = factory.createEntityManager();
         EntityTransaction transaction = entityManager.getTransaction();
@@ -161,8 +188,6 @@ public class OrderRepositories implements OrderRepositoriesInterface {
             transaction.begin();
 
             Order order = entityManager.find(Order.class, orderId);
-            Query query = entityManager.createQuery("SELECT o FROM Order o WHERE o.id = :orderId");
-            query.setParameter("orderId", orderId);
 
             order.setPaymentStatus(Status.Paid);
             order.setUpdateTime(LocalDateTime.now());

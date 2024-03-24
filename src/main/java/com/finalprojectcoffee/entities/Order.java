@@ -141,6 +141,9 @@ public class Order {
         return this.status == Status.Cancelled;
     }
 
+    //Check if pending
+    public boolean isPending(){return this.paymentStatus == Status.Pending;}
+
     public void setStatus(Status status) {
         this.status = status;
     }

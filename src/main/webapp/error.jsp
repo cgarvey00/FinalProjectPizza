@@ -21,7 +21,7 @@
 <br><br><br><br><br><br><br><br><br><br><br><br>
 <div>
     <h1 style="text-align: center;">Whoops! Something Went Wrong</h1><br>
-    <h2 style="text-align: center;">${error-msg}</h2>
+    <h2 style="text-align: center;">${sessionScope.errorMessage}</h2>
 </div>
 
 <%@include file="footer.jsp"%>

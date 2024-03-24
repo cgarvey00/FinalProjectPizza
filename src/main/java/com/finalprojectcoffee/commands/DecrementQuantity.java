@@ -1,6 +1,8 @@
 package com.finalprojectcoffee.commands;
 
 import com.finalprojectcoffee.dto.OrderItemDTO;
+import com.finalprojectcoffee.entities.Product;
+import com.finalprojectcoffee.repositories.ProductRepositories;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -32,10 +34,12 @@ public class DecrementQuantity implements Command{
         while (iterator.hasNext()) {
             OrderItemDTO orderItem = iterator.next();
             if (orderItem.getProductId() == productId) {
-
+                ProductRepositories productRep = new ProductRepositories(factory);
+                Product product = productRep.findProductByID(productId);
                 int currentQuantity = orderItem.getQuantity();
                 if(currentQuantity > 0){
                     orderItem.setQuantity(currentQuantity - 1);
+                    orderItem.setCost(product.getPrice() * orderItem.getQuantity());
                 }
 
                 if(orderItem.getQuantity() == 0){

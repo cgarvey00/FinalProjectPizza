@@ -32,10 +32,14 @@ public class ViewMenu implements Command {
 
             if(productList != null && !productList.isEmpty()){
                 session.setAttribute("productList", productList);
+            } else {
+                session.setAttribute("errorMessage", "Product list is empty. Please try again later.\"");
+                terminus = "error.jsp";
             }
-
         } catch (Exception e){
             System.err.println("An Exception occurred while viewing menu: " + e.getMessage());
+            session.setAttribute("errorMessage", "Something went wrong");
+            terminus = "error.jsp";
         }
 
         return terminus;

@@ -37,10 +37,15 @@ public class UpdateDefaultAddress implements Command{
                 if (isUpdated) {
                     addressEcho = userRep.getAddressById(addressEcho.getId());
                     session.setAttribute("addressEcho", addressEcho);
+                } else {
+                    session.setAttribute("errorMessage", "Failed to update default address. Please try again later.\"");
+                    terminus = "error.jsp";
                 }
             }
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            System.err.println("An Exception occurred while updating default address: " + e.getMessage());
+            session.setAttribute("errorMessage", "Something went wrong");
+            terminus = "error.jsp";
         }
         return terminus;
     }

@@ -36,23 +36,21 @@
     <form action="controller" method="POST">
         <div class="flex">
             <div class="inputBox">
-                <span>Street (required)</span>
+                <span>Street</span>
                 <input type="text" class="box" required maxlength="100" placeholder="Enter Street" name="street">
             </div>
             <div class="inputBox">
-                <span>Town (required)</span>
+                <span>Town</span>
                 <input type="text" class="box" required maxlength="100" placeholder="Enter Town" name="town">
             </div>
             <div class="inputBox">
-                <span>County (required)</span>
+                <span>County</span>
                 <input type="text" minlength="0" class="box" required maxlength="100" placeholder="Enter County"
                        onkeypress="if(this.value.length === 20) return false;" name="county">
             </div>
             <div class="inputBox">
                 <span>EirCode</span>
-                <label>
-                    <textarea name="eirCode" type="text" placeholder="Enter EirCode" class="box" required maxlength="500" cols="30" rows="10"></textarea>
-                </label>
+                <input name="eirCode" type="text" placeholder="Enter EirCode" class="box" required maxlength="100">
             </div>
         </div>
         <br>
