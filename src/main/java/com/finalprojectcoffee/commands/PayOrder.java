@@ -33,13 +33,13 @@ public class PayOrder implements Command{
         User activeUser = (User) session.getAttribute("loggedInUser");
         int activeUserId = activeUser.getId();
 
-        double amount;
-        try {
-            amount = Double.parseDouble(request.getParameter("amount"));
-        } catch (NumberFormatException  e) {
-            session.setAttribute("pmeMessage", "Please enter a valid number for the amount, please try again");
-            return "payment.jsp";
-        }
+//        double amount;
+//        try {
+//            amount = Double.parseDouble(request.getParameter("amount"));
+//        } catch (NumberFormatException  e) {
+//            session.setAttribute("pmeMessage", "Please enter a valid number for the amount, please try again");
+//            return "payment.jsp";
+//        }
 
         try {
             OrderRepositories orderRep = new OrderRepositories(factory);

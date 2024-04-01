@@ -15,7 +15,7 @@ document.querySelector('#user-btn').onclick = () => {
 }
 
 window.onscroll = () => {
-    loginForm.classList.remove('active');
+    //loginForm.classList.remove('active');
     menu.classList.remove('fa-times');
     navbar.classList.remove('active');
     profile.classList.remove('active');

@@ -10,7 +10,7 @@ public interface UserRepositoryInterfaces {
     User findUserByUsername(String username);
     List<User> getAllUsers();
     Boolean addUser(User user);
-    Boolean updateUser(int userId, String password, String phoneNumber, String email, String image);
+    Boolean updateUser(int userId, String phoneNumber, String email);
     Boolean deleteUser(int userId);
     Boolean addAddress(int userId, Address address);
     Boolean updateAddress(Address address);

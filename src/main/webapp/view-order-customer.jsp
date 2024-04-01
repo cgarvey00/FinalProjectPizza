@@ -24,82 +24,88 @@
 <div class="box-container">
     <h1 style="text-align: center;">Orders</h1>
     <c:if test="${not empty sessionScope.orderListCustomer}">
-    <table class="table table-bordered">
-        <thead>
-        <tr>
-            <th>ID</th>
-            <th>Create Time</th>
-            <th>Status</th>
-            <th>Payment Status</th>
-            <th>Balance</th>
-            <th>Address</th>
-            <th class="action-column">Action</th>
-        </tr>
-        </thead>
-        <tbody>
-        <c:forEach var="order" items="${sessionScope.orderListCustomer}" varStatus="status">
-        <tr>
-            <td><c:out value="${order.getId()}"/></td>
-            <td>${my:formatLocalDateTime(order.getCreateTime(), "yyyy-MM-dd HH:mm:ss")}</td>
-            <td><c:out value="${order.getStatus()}"/></td>
-            <td><c:out value="${order.getPaymentStatus()}"/></td>
-            <td><c:out value="${order.getBalance()}"/>&euro;</td>
-<%--            <td><c:out value="${order.getAddress().getEirCode()}"/></td>--%>
-            <td>
-                <c:choose>
-                    <c:when test="${order.pending}">
-                        <form action="controller" method="post">
-                            <label>
-                                <select id="addressSelect${status.index}" name="selectedAddressId" data-initial-id="${order.getAddress().getId()}" onchange="checkAddressId(${status.index})">
-                                    <option value="${order.getAddress().getId()}" selected><c:out value="${order.getAddress().getEirCode()}"/></option>
-                                    <c:if test="${not empty sessionScope.addressList}">
-                                        <c:forEach var="address" items="${sessionScope.addressList}">
-                                            <c:if test="${address.getEirCode() ne order.getAddress().getEirCode()}">
-                                            <option value="${address.getId()}"><c:out value="${address.getEirCode()}"/></option>
+        <table class="table table-bordered">
+            <thead>
+            <tr>
+                <th>ID</th>
+                <th>Create Time</th>
+                <th>Status</th>
+                <th>Payment Status</th>
+                <th>Balance</th>
+                <th>Address</th>
+                <th class="action-column">Action</th>
+            </tr>
+            </thead>
+            <tbody>
+            <c:forEach var="order" items="${sessionScope.orderListCustomer}" varStatus="status">
+                <tr>
+                    <td><c:out value="${order.getId()}"/></td>
+                    <td>${my:formatLocalDateTime(order.getCreateTime(), "yyyy-MM-dd HH:mm:ss")}</td>
+                    <td><c:out value="${order.getStatus()}"/></td>
+                    <td><c:out value="${order.getPaymentStatus()}"/></td>
+                    <td><c:out value="${order.getBalance()}"/>&euro;</td>
+                    <td>
+                        <c:choose>
+                            <c:when test="${order.pending}">
+                                <form action="controller" method="post">
+                                    <label>
+                                        <select id="addressSelect${status.index}" name="selectedAddressId"
+                                                data-initial-id="${order.getAddress().getId()}"
+                                                onchange="checkAddressId(${status.index})">
+                                            <option value="${order.getAddress().getId()}" selected><c:out
+                                                    value="${order.getAddress().getEirCode()}"/></option>
+                                            <c:if test="${not empty sessionScope.addressList}">
+                                                <c:forEach var="address" items="${sessionScope.addressList}">
+                                                    <c:if test="${address.getEirCode() ne order.getAddress().getEirCode()}">
+                                                        <option value="${address.getId()}"><c:out
+                                                                value="${address.getEirCode()}"/></option>
+                                                    </c:if>
+                                                </c:forEach>
                                             </c:if>
-                                        </c:forEach>
-                                    </c:if>
-                                </select>
-                            </label>
-                            <button type="submit" name="action" value="update-address-in-order" id="updateBtn${status.index}" class="update-address" style="display: none">Update</button>
-                            <input type="hidden" name="orderId" value="${order.getId()}">
+                                        </select>
+                                    </label>
+                                    <button type="submit" name="action" value="update-address-in-order"
+                                            id="updateBtn${status.index}" class="update-address" style="display: none">
+                                        Update
+                                    </button>
+                                    <input type="hidden" name="orderId" value="${order.getId()}">
+                                </form>
+                            </c:when>
+                            <c:otherwise>
+                                <c:out value="${order.getAddress().getEirCode()}"/>
+                            </c:otherwise>
+                        </c:choose>
+                    </td>
+                    <td>
+                        <form action="controller" method="post">
+                            <c:choose>
+                                <c:when test="${not order.cancelled}">
+                                    <button type="submit" name="action" value="view-order" class="detail-btn">Detail
+                                    </button>
+                                </c:when>
+                                <c:otherwise>
+                                    <button type="button" class="cancelled-btn">Cancelled</button>
+                                </c:otherwise>
+                            </c:choose>
+                            <input type="hidden" name="orderId" value="${order.getId()}"/>
                         </form>
-                    </c:when>
-                <c:otherwise>
-                    <c:out value="${order.getAddress().getEirCode()}"/>
-                </c:otherwise>
-                </c:choose>
-            </td>
-            <td>
-                    <%--                    <button type="submit" name="action" value="cancel-order" class="cancel-btn ${not order.cancelled ? 'active' : 'cancelled'}" ${order.cancelled  ? 'disabled' : ''}>Cancel</button>--%>
-                <form action="controller" method="post">
-                <c:choose>
-                    <c:when test="${not order.cancelled}">
-                        <button type="submit" name="action" value="view-order" class="detail-btn">Detail</button>
-                    </c:when>
-                    <c:otherwise>
-                        <button type="button" class="cancelled-btn">Cancelled</button>
-                    </c:otherwise>
-                </c:choose>
-                    <input type="hidden" name="orderId" value="${order.getId()}"/>
-                </form>
-            </td>
-        </tr>
-        </c:forEach>
-        </tbody>
-    </table>
+                    </td>
+                </tr>
+            </c:forEach>
+            </tbody>
+        </table>
     </c:if>
 </div>
 
 <%@include file="footer.jsp" %>
 
 <script>
-    function checkAddressId(index){
+    function checkAddressId(index) {
         var initialAddressId = document.getElementById('addressSelect' + index).getAttribute('data-initial-id');
         var selectedAddressId = document.getElementById('addressSelect' + index).value;
         var updateBtn = document.getElementById('updateBtn' + index);
 
-        if(initialAddressId !== selectedAddressId){
+        if (initialAddressId !== selectedAddressId) {
             updateBtn.style.display = 'inline';
         } else {
             updateBtn.style.display = 'none';
@@ -134,15 +140,15 @@
         transition: background-color 0.3s;
         display: block;
         width: 100%;
-        box-sizing:border-box;
-        margin:0;
+        box-sizing: border-box;
+        margin: 0;
     }
 
     .detail-btn:hover {
         background-color: #017fbd;
     }
 
-    .cancelled-btn{
+    .cancelled-btn {
         background-color: #ff4d4d;
         color: white;
         padding: 5px 10px;
@@ -153,8 +159,8 @@
         transition: background-color 0.3s;
         display: block;
         width: 100%;
-        box-sizing:border-box;
-        margin:0;
+        box-sizing: border-box;
+        margin: 0;
     }
 
     .update-address {
@@ -165,15 +171,5 @@
         border-radius: 3px;
         font-size: 0.8em;
     }
-
-    /*.cancel-btn.active :hover {*/
-    /*    background-color: #cc0000;*/
-    /*}*/
-
-    /*.cancelled {*/
-    /*    background-color: #ff8b8b;*/
-    /*    color: white;*/
-    /*    cursor: not-allowed;*/
-    /*}*/
 </style>
 </html>

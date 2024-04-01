@@ -103,26 +103,6 @@
     </div>
 </form>
 
-<script>
-    var eyeIcon = document.getElementById('togglePassword');
-    var pwsInput = document.getElementById('password');
-    var toggle = true;
-
-    eyeIcon.addEventListener('click', function () {
-        if(toggle){
-            pwsInput.type = 'text';
-            eyeIcon.classList.remove('fa-solid fa-eye-slash');
-            eyeIcon.classList.add('fa-solid fa-eye');
-            toggle = false;
-        } else {
-            pwsInput.type = 'password';
-            eyeIcon.classList.remove('fa-solid fa-eye');
-            eyeIcon.classList.add('fa-solid fa-eye-slash');
-            toggle = true;
-        }
-    })
-</script>
-
 </body>
 <script src="${pageContext.request.contextPath}/scripts/validation.js" type="text/javascript"></script>
 

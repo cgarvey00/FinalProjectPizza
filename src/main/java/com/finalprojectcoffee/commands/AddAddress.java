@@ -66,12 +66,11 @@ public class AddAddress implements Command{
                 addressList = userRep.getAddressesByUserId(activeUserId);
                 session.setAttribute("addressList", addressList);
             } else {
-                session.setAttribute("errorMessage", "Failed to add address, Please try again later.");
+                session.setAttribute("errorMessage", "Failed to add address, please try again later.");
                 terminus = "error.jsp";
             }
         } catch (Exception e) {
-            System.err.println("An Exception occurred: " + e.getMessage());
-            session.setAttribute("errorMessage", "Something went wrong");
+            System.err.println("An Exception occurred while adding address: " + e.getMessage());
             terminus = "error.jsp";
         }
 

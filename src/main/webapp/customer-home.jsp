@@ -1,8 +1,4 @@
 <%@ page import="com.finalprojectcoffee.entities.User" %>
-<%@ page import="com.finalprojectcoffee.entities.Address" %>
-<%@ page import="java.util.List" %>
-<%@ page import="java.util.Collections" %>
-<%@ page import="com.finalprojectcoffee.repositories.UserRepositories" %>
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%
     User loggedInUser = (User) request.getSession().getAttribute("loggedInUser");

@@ -62,7 +62,7 @@ public class UserRepositoriesTest {
 
     @Test
     public void updateUserTest(){
-        Boolean expectedResult = userRep.updateUser(2,"kDk3(etEr_5","+1-442-410-1231x3","wef234@outlook.com",null);
+        Boolean expectedResult = userRep.updateUser(2,"+1-442-410-1231x3","wef234@outlook.com");
         assertTrue(expectedResult);
     }
 

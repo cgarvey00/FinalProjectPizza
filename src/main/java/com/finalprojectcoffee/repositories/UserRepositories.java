@@ -84,7 +84,7 @@ public class UserRepositories implements UserRepositoryInterfaces {
     }
 
     @Override
-    public Boolean updateUser(int userId, String password, String phoneNumber, String email, String image) {
+    public Boolean updateUser(int userId, String phoneNumber, String email) {
         EntityManager entityManager = factory.createEntityManager();
         EntityTransaction transaction = entityManager.getTransaction();
 
@@ -92,10 +92,8 @@ public class UserRepositories implements UserRepositoryInterfaces {
             transaction.begin();
 
             User user = entityManager.find(User.class,userId);
-            user.setPassword(password);
             user.setPhoneNumber(phoneNumber);
             user.setEmail(email);
-            user.setImage(image);
 
             entityManager.merge(user);
             transaction.commit();

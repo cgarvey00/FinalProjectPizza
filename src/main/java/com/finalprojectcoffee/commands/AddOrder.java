@@ -68,6 +68,7 @@ public class AddOrder implements Command{
                 BigDecimal balanceDecimal = new BigDecimal(balance).setScale(2, RoundingMode.HALF_UP);
                 session.setAttribute("orderItemsInOrder", orderItemsInOrder);
                 session.setAttribute("addressInorder", defaultAddress);
+                session.setAttribute("order", order);
                 session.setAttribute("orderId", order.getId());
                 session.setAttribute("balance", balanceDecimal.doubleValue());
                 session.removeAttribute("orderItems");

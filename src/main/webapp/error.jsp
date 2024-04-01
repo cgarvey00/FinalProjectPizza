@@ -18,7 +18,7 @@
 </head>
 <body>
 <%@include file="customer-nav.jsp" %>
-<br><br><br><br><br><br><br><br><br><br><br><br>
+<br><br><br><br><br><br><br><br><br><br>
 <div>
     <h1 style="text-align: center;">Whoops! Something Went Wrong</h1><br>
     <h2 style="text-align: center;">${sessionScope.errorMessage}</h2>

@@ -43,6 +43,7 @@
                     <div class="box bg-light">
                         <div class="content text-dark">
                             <h1 style="text-align: center;">Balance: <c:out value="${sessionScope.balance}"/>&euro;</h1>
+                            <input type="hidden" id="balance" value="${sessionScope.balance}">
                             <br>
                             <form action="controller" method="post" id="paymentForm">
                                 <div style="text-align: center;">
@@ -60,7 +61,9 @@
                             </form>
                             <script>
                                 document.getElementById('paymentForm').onsubmit = function (event) {
-                                    var paymentInput = document.getElementById('paymentInput').value;
+                                    var paymentInputValue = document.getElementById('paymentInput').value;
+                                    var balance = document.getElementById('balance').value;
+                                    var paymentInput = parseFloat(paymentInputValue);
 
                                     if(isNaN(paymentInput) || paymentInput === ''){
                                         alert('Please enter a valid number.')
@@ -68,7 +71,7 @@
                                     } else if( paymentInput < 0){
                                         alert('Please enter a valid number.')
                                         event.preventDefault();
-                                    } else if( paymentInput < sessionStorage.balance){
+                                    } else if( paymentInput < balance){
                                         alert('Payment amount is insufficient.')
                                         event.preventDefault();
                                     }

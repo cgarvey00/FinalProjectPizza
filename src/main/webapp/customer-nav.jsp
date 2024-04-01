@@ -1,5 +1,4 @@
 <header class="header fixed-top">
-    <%--    <section class="flex">--%>
     <div class="container">
         <div class="row align-items-center">
             <a href="customer-home.jsp" class="logo mr-auto"> <i class="fa-solid fa-pizza-slice"></i> Pizza Shop </a>
@@ -14,7 +13,7 @@
                     <div class="fas fa-search" id="search-btn"></div>
                 </a>
                 <a href="view-cart.jsp">
-                    <div class="fas fa-shopping-cart" id="cart-btn"></div>
+                    <div class="fas fa-shopping-cart"></div>
                 </a>
                 <a>
                     <div id="user-btn" class="fas fa-user"></div>
@@ -25,16 +24,12 @@
             </div>
             <div class="profile">
                 <div class="flex-btn">
-                    <a href="#" class="option-btn">Profile</a>
+                    <a href="user-profile.jsp" class="option-btn">Profile</a>
                     <a href="controller?action=view-address" class="option-btn">Address</a>
                 </div>
-<%--                <a href="#" class="delete-btn"--%>
-<%--                   onclick="return confirm('logout from the website?');">logout--%>
-<%--                </a>--%>
             </div>
         </div>
     </div>
-        <%--    </section>--%>
 </header>
 
 <script>

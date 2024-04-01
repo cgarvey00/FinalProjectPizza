@@ -8,8 +8,6 @@
     if (request.getSession(false) == null || loggedInUser == null || !"Customer".equals(loggedInUser.getUserType())) {
         response.sendRedirect("index.jsp");
     }
-    @SuppressWarnings("unchecked")
-    List<Address> addressList = (List<Address>) request.getSession().getAttribute("addressList");
 %>
 
 <html lang="en">

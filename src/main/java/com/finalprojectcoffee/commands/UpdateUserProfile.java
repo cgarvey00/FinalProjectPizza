@@ -3,7 +3,6 @@ package com.finalprojectcoffee.commands;
 import com.finalprojectcoffee.entities.User;
 import com.finalprojectcoffee.repositories.UserRepositories;
 import com.finalprojectcoffee.utils.EmailUtil;
-import com.finalprojectcoffee.utils.JBCriptUtil;
 import com.finalprojectcoffee.utils.PhoneNumberUtil;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.servlet.http.HttpServletRequest;
@@ -23,47 +22,49 @@ public class UpdateUserProfile implements Command{
 
     @Override
     public String execute() {
-        String terminus = "user-profile.jsp";
+        String terminus;
 
         HttpSession session = request.getSession(true);
         User activeUser = (User) session.getAttribute("loggedInUser");
         int activeUserId = activeUser.getId();
         String newPhoneNumber = request.getParameter("phoneNumber");
         String newEmail = request.getParameter("email");
-        String image = request.getParameter("image");
 
         try {
             UserRepositories userRep = new UserRepositories(factory);
 
-            if(newPhoneNumber != null && !newPhoneNumber.isEmpty()){
-                if(PhoneNumberUtil.validationPhoneNumber(newPhoneNumber)){
-                    activeUser.setPhoneNumber(newPhoneNumber);
-                } else {
-                    session.setAttribute("upe-msg", "Phone number format error");
+            if(newPhoneNumber == null || newPhoneNumber.isEmpty()){
+                newPhoneNumber = activeUser.getPhoneNumber();
+            } else {
+                Boolean isValid = PhoneNumberUtil.validationPhoneNumber(newPhoneNumber);
+                if (!isValid) {
+                    session.setAttribute("errorMessage", "Phone number format is invalid, please try again later.");
+                    return  "error.jsp";
                 }
             }
 
-            if(newEmail != null && !newEmail.isEmpty()){
-                if(EmailUtil.validateEmail(newEmail)){
-                    activeUser.setEmail(newEmail);
-                } else {
-                    session.setAttribute("uee-msg", "Email format error");
+            if(newEmail == null || newEmail.isEmpty()){
+                newEmail = activeUser.getEmail();
+            } else {
+                Boolean isValid = EmailUtil.validateEmail(newEmail);
+                if (!isValid) {
+                    session.setAttribute("errorMessage", "Email format is invalid, please try again later.");
+                    return  "error.jsp";
                 }
             }
 
-            if(image != null && !image.isEmpty()){
-                activeUser.setImage(image);
-            }
-
-            Boolean isUpdated = userRep.updateUser(activeUserId, activeUser.getPassword(), activeUser.getPhoneNumber(), activeUser.getEmail(), activeUser.getImage());
+            Boolean isUpdated = userRep.updateUser(activeUserId, newPhoneNumber, newEmail);
             if(isUpdated){
-                session.setAttribute("upus-msg", "Update successfully");
+                activeUser = userRep.findUserById(activeUserId);
+                session.setAttribute("loggedInUser", activeUser);
                 terminus = "customer-home.jsp";
             } else {
-                session.setAttribute("upue-msg", "Failed to update");
+                session.setAttribute("errorMessage", "Failed to update profile, please try again later.");
+                terminus = "error.jsp";
             }
         } catch (Exception e) {
-            System.err.println("An Exception occurred: " + e.getMessage());
+            System.err.println("An Exception occurred while updating user profile: " + e.getMessage());
+            terminus = "error.jsp";
         }
 
         return terminus;
