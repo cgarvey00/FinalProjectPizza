@@ -55,8 +55,17 @@ public class CommandFactory {
                 case "admin-dashboard":
                     command = new ViewDashboard(request, response, factory);
                     break;
+                case "view-customer-profile":
+                    command = new ViewCustomerProfile(request, response, factory);
+                    break;
                 case "update-user-profile":
                     command = new UpdateUserProfile(request, response, factory);
+                    break;
+                case "change-password":
+                    command = new ChangePassword(request, response, factory);
+                    break;
+                case "delete-account":
+                    command = new DeleteUser(request, response, factory);
                     break;
                 case "add-address":
                     command = new AddAddress(request, response, factory);

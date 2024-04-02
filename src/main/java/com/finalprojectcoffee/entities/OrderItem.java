@@ -13,10 +13,10 @@ public class OrderItem {
     private int id;
 
     @ManyToOne
-    @JoinColumn(name = "order_id", nullable = false)
+    @JoinColumn(name = "order_id")
     private Order order;
     @OneToOne
-    @JoinColumn(name = "product_id", nullable = false)
+    @JoinColumn(name = "product_id")
     private Product product;
     @Column(name = "quantity")
     private int quantity;

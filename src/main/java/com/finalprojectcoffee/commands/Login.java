@@ -7,10 +7,7 @@ import com.finalprojectcoffee.entities.User;
 import com.finalprojectcoffee.repositories.OrderRepositories;
 import com.finalprojectcoffee.repositories.ProductRepositories;
 import com.finalprojectcoffee.repositories.UserRepositories;
-import com.finalprojectcoffee.utils.JBCriptUtil;
-import jakarta.persistence.DiscriminatorColumn;
-import jakarta.persistence.DiscriminatorValue;
-import jakarta.persistence.EntityManager;
+import com.finalprojectcoffee.utils.JBCryptUtil;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -44,7 +41,7 @@ public class Login implements Command {
                 User user = userRep.findUserByUsername(username);
 
                 if (user != null) {
-                    if (JBCriptUtil.checkPw(user.getPassword(), password)) {
+                    if (JBCryptUtil.checkPw(user.getPassword(), password)) {
                         switch (user.getUserType()) {
                             case "Customer":
                                 terminus = "customer-home.jsp";

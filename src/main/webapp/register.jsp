@@ -51,7 +51,7 @@
             <div class="s-error">${sessionScope.pnmsg}</div>
         </c:if>
         <label for="number">Phone</label>
-        <input type="number" id="number" placeholder="5654667876" name="phoneNumber">
+        <input type="number" id="number" placeholder="083XXXXXXX" name="phoneNumber">
         <i class="fas fa-check-circle"></i>
         <i class="fas fa-exclamation-circle"></i>
         <p>Error Message</p>

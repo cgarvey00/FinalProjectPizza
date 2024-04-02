@@ -47,7 +47,6 @@ public class AddOrder implements Command{
 
             Order order = orderRep.addOrder(activeUserId, addressId);
             List<OrderItem> orderItemsInOrder = new ArrayList<>();
-            double balance = 0.0;
 
             if(orderItemsDTO != null && !orderItemsDTO.isEmpty()){
 
@@ -58,19 +57,17 @@ public class AddOrder implements Command{
                     orderItem.setOrder(order);
                     orderItem.setQuantity(orderItemDTO.getQuantity());
                     orderItem.setCost(orderItemDTO.getCost());
-                    balance += orderItem.getCost();
                     orderItemsInOrder.add(orderItem);
                 }
             }
             //Add order items
             Boolean isAdded = orderRep.addOrderItem(orderItemsInOrder);
             if(!orderItemsInOrder.isEmpty() && isAdded){
-                BigDecimal balanceDecimal = new BigDecimal(balance).setScale(2, RoundingMode.HALF_UP);
+                order = orderRep.findOrderById(order.getId());
                 session.setAttribute("orderItemsInOrder", orderItemsInOrder);
                 session.setAttribute("addressInorder", defaultAddress);
                 session.setAttribute("order", order);
                 session.setAttribute("orderId", order.getId());
-                session.setAttribute("balance", balanceDecimal.doubleValue());
                 session.removeAttribute("orderItems");
                 terminus = "order-page.jsp";
             } else {

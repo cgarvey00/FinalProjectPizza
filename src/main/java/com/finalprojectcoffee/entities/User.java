@@ -27,15 +27,11 @@ public class User {
     @Column(name = "email", nullable = false)
     private String email;
 
-    @Column(name = "image")
-    private String image;
-
     @Column(name = "user_type", insertable = false, updatable = false)
     private String userType;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Address> addresses;
-
 
     public User() {
     }
@@ -47,21 +43,12 @@ public class User {
         this.email = email;
     }
 
-    public User(String username, String password, String phoneNumber, String email, String image) {
-        this.username = username;
-        this.password = password;
-        this.phoneNumber = phoneNumber;
-        this.email = email;
-        this.image = image;
-    }
-
-    public User(int id, String username, String password, String phoneNumber, String email, String image) {
+    public User(int id, String username, String password, String phoneNumber, String email) {
         this.id = id;
         this.username = username;
         this.password = password;
         this.phoneNumber = phoneNumber;
         this.email = email;
-        this.image = image;
     }
 
     public int getId() {
@@ -104,14 +91,6 @@ public class User {
         this.email = email;
     }
 
-    public String getImage() {
-        return image;
-    }
-
-    public void setImage(String image) {
-        this.image = image;
-    }
-
     public String getUserType() {
         return userType;
     }
@@ -132,7 +111,6 @@ public class User {
                 ", password='" + password + '\'' +
                 ", phoneNumber='" + phoneNumber + '\'' +
                 ", email='" + email + '\'' +
-                ", image='" + image + '\'' +
                 ", userType='" + userType + '\'' +
                 ", addresses=" + getAddressesAsSimpleString() +
                 '}';

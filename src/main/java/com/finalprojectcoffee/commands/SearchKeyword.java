@@ -1,12 +1,7 @@
 package com.finalprojectcoffee.commands;
 
 import com.finalprojectcoffee.entities.Product;
-import com.finalprojectcoffee.entities.User;
 import com.finalprojectcoffee.repositories.ProductRepositories;
-import com.finalprojectcoffee.repositories.UserRepositories;
-import com.finalprojectcoffee.utils.EmailUtil;
-import com.finalprojectcoffee.utils.JBCriptUtil;
-import com.finalprojectcoffee.utils.PhoneNumberUtil;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.servlet.http.HttpServletRequest;

@@ -39,7 +39,7 @@
                         <h3>Eir Code: <c:out value="${sessionScope.addressInorder.getEirCode()}"/></h3>
                     </c:if>
                     <c:if test="${not empty sessionScope.order}">
-                        <h1>Balance: <c:out value="${sessionScope.balance}"/> &euro;</h1>
+                        <h1>Balance: <c:out value="${sessionScope.order.getBalance()}"/> &euro;</h1>
                     </c:if>
                     <c:choose>
                         <c:when test="${sessionScope.order.pending}">

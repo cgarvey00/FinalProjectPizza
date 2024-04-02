@@ -8,6 +8,8 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 
+import java.util.List;
+
 public class UpdateDefaultAddress implements Command{
     private final HttpServletRequest request;
     private final HttpServletResponse response;
@@ -35,6 +37,10 @@ public class UpdateDefaultAddress implements Command{
             if(isUndefault){
                 Boolean isUpdated = userRep.setDefaultAddress(addressEcho);
                 if (isUpdated) {
+                    List<Address> addressList = userRep.getAddressesByUserId(activeUserId);
+                    if(addressList != null && !addressList.isEmpty()){
+                        session.setAttribute("addressList", addressList);
+                    }
                     addressEcho = userRep.getAddressById(addressEcho.getId());
                     session.setAttribute("addressEcho", addressEcho);
                 } else {

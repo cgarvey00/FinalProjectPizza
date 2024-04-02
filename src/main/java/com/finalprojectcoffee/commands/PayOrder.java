@@ -33,14 +33,6 @@ public class PayOrder implements Command{
         User activeUser = (User) session.getAttribute("loggedInUser");
         int activeUserId = activeUser.getId();
 
-//        double amount;
-//        try {
-//            amount = Double.parseDouble(request.getParameter("amount"));
-//        } catch (NumberFormatException  e) {
-//            session.setAttribute("pmeMessage", "Please enter a valid number for the amount, please try again");
-//            return "payment.jsp";
-//        }
-
         try {
             OrderRepositories orderRep = new OrderRepositories(factory);
             UserRepositories userRep = new UserRepositories(factory);
@@ -49,10 +41,10 @@ public class PayOrder implements Command{
             if(activeUser instanceof Customer){
                 Customer activeCustomer = (Customer) activeUser;
                 List<Address> addressList = userRep.getAddressesByUserId(activeUserId);
-                List<Order> orderListCustomer = orderRep.getAllOrdersByCustomerId(activeCustomer.getId());
 
                 Boolean isPaid = orderRep.payOrder(order.getId());
                 if(isPaid){
+                    List<Order> orderListCustomer = orderRep.getAllOrdersByCustomerId(activeCustomer.getId());
                     session.setAttribute("orderListCustomer", orderListCustomer);
                     session.setAttribute("addressList", addressList);
                     session.setAttribute("posMessage", "Pay successfully!");

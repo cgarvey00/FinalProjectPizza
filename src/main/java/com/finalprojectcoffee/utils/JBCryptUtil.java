@@ -2,7 +2,7 @@ package com.finalprojectcoffee.utils;
 
 import org.mindrot.jbcrypt.BCrypt;
 
-public class JBCriptUtil {
+public class JBCryptUtil {
     private static final String passwordPattern = "^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$";
 
     public  static boolean validatePassword(String password){
@@ -13,10 +13,6 @@ public class JBCriptUtil {
     }
 
     public static Boolean checkPw(String hashedPw, String password){
-        if(BCrypt.checkpw(password,hashedPw)){
-            return true;
-        } else {
-            return false;
-        }
+        return BCrypt.checkpw(password, hashedPw);
     }
 }

@@ -9,7 +9,7 @@ import java.util.Objects;
 @Table(name = "customers")
 @DiscriminatorValue("Customer")
 public class Customer extends User{
-    @Column(name = "loyalty_points")
+    @Column(name = "loyalty_points", columnDefinition = "0")
     private Integer loyaltyPoints;
 
     public Customer() {
@@ -20,12 +20,8 @@ public class Customer extends User{
         super(username, password, phoneNumber, email);
     }
 
-    public Customer(String username, String password, String phoneNumber, String email, String image) {
-        super(username, password, phoneNumber, email, image);
-    }
-
-    public Customer(int id, String username, String password, String phoneNumber, String email, String image, Integer loyaltyPoints) {
-        super(id, username, password, phoneNumber, email, image);
+    public Customer(int id, String username, String password, String phoneNumber, String email, Integer loyaltyPoints) {
+        super(id, username, password, phoneNumber, email);
         this.loyaltyPoints = loyaltyPoints;
     }
 

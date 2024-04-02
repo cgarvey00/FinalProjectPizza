@@ -22,7 +22,7 @@
 <%@include file="customer-nav.jsp" %>
 <br><br><br><br><br><br><br><br><br><br>
 <h1 style="text-align: center;">Payment</h1>
-<c:if test="${not empty sessionScope.balance}">
+<c:if test="${not empty sessionScope.order}">
     <c:choose>
         <c:when test="${not empty sessionScope.posMessage}">
             <div style="text-align: center;">
@@ -42,8 +42,8 @@
                 <div class="box-container">
                     <div class="box bg-light">
                         <div class="content text-dark">
-                            <h1 style="text-align: center;">Balance: <c:out value="${sessionScope.balance}"/>&euro;</h1>
-                            <input type="hidden" id="balance" value="${sessionScope.balance}">
+                            <h1 style="text-align: center;">Balance: <c:out value="${sessionScope.order.getBalance()}"/>&euro;</h1>
+                            <input type="hidden" id="balance" value="${sessionScope.order.getBalance()}">
                             <br>
                             <form action="controller" method="post" id="paymentForm">
                                 <div style="text-align: center;">
@@ -56,7 +56,7 @@
                                 <br>
                                 <div style="text-align: center;">
                                     <button type="submit" name="action" value="pay-order" class="pay-btn">Pay</button>
-                                    <input type="hidden" name="orderId" value="${sessionScope.orderId}">
+                                    <input type="hidden" name="orderId" value="${sessionScope.order.getId()}">
                                 </div>
                             </form>
                             <script>

@@ -3,7 +3,7 @@ package com.finalprojectcoffee.commands;
 import com.finalprojectcoffee.entities.User;
 import com.finalprojectcoffee.repositories.UserRepositories;
 import com.finalprojectcoffee.utils.EmailUtil;
-import com.finalprojectcoffee.utils.JBCriptUtil;
+import com.finalprojectcoffee.utils.JBCryptUtil;
 import com.finalprojectcoffee.utils.PhoneNumberUtil;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.servlet.http.HttpServletRequest;
@@ -41,7 +41,7 @@ public class Register implements Command{
                     session.setAttribute("umsg", "User already exists");
                 }
 
-                if(!JBCriptUtil.validatePassword(password)){
+                if(!JBCryptUtil.validatePassword(password)){
                     session.setAttribute("pwvmsg", "Password format error");
                 }
 
@@ -57,7 +57,7 @@ public class Register implements Command{
                     session.setAttribute("pnmsg", "Phone number format error");
                 }
 
-                password = JBCriptUtil.getHashedPw(password);
+                password = JBCryptUtil.getHashedPw(password);
                 User newUser = UserFactory.createUser(userType, username, password, phoneNumber, email);
                 Boolean isAdded = userRep.addUser(newUser);
                 if(isAdded){

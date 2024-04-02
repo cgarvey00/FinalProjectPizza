@@ -40,7 +40,7 @@ CREATE TABLE `products`
 
 CREATE TABLE `review` (
     `id` INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
-    `user_id` INT NOT NULL,
+    `user_id` INT,
     `comment` VARCHAR(255),
     `comment_date` DATE,
     FOREIGN KEY (`user_id`) REFERENCES `users`(`id`)
@@ -59,9 +59,9 @@ CREATE TABLE `addresses`(
 
 CREATE TABLE `orders` (
     `id` INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
-    `customer_id` INT NOT NULL,
+    `customer_id` INT,
     `employee_id` INT,
-    `address_id` INT NOT NULL,
+    `address_id` INT,
     `balance` DOUBLE DEFAULT 0.0,
     `payment_status` VARCHAR(255) NOT NULL DEFAULT 'Pending',
     `status` VARCHAR(255) NOT NULL DEFAULT 'Pending',
@@ -74,8 +74,8 @@ CREATE TABLE `orders` (
 
 CREATE TABLE `order_items`(
     `id` INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
-    `order_id` INT NOT NULL,
-    `product_id` INT NOT NULL,
+    `order_id` INT,
+    `product_id` INT,
     `quantity` INT DEFAULT 0,
     `cost` DOUBLE DEFAULT 0.0,
     FOREIGN KEY (`order_id`) REFERENCES `orders`(`id`),

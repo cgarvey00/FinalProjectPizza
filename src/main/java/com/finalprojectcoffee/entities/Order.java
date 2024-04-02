@@ -13,19 +13,19 @@ import java.util.Objects;
 @Table(name = "orders")
 public class Order {
     @Id
-    @Column(name = "id", updatable = false)
+    @Column(name = "id", updatable = false, nullable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
     @ManyToOne
-    @JoinColumn(name = "customer_id", referencedColumnName = "id", nullable = false)
+    @JoinColumn(name = "customer_id", referencedColumnName = "id")
     private Customer customer;
 
     @ManyToOne
     @JoinColumn(name = "employee_id", referencedColumnName = "id")
     private Employee employee;
     @OneToOne
-    @JoinColumn(name = "address_id", referencedColumnName = "id", nullable = false)
+    @JoinColumn(name = "address_id", referencedColumnName = "id")
     private Address address;
 
     @OneToMany(mappedBy = "order",cascade = CascadeType.ALL,orphanRemoval = true)
