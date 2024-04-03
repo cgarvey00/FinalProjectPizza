@@ -37,11 +37,17 @@ public class ChangePassword implements Command{
             }
 
             if(newPassword != null && !newPassword.isEmpty() && passwordConfirmation != null && !passwordConfirmation.isEmpty()){
-
                 if(newPassword.equals(passwordConfirmation)){
                     if(JBCryptUtil.validatePassword(newPassword)){
-                        activeUser.setPassword(JBCryptUtil.getHashedPw(newPassword));
-                        terminus = "customer-profile.jsp";
+                        newPassword = JBCryptUtil.getHashedPw(newPassword);
+                        Boolean isChanged = userRep.changePassword(activeUser.getId(), newPassword);
+                        if(isChanged){
+                            session.setAttribute("toastMessage", "Change Successfully");
+                            terminus = "customer-profile.jsp";
+                        } else {
+                            session.setAttribute("toastMessage", "Failed to Change");
+                            terminus = "customer-profile.jsp";
+                        }
                     } else {
                         session.setAttribute("pwMessage", "Password format error");
                     }
@@ -49,10 +55,11 @@ public class ChangePassword implements Command{
                     session.setAttribute("pwcMessage", "Password inconsistency");
                 }
             } else {
-                session.setAttribute("errorMessage", "Failed to change password. Please try again later. <a href='customer-profile.jsp'>Profile page<a/>");
+                session.setAttribute("toastMessage", "Can Not be Empty");
             }
         } catch (Exception e) {
             System.err.println("An Exception occurred while changing password: " + e.getMessage());
+            session.setAttribute("errorMessage", "Failed to change password. Please try again later. <a href='customer-profile.jsp'>Profile page<a/>");
             terminus = "error.jsp";
         }
         return terminus;

@@ -1,8 +1,6 @@
 package com.finalprojectcoffee.repositories;
 
-import com.finalprojectcoffee.entities.Address;
-import com.finalprojectcoffee.entities.Order;
-import com.finalprojectcoffee.entities.User;
+import com.finalprojectcoffee.entities.*;
 import jakarta.persistence.*;
 
 import java.util.Collections;
@@ -23,7 +21,7 @@ public class UserRepositories implements UserRepositoryInterfaces {
         EntityManager entityManager = factory.createEntityManager();
 
         try {
-            return entityManager.find(User.class,userId);
+            return entityManager.find(User.class, userId);
         } catch (Exception e) {
             System.err.println("An Exception occurred while searching " + e.getMessage());
             return null;
@@ -37,8 +35,8 @@ public class UserRepositories implements UserRepositoryInterfaces {
         EntityManager entityManager = factory.createEntityManager();
 
         try {
-            Query query =entityManager.createQuery("SELECT u FROM User u WHERE u.username = :username");
-            query.setParameter("username",username);
+            Query query = entityManager.createQuery("SELECT u FROM User u WHERE u.username = :username");
+            query.setParameter("username", username);
             return (User) query.getSingleResult();
         } catch (Exception e) {
             System.err.println("An Exception occurred while searching " + e.getMessage());
@@ -91,7 +89,7 @@ public class UserRepositories implements UserRepositoryInterfaces {
         try {
             transaction.begin();
 
-            User user = entityManager.find(User.class,userId);
+            User user = entityManager.find(User.class, userId);
             user.setPhoneNumber(phoneNumber);
             user.setEmail(email);
 
@@ -108,6 +106,26 @@ public class UserRepositories implements UserRepositoryInterfaces {
     }
 
     @Override
+    public Boolean changePassword(int userId, String password) {
+        EntityManager entityManager = factory.createEntityManager();
+        EntityTransaction transaction = entityManager.getTransaction();
+
+        try {
+            transaction.begin();
+
+            User user = entityManager.find(User.class, userId);
+            user.setPassword(password);
+            entityManager.merge(user);
+            transaction.commit();
+            return true;
+        } catch (PersistenceException e) {
+            System.err.println("A PersistenceException occurred while merging: " + e.getMessage());
+            transaction.rollback();
+            return false;
+        }
+    }
+
+    @Override
     public Boolean deleteUser(int userId) {
         EntityManager entityManager = factory.createEntityManager();
         EntityTransaction transaction = entityManager.getTransaction();
@@ -115,7 +133,45 @@ public class UserRepositories implements UserRepositoryInterfaces {
         try {
             transaction.begin();
 
-            User user = entityManager.find(User.class,userId);
+            User user = entityManager.find(User.class, userId);
+            if (user instanceof Customer) {
+                Customer customer = (Customer) user;
+
+                TypedQuery<Order> queryOrder = entityManager.createQuery("SELECT o FROM Order o WHERE o.customer.id = :customerId", Order.class);
+                queryOrder.setParameter("customerId", customer.getId());
+                List<Order> orders = queryOrder.getResultList();
+
+                TypedQuery<Integer> queryInteger = entityManager.createQuery("SELECT DISTINCT o.address.id FROM Order o WHERE o.customer.id = :customerId", Integer.class);
+                queryInteger.setParameter("customerId", customer.getId());
+                List<Address> addresses = customer.getAddresses();
+
+                for (Order order : orders) {
+                    order.setCustomer(null);
+                    order.setAddress(null);
+                    entityManager.merge(order);
+                }
+
+                for (Address address : addresses) {
+                    address.setUser(null);
+                    entityManager.remove(address);
+                }
+
+                entityManager.remove(customer);
+            }
+
+            if (user instanceof Employee) {
+                Employee employee = (Employee) user;
+                TypedQuery<Order> queryOrder = entityManager.createQuery("SELECT o FROM Order o WHERE o.employee.id = :employeeId", Order.class);
+                queryOrder.setParameter("employeeId", employee.getId());
+                List<Order> orders = queryOrder.getResultList();
+
+                for (Order order : orders) {
+                    order.setEmployee(null);
+                    entityManager.merge(order);
+                }
+
+                entityManager.remove(employee);
+            }
 
             entityManager.remove(user);
             transaction.commit();
@@ -180,7 +236,7 @@ public class UserRepositories implements UserRepositoryInterfaces {
         try {
             transaction.begin();
 
-            if(address.getIsDefault() == 0){
+            if (address.getIsDefault() == 0) {
                 address.setIsDefault(1);
             } else {
                 address.setIsDefault(0);
@@ -241,12 +297,12 @@ public class UserRepositories implements UserRepositoryInterfaces {
             countQuery.setParameter("userId", userId);
             long count = countQuery.getSingleResult();
 
-            if(address.getIsDefault() == 1 && count > 1){
+            if (address.getIsDefault() == 1 && count > 1) {
                 TypedQuery<Address> query = entityManager.createQuery("SELECT a FROM Address a WHERE a.user.id = :userId AND a.id != :addressId ORDER BY a.id ASC", Address.class);
                 query.setParameter("userId", userId);
                 query.setParameter("addressId", addressId);
                 List<Address> addresses = query.getResultList();
-                if(!addresses.isEmpty()){
+                if (!addresses.isEmpty()) {
                     Address newDefaultAddress = addresses.get(0);
                     newDefaultAddress.setIsDefault(1);
                     entityManager.merge(newDefaultAddress);

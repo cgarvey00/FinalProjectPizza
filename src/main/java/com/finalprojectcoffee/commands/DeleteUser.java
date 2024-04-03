@@ -39,6 +39,7 @@ public class DeleteUser implements Command{
             }
         } catch (Exception e) {
             System.err.println("An Exception occurred while deleting user: " + e.getMessage());
+            session.setAttribute("errorMessage", "Failed to delete account, please try again later");
             terminus = "error.jsp";
         }
         return terminus;

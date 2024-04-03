@@ -1,5 +1,5 @@
 <%@page contentType="text/html" pageEncoding="UTF-8" %>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -31,7 +31,7 @@
         <div class="s-success">${sessionScope.successmsg}</div>
     </c:if>
 
-    <c:if test="${not empty sessionScope.errormsg}">
+    <c:if test="${not empty sessionScope.errorMessage}">
         <div class="s-error">${sessionScope.errorMessage}</div>
     </c:if>
     <div class="title" style="text-align: center;">
@@ -64,6 +64,11 @@
         </div>
     </div>
 </form>
+
+<c:if test="${not empty sessionScope.errorMessage}">
+    <c:remove var="errorMessage" scope="session"/>
+</c:if>
+
 </body>
 <script src="${pageContext.request.contextPath}/scripts/login.js" type="text/javascript"></script>
 

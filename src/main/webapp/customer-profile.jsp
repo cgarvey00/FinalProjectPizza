@@ -27,6 +27,14 @@
         <div class="box-container">
             <div class="box bg-light">
                 <div class="content text-dark" style="text-align: center;">
+                    <c:if test="${not empty sessionScope.toastMessage}">
+                        <script>
+                            window.onload = function() {
+                                showToast("${sessionScope.toastMessage}");
+                            };
+                        </script>
+                    </c:if>
+                    <div id="toast-container" class="toast-container"></div>
                     <h1 style="text-align: center;"><c:out value="${sessionScope.loggedInUser.getUsername()}"/></h1><br>
                     <h2>Email: <c:out value="${sessionScope.loggedInUser.getEmail()}"/></h2><br>
                     <h2>Phone Number: <c:out value="${sessionScope.loggedInUser.getPhoneNumber()}"/></h2><br>
@@ -106,11 +114,29 @@
         if (deleteConfirmValue === "DELETE") {
             document.getElementById('deleteAccountForm').submit();
         } else {
-            alert('You need to type "DELETE" to confirm.');
+            alert('Type "DELETE" to confirm.');
         }
     }
-</script>
 
+    function showToast(message) {
+        var toast = document.createElement("div");
+        toast.className = "toast-message";
+        toast.textContent = message;
+
+        document.getElementById('toast-container').appendChild(toast);
+
+        toast.style.display = 'block';
+        toast.style.opacity = '1';
+
+        setTimeout(function() {
+            toast.style.opacity = '0';
+            setTimeout(function() {
+                toast.remove();
+            }, 600);
+        }, 1000);
+    }
+
+</script>
 </body>
 <style>
     .button-container {
@@ -208,6 +234,45 @@
         font-size: 16px;
         border: 1px solid black;
         text-align: center;
+    }
+
+    .toast-container {
+        position: fixed;
+        top: 30%;
+        left: 50%;
+        transform: translate(-50%, -30%);
+        z-index: 5000;
+    }
+
+    .toast-message {
+        background-color: #A52A2A;
+        color: white;
+        padding: 20px 40px;
+        border-radius: 10px;
+        min-width: 300px;
+        text-align: center;
+        font-size: 20px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+        position: fixed;
+        top: 30%;
+        left: 50%;
+        transform: translate(-50%, -30%);
+        display: none;
+        opacity: 1;
+        transition: opacity 0.5s ease;
+        z-index: 10000;
+    }
+
+    .toast-message i {
+        font-size: 25px;
+    }
+
+    .toast-message.error {
+        background-color: #d9534f;
+    }
+
+    .toast-show {
+        animation: fadeInOut 5s forwards;
     }
 </style>
 </html>

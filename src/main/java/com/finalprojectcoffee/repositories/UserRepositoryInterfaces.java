@@ -11,6 +11,7 @@ public interface UserRepositoryInterfaces {
     List<User> getAllUsers();
     Boolean addUser(User user);
     Boolean updateUser(int userId, String phoneNumber, String email);
+    Boolean changePassword(int userId, String password);
     Boolean deleteUser(int userId);
     Boolean addAddress(int userId, Address address);
     Boolean updateAddress(Address address);

@@ -28,9 +28,9 @@ function validateForm() {
 
     // USERNAME
     if (usernameInput.value.trim() === '') {
-        setError(usernameInput, 'Username cant be empty');
+        setError(usernameInput, 'Username can not be empty');
     } else if (usernameInput.value.trim().length < 5 || usernameInput.value.trim().length > 15) {
-        setError(usernameInput, 'Username must be min 5 and max 15 charecters');
+        setError(usernameInput, 'Username must be min 5 and max 15 characters');
     } else {
         setSuccess(usernameInput);
     }

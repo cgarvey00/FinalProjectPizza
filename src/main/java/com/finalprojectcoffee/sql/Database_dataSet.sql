@@ -1,4 +1,4 @@
-USE testpizzashop;
+USE pizzashop;
 
 INSERT INTO `users` (`id`, `username`, `password`, `phone_number`, `email`, `user_type`) VALUES
     (1, 'cookregina', '_IfkP$*t@4', '311-325-1356', 'aguilarsara@hotmail.com', 'Customer'),
