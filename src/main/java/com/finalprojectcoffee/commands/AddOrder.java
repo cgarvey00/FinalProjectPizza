@@ -11,8 +11,6 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 
-import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -68,6 +66,7 @@ public class AddOrder implements Command{
                 session.setAttribute("addressInorder", defaultAddress);
                 session.setAttribute("order", order);
                 session.setAttribute("orderId", order.getId());
+                session.setAttribute("userType", "customer");
                 session.removeAttribute("orderItems");
                 terminus = "order-page.jsp";
             } else {

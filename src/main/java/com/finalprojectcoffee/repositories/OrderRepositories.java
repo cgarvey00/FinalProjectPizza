@@ -270,9 +270,6 @@ public class OrderRepositories implements OrderRepositoriesInterface {
             Order order = entityManager.find(Order.class, orderId);
             Query query = entityManager.createQuery("SELECT o FROM Order o WHERE o.id = :orderId");
             query.setParameter("orderId", orderId);
-            TypedQuery<OrderItem> typedQuery = entityManager.createQuery("SELECT oi FROM OrderItem  oi WHERE oi.order.id = :orderId", OrderItem.class);
-            typedQuery.setParameter("orderId", orderId);
-            List<OrderItem> orderItems = typedQuery.getResultList();
 
             if(order != null){
                 order.setStatus(Status.Cancelled);
@@ -281,17 +278,11 @@ public class OrderRepositories implements OrderRepositoriesInterface {
                 entityManager.merge(order);
             }
 
-            if(orderItems != null && !orderItems.isEmpty()){
-                for (OrderItem orderItem : orderItems) {
-                    entityManager.remove(orderItem);
-                }
-            }
-
             transaction.commit();
             return true;
         } catch (PersistenceException e) {
             transaction.rollback();
-            System.out.println("A PersistenceException occurred while merging or removing: " + e.getMessage());
+            System.out.println("A PersistenceException occurred while merging: " + e.getMessage());
             return false;
         } finally {
             entityManager.close();

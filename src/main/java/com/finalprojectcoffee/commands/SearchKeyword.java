@@ -26,16 +26,15 @@ public class SearchKeyword implements Command {
         String terminus = "search.jsp";
         HttpSession session = request.getSession(true);
         String keyword = request.getParameter("search_box");
-        if (keyword != null && !keyword.isEmpty()) {
-            EntityManager entityManager = factory.createEntityManager();
-            try {
-                ProductRepositories productRepos = new ProductRepositories(factory);
-                List<Product> productList = productRepos.findProductsByKeyword(keyword);
-                session.setAttribute("searchKeywordProducts", productList);
-            } finally {
-                entityManager.close();
-            }
+        try {
+            ProductRepositories productRep = new ProductRepositories(factory);
+            List<Product> searchProducts = productRep.findProductsByKeyword(keyword);
+            session.setAttribute("searchProducts", searchProducts);
+        } catch (Exception e){
+            System.out.println("An Exception occurred while searching product: " + e.getMessage());
+            terminus = "error.jsp";
         }
+
         return terminus;
     }
 }

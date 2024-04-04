@@ -22,9 +22,6 @@ public class CommandFactory {
                 case "register":
                     command = new Register(request, response, factory);
                     break;
-                case "SearchKeyword":
-                    command = new SearchKeyword(request, response, factory);
-                    break;
                 case "view-register":
                     command = new ViewRegister(request, response, factory);
                     break;
@@ -48,6 +45,9 @@ public class CommandFactory {
                     break;
                 case "update-product":
                     command = new UpdateProduct(request, response, factory);
+                    break;
+                case "search-keyword":
+                    command = new SearchKeyword(request, response, factory);
                     break;
                 case "delete-product":
                     command = new DeleteProduct(request, response, factory);
@@ -96,6 +96,9 @@ public class CommandFactory {
                     break;
                 case "view-orderList-customer":
                     command = new ViewOrderListCustomer(request, response, factory);
+                    break;
+                case "view-orderList-admin":
+                    command = new ViewOrderListAdmin(request, response, factory);
                     break;
                 case "update-address-in-order":
                     command = new UpdateAddressInOrder(request, response, factory);

@@ -39,14 +39,7 @@
 <body>
 <%@include file="admin-nav.jsp" %>
 <section class="dashboard">
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
+    <br>br><br><br><br><br><br><br>
     <h1 class="heading">Admin Dashboard</h1>
     <div class="box-container">
         <!-- ADMIN  NAME AND WELCOME-->
@@ -54,37 +47,35 @@
             <h3>Welcome!</h3>
             <%
                 if (loggedInUser != null) { %>
-            <p><%=loggedInUser.getUsername() %>
-            </p>
-            <a style="font-size:13px;" class="btn"><%=loggedInUser.getEmail() %>
-            </a>
+            <p style="font-size: 16px"><%=loggedInUser.getUsername() %></p>
+            <p style="font-size: 18px"><%=loggedInUser.getEmail() %></p>
             <%}%>
         </div>
         <!-- NUMBER OF TOTAL ORDERS-->
         <div class="box">
             <h3><%=orderList.size()%></h3>
-            <p>orders placed</p>
-            <a href="controller?action=view-orders" class="btn">see orders</a>
+            <p style="font-size: 16px">Handle Order</p>
+            <a href="controller?action=view-orderList-admin" class="btn" style="font-size: 18px" >see orders</a>
         </div>
 
         <!-- NUMBER OF PENDING ORDERS-->
         <div class="box">
             <h3><%=orderList.size()%></h3>
-            <p>pending orders placed</p>
-            <a href="controller?action=view-orders" class="btn">see orders</a>
+            <p style="font-size: 16px">Pending Orders Placed</p>
+            <a href="controller?action=view-orders" class="btn" style="font-size: 18px" >see orders</a>
         </div>
 
         <div class="box">
             <h3><%=productList.size()%></h3>
-            <p>products added</p>
-            <a href="controller?action=view-products" class="btn">see products</a>
+            <p style="font-size: 16px">Products Added</p>
+            <a href="controller?action=view-products" class="btn" style="font-size: 18px" >see products</a>
         </div>
 
         <!-- NUMBER OF USERS-->
         <div class="box">
             <h3><%=userList.size()%></h3>
-            <p>Users Present</p>
-            <a href="controller?action=view-users" class="btn">see users</a>
+            <p style="font-size: 16px">Users Present</p>
+            <a href="controller?action=view-users" class="btn" style="font-size: 18px">see users</a>
         </div>
     </div>
 </section>

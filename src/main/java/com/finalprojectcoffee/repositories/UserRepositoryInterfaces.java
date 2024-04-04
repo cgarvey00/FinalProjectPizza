@@ -8,6 +8,8 @@ import java.util.List;
 public interface UserRepositoryInterfaces {
     User findUserById(int userId);
     User findUserByUsername(String username);
+    Boolean findExistingEmail(String email);
+    Boolean findExistingPhoneNumber(String phoneNumber);
     List<User> getAllUsers();
     Boolean addUser(User user);
     Boolean updateUser(int userId, String phoneNumber, String email);

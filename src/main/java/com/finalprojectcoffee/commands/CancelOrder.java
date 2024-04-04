@@ -23,20 +23,28 @@ public class CancelOrder implements Command{
 
     @Override
     public String execute() {
-        String terminus ;
+        String terminus = "order-page.jsp";
         HttpSession session = request.getSession(true);
         int orderId = Integer.parseInt(request.getParameter("orderId"));
         User activeCustomer = (User) session.getAttribute("loggedInUser");
         int activeCustomerId = activeCustomer.getId();
+        String userType = request.getParameter("userType");
 
         try {
             OrderRepositories orderRep = new OrderRepositories(factory);
 
             Boolean isCancelled = orderRep.cancelOrder(orderId);
             if (isCancelled) {
-                List<Order> orderListCustomer = orderRep.getAllOrdersByCustomerId(activeCustomerId);
-                session.setAttribute("orderListCustomer", orderListCustomer);
-                terminus = "view-order-customer.jsp";
+                if(userType.equals("customer")){
+                    List<Order> orderListCustomer = orderRep.getAllOrdersByCustomerId(activeCustomerId);
+                    session.setAttribute("orderListCustomer", orderListCustomer);
+                    terminus = "view-order-customer.jsp";
+                }
+                if(userType.equals("admin")){
+                    List<Order> orderList = orderRep.getAllOrders();
+                    session.setAttribute("orderList", orderList);
+                    terminus = "view-order-admin.jsp";
+                }
             } else {
                 session.setAttribute("errorMessage", "Failed to cancel order. Please try again later.");
                 terminus = "error.jsp";

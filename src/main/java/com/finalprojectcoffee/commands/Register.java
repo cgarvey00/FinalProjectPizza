@@ -39,22 +39,39 @@ public class Register implements Command{
 
                 if(user != null){
                     session.setAttribute("umsg", "User already exists");
+                    return "register.jsp";
                 }
 
-                if(!JBCryptUtil.validatePassword(password)){
-                    session.setAttribute("pwvmsg", "Password format error");
+                Boolean isExistedPhoneNumber = userRep.findExistingPhoneNumber(phoneNumber);
+                if(isExistedPhoneNumber){
+                    session.setAttribute("pnmsg", "Phone number already exists");
+                    return "register.jsp";
                 }
 
-                if(!password.equals(passwordConfirmation)){
-                    session.setAttribute("pwcmsg", "Password inconsistency");
+                Boolean isExistedEmail = userRep.findExistingEmail(email);
+                if (isExistedEmail) {
+                    session.setAttribute("emsg", "Email already exists");
+                    return "register.jsp";
                 }
 
                 if(!EmailUtil.validateEmail(email)){
                     session.setAttribute("emsg", "Email format error");
+                    return "register.jsp";
                 }
 
                 if(!PhoneNumberUtil.validationPhoneNumber(phoneNumber)){
                     session.setAttribute("pnmsg", "Phone number format error");
+                    return "register.jsp";
+                }
+
+                if(!JBCryptUtil.validatePassword(password)){
+                    session.setAttribute("pwvmsg", "Password format error");
+                    return "register.jsp";
+                }
+
+                if(!password.equals(passwordConfirmation)){
+                    session.setAttribute("pwcmsg", "Password inconsistency");
+                    return "register.jsp";
                 }
 
                 password = JBCryptUtil.getHashedPw(password);

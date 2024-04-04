@@ -47,6 +47,36 @@ public class UserRepositories implements UserRepositoryInterfaces {
     }
 
     @Override
+    public Boolean findExistingEmail(String email) {
+        EntityManager entityManager = factory.createEntityManager();
+
+        try {
+            Query query = entityManager.createQuery("SELECT u FROM User u WHERE u.email = :email");
+            query.setParameter("email", email);
+            return true;
+        } catch (NoResultException  e) {
+            return false;
+        } finally {
+            entityManager.close();
+        }
+    }
+
+    @Override
+    public Boolean findExistingPhoneNumber(String phoneNumber) {
+        EntityManager entityManager = factory.createEntityManager();
+
+        try {
+            Query query = entityManager.createQuery("SELECT u FROM User u WHERE u.phoneNumber = :phoneNumber");
+            query.setParameter("phoneNumber", phoneNumber);
+            return true;
+        } catch (NoResultException e) {
+            return false;
+        } finally {
+            entityManager.close();
+        }
+    }
+
+    @Override
     public List<User> getAllUsers() {
         EntityManager entityManager = factory.createEntityManager();
 

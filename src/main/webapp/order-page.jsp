@@ -19,7 +19,14 @@
     <link rel="stylesheet" href="${pageContext.request.contextPath}/stylesheets/styles.css">
 </head>
 <body>
-<%@include file="customer-nav.jsp" %>
+<c:choose>
+    <c:when test="${sessionScope.userType == 'customer'}">
+        <jsp:include page="customer-nav.jsp" />
+    </c:when>
+    <c:when test="${sessionScope.userType == 'admin'}">
+        <jsp:include page="admin-nav.jsp" />
+    </c:when>
+</c:choose>
 <br><br><br><br><br><br><br><br><br><br>
 <h1 style="text-align: center;">Order Page</h1>
 <c:if test="${not empty sessionScope.orderItemsInOrder}">
@@ -33,16 +40,16 @@
                              class="img-size">
                         <span style="font-size: 20px;"> x ${orderItem.getQuantity()} = ${orderItem.getCost()} &euro;</span>
                     </c:forEach>
-                    <c:if test="${not empty sessionScope.addressInorder}">
+                    <c:if test="${not empty sessionScope.addressInOrder}">
                         <h1 class="text-dark">Address</h1>
-                        <h3>Street: <c:out value="${sessionScope.addressInorder.getStreet()}"/></h3>
-                        <h3>Eir Code: <c:out value="${sessionScope.addressInorder.getEirCode()}"/></h3>
+                        <h3>Street: <c:out value="${sessionScope.addressInOrder.getStreet()}"/></h3>
+                        <h3>Eir Code: <c:out value="${sessionScope.addressInOrder.getEirCode()}"/></h3>
                     </c:if>
                     <c:if test="${not empty sessionScope.order}">
                         <h1>Balance: <c:out value="${sessionScope.order.getBalance()}"/> &euro;</h1>
                     </c:if>
                     <c:choose>
-                        <c:when test="${sessionScope.order.pending}">
+                        <c:when test="${sessionScope.order.pending && sessionScope.userType == 'customer'}">
                             <form action="controller" method="post">
                                 <div class="button-container">
                                     <button type="submit" name="action" value="cancel-order" class="btn cancel-btn">
@@ -52,6 +59,17 @@
                                         Pay
                                     </button>
                                     <input type="hidden" name="orderId" value="${sessionScope.order.getId()}">
+                                    <input type="hidden" name="userType" value="customer">
+                                </div>
+                            </form>
+                        </c:when>
+                        <c:when test="${sessionScope.order.pending && sessionScope.userType == 'admin'}">
+                            <form action="controller" method="post">
+                                <div class="button-container">
+                                    <button type="submit" name="action" value="cancel-order" class="btn cancel-btn">Cancel</button>
+                                    <button type="submit" name="action" value="finish-order" class="btn finish-btn">Finish</button>
+                                    <input type="hidden" name="orderId" value="${sessionScope.order.getId()}">
+                                    <input type="hidden" name="userType" value="admin">
                                 </div>
                             </form>
                         </c:when>
@@ -94,19 +112,19 @@
         margin-inside: 6%;
     }
 
-    .cancel-btn {
+    .cancel-btn{
         background-color: #ff4d4d;
     }
 
-    .cancel-btn:hover {
+    .cancel-btn:hover{
         background-color: #cc0000;
     }
 
-    .toPay-btn {
+    .toPay-btn, .finish-btn {
         background-color: #109acb;
     }
 
-    .toPay-btn:hover {
+    .toPay-btn:hover, .finish-btn:hover {
         background-color: #017fbd;
     }
 </style>

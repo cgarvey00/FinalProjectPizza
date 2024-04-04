@@ -36,8 +36,8 @@
 
     <!-- USERNAME -->
     <div class="input-group">
-        <c:if test="${not empty sessionScope.usmg}">
-            <div class="s-error">${sessionScope.usmg}</div>
+        <c:if test="${not empty sessionScope.umsg}">
+            <div class="s-error">${sessionScope.umsg}</div>
         </c:if>
         <label for="username">Username</label>
         <input type="text" id="username" placeholder="Username" name="username">
@@ -51,7 +51,7 @@
             <div class="s-error">${sessionScope.pnmsg}</div>
         </c:if>
         <label for="number">Phone</label>
-        <input type="number" id="number" placeholder="083XXXXXXX" name="phoneNumber">
+        <input type="text" id="number" placeholder="083XXXXXXX" name="phoneNumber">
         <i class="fas fa-check-circle"></i>
         <i class="fas fa-exclamation-circle"></i>
         <p>Error Message</p>
@@ -102,6 +102,22 @@
         </div>
     </div>
 </form>
+
+<c:if test="${not empty sessionScope.umsg}">
+    <c:remove var="umsg" scope="session"/>
+</c:if>
+<c:if test="${not empty sessionScope.emsg}">
+    <c:remove var="emsg" scope="session"/>
+</c:if>
+<c:if test="${not empty sessionScope.pnmsg}">
+    <c:remove var="pnmsg" scope="session"/>
+</c:if>
+<c:if test="${not empty sessionScope.pwvmsg}">
+    <c:remove var="pwvmsg" scope="session"/>
+</c:if>
+<c:if test="${not empty sessionScope.pwcmsg}">
+    <c:remove var="pwcmsg" scope="session"/>
+</c:if>
 
 </body>
 <script src="${pageContext.request.contextPath}/scripts/validation.js" type="text/javascript"></script>

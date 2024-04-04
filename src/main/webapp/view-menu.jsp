@@ -12,7 +12,7 @@
 
     <!-- font awesome cdn link  -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css">
-
+    <!-- ajax link  -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <!-- bootstrap cdn link  -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/js/bootstrap.bundle.min.js"></script>
@@ -26,7 +26,7 @@
 <br><br><br><br><br><br><br><br><br><br>
 <div id="toast-container" class="toast-container"></div>
 <div class="show-products" id="products">
-    <h1 style="text-align: center;">View Products On Menu</h1><
+    <h1 style="text-align: center;">View Products On Menu</h1>
     <div class="box-container">
         <%
             @SuppressWarnings("unchecked")
@@ -36,7 +36,7 @@
         <form action="controller" method="POST">
             <div class="box bg-light">
                 <div class="image">
-                    <img src="${pageContext.request.contextPath}/images/<%= product.getImage() %>" name="image" alt="image">
+                    <img src="${pageContext.request.contextPath}/images/<%= product.getImage() %>" alt="image">
                 </div>
                 <div class="content text-dark">
                     <h3 class="text-dark">
@@ -183,6 +183,5 @@
         color: white;
         cursor: not-allowed;
     }
-
 </style>
 </html>

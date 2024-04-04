@@ -19,68 +19,52 @@
     <link rel="stylesheet" href="${pageContext.request.contextPath}/stylesheets/styles.css">
 </head>
 <body>
-<jsp:include page="customer-nav.jsp"/>
+<jsp:include page="admin-nav.jsp" />
 <br><br><br><br><br><br><br><br><br><br>
 <div class="box-container">
     <h1 style="text-align: center;">Orders</h1>
-    <c:if test="${not empty sessionScope.orderListCustomer}">
+    <c:if test="${not empty sessionScope.orderList}">
         <table class="table table-bordered">
             <thead>
             <tr>
                 <th>ID</th>
                 <th>Create Time</th>
+                <th>Update Time</th>
                 <th>Status</th>
                 <th>Payment Status</th>
-                <th>Balance</th>
+                <th>Customer ID</th>
+                <th>Employee ID</th>
                 <th>Address</th>
+                <th>Balance</th>
                 <th class="action-column">Action</th>
             </tr>
             </thead>
             <tbody>
-            <c:forEach var="order" items="${sessionScope.orderListCustomer}" varStatus="status">
+            <c:forEach var="order" items="${sessionScope.orderList}" varStatus="status">
                 <tr>
                     <td><c:out value="${order.getId()}"/></td>
                     <td>${my:formatLocalDateTime(order.getCreateTime(), "yyyy-MM-dd HH:mm:ss")}</td>
+                    <td>${my:formatLocalDateTime(order.getUpdateTime(), "yyyy-MM-dd HH:mm:ss")}</td>
                     <td><c:out value="${order.getStatus()}"/></td>
                     <td><c:out value="${order.getPaymentStatus()}"/></td>
-                    <td><c:out value="${order.getBalance()}"/>&euro;</td>
                     <td>
                         <c:choose>
-                            <c:when test="${order.pending}">
-                                <form action="controller" method="post">
-                                    <label>
-                                        <select id="addressSelect${status.index}" name="selectedAddressId"
-                                                data-initial-id="${order.getAddress().getId()}"
-                                                onchange="checkAddressId(${status.index})">
-                                            <option value="${order.getAddress().getId()}" selected><c:out
-                                                    value="${order.getAddress().getEirCode()}"/></option>
-                                            <c:if test="${not empty sessionScope.addressList}">
-                                                <c:forEach var="address" items="${sessionScope.addressList}">
-                                                    <c:if test="${address.getEirCode() ne order.getAddress().getEirCode()}">
-                                                        <option value="${address.getId()}"><c:out
-                                                                value="${address.getEirCode()}"/></option>
-                                                    </c:if>
-                                                </c:forEach>
-                                            </c:if>
-                                        </select>
-                                    </label>
-                                    <button type="submit" name="action" value="update-address-in-order"
-                                            id="updateBtn${status.index}" class="update-address" style="display: none">
-                                        Update
-                                    </button>
-                                    <input type="hidden" name="orderId" value="${order.getId()}">
-                                </form>
+                            <c:when test="${not empty order.getCustomer()}">
+                                <c:out value="${order.getCustomer().getId()}"/>
                             </c:when>
                             <c:otherwise>
-                                <c:out value="${order.getAddress().getEirCode()}"/>
+                                <c:out value="Deletd Customer"/>
                             </c:otherwise>
                         </c:choose>
                     </td>
+                    <td><c:out value="${order.getEmployee().getId()}"/></td>
+                    <td><c:out value="${order.getAddress().getEirCode()}"/></td>
+                    <td><c:out value="${order.getBalance()}"/>&euro;</td>
                     <td>
                         <form action="controller" method="post">
                             <button type="submit" name="action" value="view-order" class="detail-btn">Detail</button>
                             <input type="hidden" name="orderId" value="${order.getId()}"/>
-                            <input type="hidden" name="userType" value="customer">
+                            <input type="hidden" name="userType" value="admin">
                         </form>
                     </td>
                 </tr>

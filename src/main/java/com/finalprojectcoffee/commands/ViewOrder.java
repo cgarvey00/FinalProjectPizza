@@ -29,6 +29,7 @@ public class ViewOrder implements Command{
 
         HttpSession session = request.getSession(true);
         int orderId = Integer.parseInt(request.getParameter("orderId"));
+        String userType = request.getParameter("userType");
 
         try {
             OrderRepositories orderRep = new OrderRepositories(factory);
@@ -36,11 +37,13 @@ public class ViewOrder implements Command{
 
             List<OrderItem> orderItemsInOrder = orderRep.getOrderItemByOrderId(orderId);
             Order order = orderRep.findOrderById(orderId);
-            Address addressInorder = userRep.getAddressById(order.getAddress().getId());
+            Address addressInOrder = userRep.getAddressById(order.getAddress().getId());
+            session.setAttribute("userType", userType);
+
             if (orderItemsInOrder != null && !orderItemsInOrder.isEmpty()) {
                 session.setAttribute("order", order);
                 session.setAttribute("orderItemsInOrder", orderItemsInOrder);
-                session.setAttribute("addressInorder", addressInorder);
+                session.setAttribute("addressInOrder", addressInOrder);
             } else {
                 session.setAttribute("errorMessage", "Order doesn't exist. Please try again later.");
                 terminus = "error.jsp";

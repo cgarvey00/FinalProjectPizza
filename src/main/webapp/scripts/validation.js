@@ -30,8 +30,6 @@ function isFormValid() {
 }
 
 function validateForm() {
-
-
     //USERNAME
     if (usernameInput.value.trim() === '') {
         setError(usernameInput, 'Username cant be empty');

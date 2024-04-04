@@ -9,7 +9,7 @@
             </nav>
             <div class="icons">
                 <div class="fas fa-bars" id="menu-btn"></div>
-                <a href="controller?action=view-search">
+                <a href="search.jsp">
                     <div class="fas fa-search" id="search-btn"></div>
                 </a>
                 <a href="view-cart.jsp">
