@@ -1,6 +1,4 @@
 <%@ page import="com.finalprojectcoffee.entities.User" %>
-<%@ page import="com.finalprojectcoffee.entities.Address" %>
-<%@ page import="java.util.List" %>
 
 <%
     User loggedInUser = (User) request.getSession().getAttribute("loggedInUser");
@@ -27,7 +25,7 @@
     <link rel="stylesheet" href="${pageContext.request.contextPath}/stylesheets/styles.css">
 </head>
 <body>
-<%@include file="customer-nav.jsp" %>
+<jsp:include page="customer-nav.jsp"/>
 <br><br><br><br><br><br><br><br><br><br>
 <h1 class="heading">Add Address</h1>
 <section class="add-products">

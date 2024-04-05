@@ -57,7 +57,29 @@
                             </c:otherwise>
                         </c:choose>
                     </td>
-                    <td><c:out value="${order.getEmployee().getId()}"/></td>
+                    <td>
+                        <c:choose>
+                            <c:when test="${order.getStatus() != 'Finished' && order.getStatus() != 'Cancelled'}">
+                            <label>
+                                <select id="employee${status.index}" name="selectedEmployeeId" data-initial-id="${order.getEmployee().getId()}" onchange="checkEmployeeId(${status.index})">
+                                    <option value="${order.getEmployee().getId()}" selected>
+                                        <c:out value="${order.getEmployee().getId()}"/>
+                                    </option>
+                                        <c:if test="${not empty sessionScope.employeeList}">
+                                            <c:forEach var="employee" items="${sessionScope.employeeList}">
+                                                <c:if test="${employee.getStatus() != 'Available'}">
+                                                    <option value="${employee.getId()}"><c:out value="${employee.getId()}"/></option>
+                                                </c:if>
+                                            </c:forEach>
+                                        </c:if>
+                                </select>
+                            </label>
+                            </c:when>
+                            <c:otherwise>
+                                <c:out value="${order.getEmployee().getId()}"/>
+                            </c:otherwise>
+                        </c:choose>
+                    </td>
                     <td><c:out value="${order.getAddress().getEirCode()}"/></td>
                     <td><c:out value="${order.getBalance()}"/>&euro;</td>
                     <td>
@@ -74,15 +96,15 @@
     </c:if>
 </div>
 
-<%@include file="footer.jsp" %>
+<jsp:include page="footer.jsp"/>
 
 <script>
-    function checkAddressId(index) {
-        var initialAddressId = document.getElementById('addressSelect' + index).getAttribute('data-initial-id');
-        var selectedAddressId = document.getElementById('addressSelect' + index).value;
+    function checkEmployeeId(index) {
+        var initialEmployeeId = document.getElementById('employeeSelect' + index).getAttribute('data-initial-id');
+        var selectedEmployeeId = document.getElementById('employeeSelect' + index).value;
         var updateBtn = document.getElementById('updateBtn' + index);
 
-        if (initialAddressId !== selectedAddressId) {
+        if (initialEmployeeId !== selectedEmployeeId) {
             updateBtn.style.display = 'inline';
         } else {
             updateBtn.style.display = 'none';
@@ -140,8 +162,8 @@
         margin: 0;
     }
 
-    .update-address {
-        background-color: #4CAF50;
+    .update-employee {
+        background-color: #109acb;
         color: white;
         padding: 3px 6px;
         margin-left: 10px;

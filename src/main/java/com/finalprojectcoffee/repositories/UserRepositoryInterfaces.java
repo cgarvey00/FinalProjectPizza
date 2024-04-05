@@ -1,6 +1,7 @@
 package com.finalprojectcoffee.repositories;
 
 import com.finalprojectcoffee.entities.Address;
+import com.finalprojectcoffee.entities.Employee;
 import com.finalprojectcoffee.entities.User;
 
 import java.util.List;
@@ -11,6 +12,7 @@ public interface UserRepositoryInterfaces {
     Boolean findExistingEmail(String email);
     Boolean findExistingPhoneNumber(String phoneNumber);
     List<User> getAllUsers();
+    List<Employee> getAllEmployees();
     Boolean addUser(User user);
     Boolean updateUser(int userId, String phoneNumber, String email);
     Boolean changePassword(int userId, String password);

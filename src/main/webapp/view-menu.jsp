@@ -70,8 +70,20 @@
 </div>
 
 <script>
+    let cartQuantities = {};
     function addToCart(productId){
-        var quantity = document.getElementById("quantity" + productId).value
+        var quantity = parseInt(document.getElementById("quantity" + productId).value)
+        var currentQuantity = cartQuantities[productId] || 0
+        var newQuantity = currentQuantity + quantity;
+        var stock = parseInt(document.getElementById("quantity" + productId).max);
+
+        if(newQuantity > stock){
+            alert("Cannot add more items than available in stock.")
+            return;
+        }
+
+        cartQuantities[productId] = newQuantity;
+
         $.ajax({
             url: 'controller',
             type: 'POST',

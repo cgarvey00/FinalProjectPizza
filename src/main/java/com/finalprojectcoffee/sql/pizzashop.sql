@@ -23,7 +23,7 @@ CREATE TABLE `employees`
 (
     `id`      INT NOT NULL,
     `salary`  DOUBLE DEFAULT 0.0,
-    `status`  VARCHAR(255),
+    `status`  VARCHAR(255) DEFAULT 'Available',
     FOREIGN KEY (`id`) REFERENCES `users` (`id`)
 );
 
@@ -106,12 +106,15 @@ BEGIN
     WHERE id = NEW.product_id;
 END;
 
-CREATE TRIGGER UpdateStockAfterDelete
-    AFTER DELETE ON order_items FOR EACH ROW
+CREATE TRIGGER UpdateStockOnOrderCancel
+    AFTER UPDATE ON orders FOR EACH ROW
 BEGIN
-    UPDATE products
-    SET stock = stock + OLD.quantity
-    WHERE id = OLD.product_id;
+    IF OLD.status != 'Cancelled' AND NEW.status = 'Cancelled' THEN
+        UPDATE products p
+        JOIN order_items oi ON p.id = oi.product_id
+        SET p.stock = p.stock + oi.quantity
+        WHERE oi.order_id = NEW.id;
+    END IF;
 END;
 
 CREATE TRIGGER UpdateLoyaltyPoints

@@ -1,3 +1,4 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page import="com.finalprojectcoffee.entities.Product" %>
 <%@ page import="java.util.List" %>
 <%@ page import="com.finalprojectcoffee.entities.User" %>
@@ -53,27 +54,54 @@
         </div>
         <!-- NUMBER OF TOTAL ORDERS-->
         <div class="box">
-            <h3><%=orderList.size()%></h3>
+            <c:choose>
+                <c:when test="${not empty sessionScope.orderList}">
+                    <h3><c:out value="${sessionScope.orderList.size()}"/></h3>
+                </c:when>
+                <c:otherwise>
+                    <h3><c:out value="0"/></h3>
+                </c:otherwise>
+            </c:choose>
             <p style="font-size: 16px">Handle Order</p>
-            <a href="controller?action=view-orderList-admin" class="btn" style="font-size: 18px" >see orders</a>
-        </div>
-
-        <!-- NUMBER OF PENDING ORDERS-->
-        <div class="box">
-            <h3><%=orderList.size()%></h3>
-            <p style="font-size: 16px">Pending Orders Placed</p>
-            <a href="controller?action=view-orders" class="btn" style="font-size: 18px" >see orders</a>
+            <a href="controller?action=view-orderList-admin" class="btn" style="font-size: 18px">see orders</a>
         </div>
 
         <div class="box">
-            <h3><%=productList.size()%></h3>
-            <p style="font-size: 16px">Products Added</p>
-            <a href="controller?action=view-products" class="btn" style="font-size: 18px" >see products</a>
+            <c:choose>
+                <c:when test="${not empty sessionScope.employeeList}">
+                <h3><c:out value="${sessionScope.employeeList.size()}"/></h3>
+                </c:when>
+                <c:otherwise>
+                    <h3><c:out value="0"/></h3>
+                </c:otherwise>
+            </c:choose>
+            <p style="font-size: 16px">Employees Present</p>
+            <a href="controller?action=view-all-employees" class="btn" style="font-size: 18px">see employees</a>
+        </div>
+
+        <div class="box">
+            <c:choose>
+                <c:when test="${not empty sessionScope.productList}">
+                    <h3><c:out value="${sessionScope.productList.size()}"/></h3>
+                </c:when>
+                <c:otherwise>
+                    <h3><c:out value="0"/></h3>
+                </c:otherwise>
+            </c:choose>
+            <p style="font-size: 16px">Handle Product</p>
+            <a href="controller?action=view-products" class="btn" style="font-size: 18px">see products</a>
         </div>
 
         <!-- NUMBER OF USERS-->
         <div class="box">
-            <h3><%=userList.size()%></h3>
+            <c:choose>
+                <c:when test="${not empty sessionScope.userList}">
+                    <h3><c:out value="${sessionScope.userList.size()}"/></h3>
+                </c:when>
+                <c:otherwise>
+                    <h3><c:out value="0"/></h3>
+                </c:otherwise>
+            </c:choose>
             <p style="font-size: 16px">Users Present</p>
             <a href="controller?action=view-users" class="btn" style="font-size: 18px">see users</a>
         </div>

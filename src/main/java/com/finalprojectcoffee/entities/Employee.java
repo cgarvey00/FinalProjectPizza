@@ -2,8 +2,6 @@ package com.finalprojectcoffee.entities;
 
 import jakarta.persistence.*;
 
-import java.util.List;
-
 @Entity
 @Table(name = "employees")
 @DiscriminatorValue("Employee")
@@ -13,7 +11,7 @@ public class Employee extends User {
 
     @Enumerated(EnumType.STRING)
     @Column(name = "status")
-    private Status status;
+    private Status status = Status.Available;
 
     public Employee() {
 
@@ -34,12 +32,12 @@ public class Employee extends User {
         this.status = status;
     }
 
-    public Employee(int id, String username, String password, String phoneNumber, String email, String image, Float salary) {
+    public Employee(int id, String username, String password, String phoneNumber, String email, Float salary) {
         super(id, username, password, phoneNumber, email);
         this.salary = salary;
     }
 
-    public Employee(int id, String username, String password, String phoneNumber, String email, String image, Float salary, Status status) {
+    public Employee(int id, String username, String password, String phoneNumber, String email, Float salary, Status status) {
         super(id, username, password, phoneNumber, email);
         this.salary = salary;
         this.status = status;

@@ -1,8 +1,6 @@
 package com.finalprojectcoffee.commands;
 
 import com.finalprojectcoffee.entities.Employee;
-import com.finalprojectcoffee.entities.Order;
-import com.finalprojectcoffee.repositories.OrderRepositories;
 import com.finalprojectcoffee.repositories.UserRepositories;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.servlet.http.HttpServletRequest;
@@ -11,12 +9,12 @@ import jakarta.servlet.http.HttpSession;
 
 import java.util.List;
 
-public class ViewOrderListAdmin implements Command{
+public class ViewAllEmployees implements Command{
     private final HttpServletRequest request;
     private final HttpServletResponse response;
     private final EntityManagerFactory factory;
 
-    public ViewOrderListAdmin(HttpServletRequest request, HttpServletResponse response, EntityManagerFactory factory) {
+    public ViewAllEmployees(HttpServletRequest request, HttpServletResponse response, EntityManagerFactory factory) {
         this.request = request;
         this.response = response;
         this.factory = factory;
@@ -24,27 +22,18 @@ public class ViewOrderListAdmin implements Command{
 
     @Override
     public String execute() {
-        String terminus = "view-order-admin.jsp";
+        String terminus = "view-all-employees.jsp";
         HttpSession session = request.getSession(true);
 
         try {
-            OrderRepositories orderRep = new OrderRepositories(factory);
             UserRepositories userRep = new UserRepositories(factory);
 
-            List<Order> orderList = orderRep.getAllOrders();
             List<Employee> employeeList = userRep.getAllEmployees();
-            if(!orderList.isEmpty()){
-                session.setAttribute("orderList", orderList);
-                session.setAttribute("employeeList", employeeList);
-            } else {
-                session.setAttribute("errorMessage", "Order list is empty");
-                terminus = "error.jsp";
-            }
+            session.setAttribute("employeeList", employeeList);
         } catch (Exception e) {
-            System.out.println("An Exception occurred while getting order list: " + e.getMessage());
+            System.out.println("An Exception occurred while viewing all employees: " + e.getMessage());
             terminus = "error.jsp";
         }
-
         return terminus;
     }
 }

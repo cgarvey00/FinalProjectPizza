@@ -2,15 +2,12 @@ package com.finalprojectcoffee.entities;
 
 import jakarta.persistence.*;
 
-import java.util.List;
-import java.util.Objects;
-
 @Entity
 @Table(name = "customers")
 @DiscriminatorValue("Customer")
 public class Customer extends User{
     @Column(name = "loyalty_points", columnDefinition = "0")
-    private Integer loyaltyPoints;
+    private Integer loyaltyPoints = 0;
 
     public Customer() {
 

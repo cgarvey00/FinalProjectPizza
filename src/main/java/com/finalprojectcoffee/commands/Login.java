@@ -1,9 +1,6 @@
 package com.finalprojectcoffee.commands;
 
-import com.finalprojectcoffee.entities.Address;
-import com.finalprojectcoffee.entities.Order;
-import com.finalprojectcoffee.entities.Product;
-import com.finalprojectcoffee.entities.User;
+import com.finalprojectcoffee.entities.*;
 import com.finalprojectcoffee.repositories.OrderRepositories;
 import com.finalprojectcoffee.repositories.ProductRepositories;
 import com.finalprojectcoffee.repositories.UserRepositories;
@@ -65,6 +62,9 @@ public class Login implements Command {
 
                                 List<User> userList = userRep.getAllUsers();
                                 session.setAttribute("userList", userList);
+
+                                List<Employee> employeeList = userRep.getAllEmployees();
+                                session.setAttribute("employeeList", employeeList);
 
                                 List<Order> orderList = orderRep.getAllOrders();
                                 session.setAttribute("orderList", orderList);

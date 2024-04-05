@@ -34,6 +34,12 @@ public class CommandFactory {
                 case "view-all-users":
                     command = new ViewAllUsers(request, response,factory);
                     break;
+                case "view-all-employees":
+                    command = new ViewAllEmployees(request, response, factory);
+                    break;
+                case "to-update-employee":
+                    command = new ToUpdateEmployee(request, response, factory);
+                    break;
                 case "view-products":
                     command = new ViewProducts(request, response, factory);
                     break;

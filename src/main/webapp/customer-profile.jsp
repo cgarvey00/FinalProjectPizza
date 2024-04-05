@@ -228,7 +228,7 @@
     }
 
     #confirmDeleteBtn {
-        width: 200px;
+        width: 300px;
         height: 25px;
         margin-top: 20px;
         font-size: 16px;

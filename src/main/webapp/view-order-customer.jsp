@@ -90,7 +90,7 @@
     </c:if>
 </div>
 
-<%@include file="footer.jsp" %>
+<jsp:include page="footer.jsp"/>
 
 <script>
     function checkAddressId(index) {

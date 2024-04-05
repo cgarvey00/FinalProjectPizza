@@ -13,13 +13,9 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet"
           integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
     <!-- font awesome cdn link  -->
-    <%--    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">--%>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css">
     <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/stylesheets/signup.css">
 
-    <%--    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"--%>
-    <%--          integrity="sha512-Fo3rlrZj/k7ujTnHg4CGR2D7kSs0v4LLanw2qksYuRlEzO+tcaEPQogQ0KaoGN26/zrn20ImR1DfuLWnOo7aBA=="--%>
-    <%--          crossorigin="anonymous" referrerpolicy="no-referrer" />--%>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"
           crossorigin="anonymous" referrerpolicy="no-referrer"/>
     <script src="https://kit.fontawesome.com/2bbac3a66c.js" crossorigin="anonymous"></script>
@@ -29,7 +25,7 @@
 <form id="register-form" action="controller" method="POST">
     <input type="hidden" name="action" value="register">
     <div class="title" style="text-align: center;">
-        <h2>Register as an Employee or Customer</h2>
+        <h2>Register</h2>
         <h6 style="text-transform: none;">Choose a Strong password, at least 8 characters, one uppercase letter,
             lowercase, digit and special character</h6>
     </div>
@@ -95,7 +91,7 @@
     <br><br> <br>
     <div class="card-footer">
         <div style="color:#fff;" class="d-flex justify-content-center links">
-            Already have an account?<a style="color:#6b1a1a;" href="controller?action=view-login">Log In</a>
+            Already have an account?<a style="color:#6b1a1a;" href="controller?action=view-login">Login</a>
         </div>
         <div style="color:#fff;" class="d-flex justify-content-center">
             <a style="color:#6b1a1a;" href="controller?action=home">Return Home</a>

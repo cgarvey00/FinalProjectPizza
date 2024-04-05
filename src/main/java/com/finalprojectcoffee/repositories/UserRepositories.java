@@ -53,6 +53,7 @@ public class UserRepositories implements UserRepositoryInterfaces {
         try {
             Query query = entityManager.createQuery("SELECT u FROM User u WHERE u.email = :email");
             query.setParameter("email", email);
+            query.getSingleResult();
             return true;
         } catch (NoResultException  e) {
             return false;
@@ -68,6 +69,7 @@ public class UserRepositories implements UserRepositoryInterfaces {
         try {
             Query query = entityManager.createQuery("SELECT u FROM User u WHERE u.phoneNumber = :phoneNumber");
             query.setParameter("phoneNumber", phoneNumber);
+            query.getSingleResult();
             return true;
         } catch (NoResultException e) {
             return false;
@@ -85,6 +87,21 @@ public class UserRepositories implements UserRepositoryInterfaces {
             return query.getResultList();
         } catch (NoResultException e) {
             System.err.println("A NoResultException occurred while searching " + e.getMessage());
+            return Collections.emptyList();
+        } finally {
+            entityManager.close();
+        }
+    }
+
+    @Override
+    public List<Employee> getAllEmployees() {
+        EntityManager entityManager = factory.createEntityManager();
+
+        try {
+            TypedQuery<Employee> query = entityManager.createQuery("SELECT u FROM User u WHERE u.userType = 'Employee'", Employee.class);
+            return  query.getResultList();
+        } catch (NoResultException e) {
+            System.err.println("A NoresultException occurred while getting add employees: " + e.getMessage());
             return Collections.emptyList();
         } finally {
             entityManager.close();

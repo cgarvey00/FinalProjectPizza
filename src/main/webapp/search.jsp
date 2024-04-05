@@ -83,8 +83,20 @@
 </section>
 
 <script>
-    function addToCart(productId) {
-        var quantity = document.getElementById("quantity" + productId).value
+    let cartQuantities = {};
+    function addToCart(productId){
+        var quantity = parseInt(document.getElementById("quantity" + productId).value)
+        var currentQuantity = cartQuantities[productId] || 0
+        var newQuantity = currentQuantity + quantity;
+        var stock = parseInt(document.getElementById("quantity" + productId).max);
+
+        if(newQuantity > stock){
+            alert("Cannot add more items than available in stock.")
+            return;
+        }
+
+        cartQuantities[productId] = newQuantity;
+
         $.ajax({
             url: 'controller',
             type: 'POST',
@@ -94,8 +106,8 @@
                 productId: productId,
                 quantity: quantity
             },
-            success: function (response) {
-                if (response.success) {
+            success: function (response){
+                if(response.success) {
                     showToast(response.addCartMessage);
                 } else {
                     showToast(response.addCartMessage, true);
