@@ -18,7 +18,7 @@ public class ReviewRepository implements ReviewRepositoryInterface {
     }
 
     @Override
-    public boolean addReview(Review review) {
+    public boolean addReview(Review review, int stars) {
         EntityManager entityManager = factory.createEntityManager();
         EntityTransaction transaction = entityManager.getTransaction();
         try {
@@ -63,7 +63,6 @@ public class ReviewRepository implements ReviewRepositoryInterface {
         }
     }
 
-
     @Override
     public boolean removeReview(int reviewId) {
         EntityManager entityManager = factory.createEntityManager();
@@ -92,5 +91,4 @@ public class ReviewRepository implements ReviewRepositoryInterface {
             entityManager.close();
         }
     }
-
 }

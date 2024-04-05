@@ -23,13 +23,17 @@ public class Review {
     @Temporal(TemporalType.DATE)
     private Date commentDate;
 
+    @Column(name = "stars")
+    private int stars;
+
     public Review() {
     }
 
-    public Review(User user, String comment, Date commentDate) {
+    public Review(User user, String comment, Date commentDate, int stars) {
         this.user = user;
         this.comment = comment;
         this.commentDate = commentDate;
+        this.stars = stars;
     }
 
     public int getId() {
@@ -62,5 +66,13 @@ public class Review {
 
     public void setCommentDate(Date commentDate) {
         this.commentDate = commentDate;
+    }
+
+    public int getStars() {
+        return stars;
+    }
+
+    public void setStars(int stars) {
+        this.stars = stars;
     }
 }

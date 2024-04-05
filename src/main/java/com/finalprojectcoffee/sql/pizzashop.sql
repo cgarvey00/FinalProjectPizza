@@ -54,10 +54,11 @@ CREATE TABLE `carts`
 
 CREATE TABLE `review`
 (
-    `id`           INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
-    `user_id`      INT NOT NULL,
+    `id`           INT          NOT NULL PRIMARY KEY AUTO_INCREMENT,
+    `user_id`      INT          NOT NULL,
     `comment`      VARCHAR(255),
     `comment_date` DATE,
+    `stars`        INT,
     FOREIGN KEY (`user_id`) REFERENCES `users` (`id`)
 );
 

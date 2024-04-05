@@ -1,5 +1,5 @@
 import com.finalprojectcoffee.entities.Review;
-import com.finalprojectcoffee.entities.User; // Import User entity
+import com.finalprojectcoffee.entities.User;
 import com.finalprojectcoffee.repositories.ReviewRepository;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
@@ -42,17 +42,15 @@ public class ReviewRepositoryTest {
         try {
             transaction.begin();
 
-            // Fetch a user from the database
-            User user = entityManager.find(User.class, 1); // Change the ID as per your requirement
+            User user = entityManager.find(User.class, 1);
 
-            // Create a test review
             Review review = new Review();
-            review.setUser(user); // Set the fetched user
+            review.setUser(user);
             review.setComment("Great pizza!");
             review.setCommentDate(new Date());
+            review.setStars(5);
 
-            // Add the review
-            boolean result = reviewRepository.addReview(review);
+            boolean result = reviewRepository.addReview(review, review.getStars());
             assertTrue(result);
 
             transaction.commit();
@@ -68,15 +66,15 @@ public class ReviewRepositoryTest {
 
     @Test
     public void addReview_Failure() {
-        // Create a test review with a non-existent user
         Review review = new Review();
-        User user = new User(); // Create a dummy user
-        user.setId(1000); // Assuming user ID 1000 doesn't exist in the database
+        User user = new User();
+        user.setId(1000);
         review.setUser(user);
         review.setComment("Bad experience");
         review.setCommentDate(new Date());
+        review.setStars(1);
 
-        assertFalse(reviewRepository.addReview(review));
+        assertFalse(reviewRepository.addReview(review, review.getStars()));
     }
 
     @Test
@@ -88,20 +86,18 @@ public class ReviewRepositoryTest {
 
     @Test
     public void getReviewsByUserId() {
-        List<Review> reviews = reviewRepository.getReviewsByUserId(1); // Assuming user ID 1 exists
+        List<Review> reviews = reviewRepository.getReviewsByUserId(1);
         assertNotNull(reviews);
         assertFalse(reviews.isEmpty());
     }
 
     @Test
     public void removeReview_Success() {
-        // Assuming there's a review with ID 1 in the database
         assertTrue(reviewRepository.removeReview(1));
     }
 
     @Test
     public void removeReview_Failure() {
-        // Assuming there's no review with ID 1000 in the database
         assertFalse(reviewRepository.removeReview(1000));
     }
 }
