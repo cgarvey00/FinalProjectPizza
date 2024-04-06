@@ -24,7 +24,7 @@
             </div>
             <div class="profile">
                 <div class="flex-btn">
-                    <a href="controller?action=view-customer-profile" class="option-btn">Profile</a>
+                    <a href="controller?action=view-user-profile" class="option-btn">Profile</a>
                     <a href="controller?action=view-address" class="option-btn">Address</a>
                 </div>
             </div>

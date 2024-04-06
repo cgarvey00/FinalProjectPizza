@@ -53,6 +53,7 @@ public class Login implements Command {
                                     addressed = true;
                                     session.setAttribute("addressed", addressed);
                                 }
+                                session.setAttribute("userType", "customer");
                                 break;
                             case "Employee":
                                 terminus = "employee-home.jsp";
@@ -71,23 +72,25 @@ public class Login implements Command {
 
                                 List<Product> productList = productRep.getAllProducts();
                                 session.setAttribute("productList", productList);
+
+                                session.setAttribute("userType", "admin");
                                 break;
                         }
                         session.setAttribute("loggedInUser", user);
                     } else {
-                        String errorMessage = "Wrong password";
-                        session.setAttribute("errorMessage", errorMessage);
+                        String loginMessage = "Wrong password";
+                        session.setAttribute("loginMessage", loginMessage);
                     }
                 } else {
-                    String errorMessage = "User doesn't exist";
-                    session.setAttribute("errorMessage", errorMessage);
+                    String loginMessage = "User doesn't exist";
+                    session.setAttribute("loginMessage", loginMessage);
                 }
             } catch (Exception e) {
                 System.err.println("An Exception occurred while logging: " + e.getMessage());
             }
         } else {
-            String errorMessage = "Register for Account";
-            session.setAttribute("errorMessage", errorMessage);
+            String loginMessage = "Register for Account";
+            session.setAttribute("loginMessage", loginMessage);
         }
         return terminus;
     }

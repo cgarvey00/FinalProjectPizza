@@ -24,7 +24,7 @@
     <c:when test="${sessionScope.userType == 'admin'}">
         <jsp:include page="admin-nav.jsp"/>
     </c:when>
-    <c:when test="${sessionScope.employee}">
+    <c:when test="${sessionScope.userType == 'employee'}">
         <jsp:include page="employee-nav.jsp"/>
     </c:when>
 </c:choose>
@@ -34,7 +34,7 @@
     <h2 style="text-align: center;">${sessionScope.errorMessage}</h2>
 </div>
 
-<%@include file="footer.jsp" %>
+<jsp:include page="footer.jsp"/>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js"></script>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">

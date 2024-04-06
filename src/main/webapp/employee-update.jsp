@@ -27,11 +27,11 @@
     <form action="controller" method="POST">
         <div class="flex">
             <div class="inputBox">
-                <span>Name</span>
+                <span>Name (Readonly)</span>
                 <c:if test="${not empty sessionScope.umsg}">
                     <div class="s-error">${sessionScope.umsg}</div>
                 </c:if>
-                <input type="text" class="box" required maxlength="100" placeholder="${sessionScope.employee.getUsername()}" name="username">
+                <input type="text" class="box" readonly maxlength="100" placeholder="${sessionScope.employee.getUsername()}" name="username">
             </div>
             <div class="inputBox">
                 <span>Phone Number</span>

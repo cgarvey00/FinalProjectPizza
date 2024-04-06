@@ -48,8 +48,7 @@
                         <td><c:out value="${employee.getStatus()}"/></td>
                         <td>
                             <form action="controller" method="post" class="action-buttons">
-                                <button type="submit" name="action" value="to-update-employee" class="update-btn">Update</button>
-                                <button type="submit" name="action" value="delete-employee" class="delete-btn">Delete</button>
+                                <button type="submit" name="action" value="#" class="update-btn">Detail</button>
                                 <input type="hidden" name="employeeId" value="${employee.getId()}" />
                             </form>
                         </td>
@@ -62,36 +61,7 @@
 </section>
 
 <jsp:include page="footer.jsp"/>
-<script>
-    function updateEmployee(employeeId){
-        $.ajax({
-            url:'controller',
-            type:'POST',
-            data:{
-                ajax: true,
-                action: 'update-employee',
-                addressId: addressId
-            }
-        })
-    }
 
-    function deleteEmployee(employeeId){
-        $.ajax({
-            url:'controller',
-            type:'POST',
-            data:{
-                ajax: true,
-                action: 'delete-user',
-                addressId: addressId
-            },
-            success: function (response) {
-                if (response.success) {
-                    window.location.reload();
-                }
-            }
-        })
-    }
-</script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js"></script>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css">

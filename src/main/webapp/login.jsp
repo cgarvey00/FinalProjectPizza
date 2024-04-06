@@ -31,8 +31,8 @@
         <div class="s-success">${sessionScope.successmsg}</div>
     </c:if>
 
-    <c:if test="${not empty sessionScope.errorMessage}">
-        <div class="s-error">${sessionScope.errorMessage}</div>
+    <c:if test="${not empty sessionScope.loginMessage}">
+        <div class="s-error">${sessionScope.loginMessage}</div>
     </c:if>
     <div class="title" style="text-align: center;">
         <h2>Login Here</h2>

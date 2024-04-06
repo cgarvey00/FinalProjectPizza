@@ -58,10 +58,10 @@ public class UpdateUserProfile implements Command{
                 activeUser = userRep.findUserById(activeUserId);
                 session.setAttribute("loggedInUser", activeUser);
                 session.setAttribute("toastMessage", "Update Successfully");
-                terminus = "customer-profile.jsp";
+                terminus = "user-profile.jsp";
             } else {
                 session.setAttribute("toastMessage", "Failed to Update");
-                terminus = "customer-profile.jsp";
+                terminus = "user-profile.jsp";
             }
         } catch (Exception e) {
             System.err.println("An Exception occurred while updating user profile: " + e.getMessage());

@@ -19,7 +19,17 @@
     <link rel="stylesheet" href="${pageContext.request.contextPath}/stylesheets/styles.css">
 </head>
 <body>
-<%@include file="customer-nav.jsp" %>
+<c:choose>
+    <c:when test="${sessionScope.userType == 'customer'}">
+        <jsp:include page="customer-nav.jsp"/>
+    </c:when>
+    <c:when test="${sessionScope.userType == 'admin'}">
+        <jsp:include page="admin-nav.jsp"/>
+    </c:when>
+    <c:when test="${sessionScope.userType == 'employee'}">
+        <jsp:include page="employee-nav.jsp"/>
+    </c:when>
+</c:choose>
 <br><br><br><br><br><br><br><br><br><br>
 <h1 style="text-align: center;">Change Password</h1>
 <c:if test="${not empty sessionScope.loggedInUser}">
@@ -65,7 +75,7 @@
     </div>
 </c:if>
 
-<%@include file="footer.jsp" %>
+<jsp:include page="footer.jsp"/>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js"></script>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">

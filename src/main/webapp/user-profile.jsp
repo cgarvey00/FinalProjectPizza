@@ -19,7 +19,17 @@
     <link rel="stylesheet" href="${pageContext.request.contextPath}/stylesheets/styles.css">
 </head>
 <body>
-<%@include file="customer-nav.jsp" %>
+<c:choose>
+    <c:when test="${sessionScope.userType == 'customer'}">
+        <jsp:include page="customer-nav.jsp"/>
+    </c:when>
+    <c:when test="${sessionScope.userType == 'admin'}">
+        <jsp:include page="admin-nav.jsp"/>
+    </c:when>
+    <c:when test="${sessionScope.userType == 'employee'}">
+        <jsp:include page="employee-nav.jsp"/>
+    </c:when>
+</c:choose>
 <br><br><br><br><br><br><br><br><br><br>
 <h1 style="text-align: center;">Profile Page</h1>
 <c:if test="${not empty sessionScope.loggedInUser}">
@@ -38,19 +48,26 @@
                     <h1 style="text-align: center;"><c:out value="${sessionScope.loggedInUser.getUsername()}"/></h1><br>
                     <h2>Email: <c:out value="${sessionScope.loggedInUser.getEmail()}"/></h2><br>
                     <h2>Phone Number: <c:out value="${sessionScope.loggedInUser.getPhoneNumber()}"/></h2><br>
-                    <h2>Default Address:
-                        <c:if test="${not empty sessionScope.addressList}">
-                            <c:forEach var="address" items="${sessionScope.addressList}">
-                                <c:if test="${address.getIsDefault()==1}">
-                                    <c:out value="${address.getEirCode()}"/>
+                    <c:choose>
+                        <c:when test="${sessionScope.userType == 'customer'}">
+                            <h2>Default Address:
+                                <c:if test="${not empty sessionScope.addressList}">
+                                    <c:forEach var="address" items="${sessionScope.addressList}">
+                                        <c:if test="${address.getIsDefault()==1}">
+                                            <c:out value="${address.getEirCode()}"/>
+                                        </c:if>
+                                    </c:forEach>
                                 </c:if>
-                            </c:forEach>
-                        </c:if>
-                    </h2><br>
-                    <h2>Loyalty Point: <c:out value="${sessionScope.loyaltyPoints}"/></h2>
+                            </h2><br>
+                            <h2>Loyalty Point: <c:out value="${sessionScope.loyaltyPoints}"/></h2>
+                        </c:when>
+                        <c:when test="${sessionScope.userType == 'employee'}">
+                            <h2>Status: <c:out value="${sessionScope.activeEmployee.getStatus()}"/></h2>
+                        </c:when>
+                    </c:choose>
                     <div class="button-container">
                         <a href="update-profile.jsp" class="btn update-btn">Update Profile</a>
-                        <a href="change-password.jsp" class="btn update-btn">Change Password</a>
+                        <a href="change-password.jsp" class="btn change-btn">Change Password</a>
                         <form action="controller" method="post" id="deleteAccountForm">
                             <button type="button" onclick="showDeleteModal()" class="btn delete-account-btn">Delete Account</button>
                             <input type="hidden" name="action" value="delete-account">
@@ -62,7 +79,7 @@
         </div>
     </div>
 </c:if>
-<%@include file="footer.jsp" %>
+<jsp:include page="footer.jsp"/>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js"></script>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
@@ -166,6 +183,8 @@
     }
 
     .delete-account-btn {
+        width: 265px;
+        height: 50px;
         background-color: #ff4d4d;
     }
 
