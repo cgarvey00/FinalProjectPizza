@@ -29,9 +29,7 @@ public class ToPayment implements Command{
 
             Order order = orderRep.findOrderById(orderId);
             if (order != null) {
-                double balance = order.getBalance();
-                session.setAttribute("balance", balance);
-                session.setAttribute("orderId", orderId);
+                session.setAttribute("order", order);
                 terminus = "payment.jsp";
             } else {
                 session.setAttribute("errorMessage", "Failed to go to payment page. Please try again later.");

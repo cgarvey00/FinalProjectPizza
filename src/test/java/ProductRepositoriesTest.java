@@ -22,7 +22,7 @@
 //
 //    @BeforeEach
 //    public void setUp() {
-//        factory = Persistence.createEntityManagerFactory("testpizzashop");
+//        factory = Persistence.createEntityManagerFactory("test_pizza_shop");
 //        manager = factory.createEntityManager();
 //        productRep = new ProductRepositories(factory);
 //

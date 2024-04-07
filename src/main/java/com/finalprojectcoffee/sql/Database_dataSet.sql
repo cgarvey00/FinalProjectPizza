@@ -1,4 +1,4 @@
-USE pizzashop;
+USE pizza_shop;
 
 INSERT INTO `users` (`id`, `username`, `password`, `phone_number`, `email`, `user_type`) VALUES
     (1, 'cookregina', '_IfkP$*t@4', '311-325-1356', 'aguilarsara@hotmail.com', 'Customer'),
@@ -18,13 +18,6 @@ INSERT INTO `customers` (`id`, `loyalty_points`) VALUES
     (5, 317),
     (7, 763),
     (9, 589);
-
-INSERT INTO `employees` (`id`, `salary`) VALUES
-    (2, 43694.26),
-    (4, 32659.36),
-    (6, 52066.96),
-    (8, 53275.26),
-    (10, 34917.29);
 
 INSERT INTO `products` (`id`, `name`, `category`, `details`, `price`, `stock`, `image`) VALUES
     (1, 'Pepperoni Deluxe', 'Pizzas', 'Pepperoni and Cheese 10`', 5.99, 100, 'PepperoniDeluxe.png'),

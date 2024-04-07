@@ -9,9 +9,9 @@ public enum Status {
     Delivered("Delivered"),
     Cancelled("Cancelled"),
     Failed("Failed"),
-    WaitingForPickUp("Waiting for Pick Up"),
 
     Available("Available"),
+    Unavailable("Unavailable"),
     Delivering("Delivering"),
     Paid("Paid"),
     PaymentFailed("Payment Failed"),

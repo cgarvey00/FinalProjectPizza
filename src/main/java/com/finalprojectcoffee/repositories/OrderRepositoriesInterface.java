@@ -15,7 +15,7 @@ public interface OrderRepositoriesInterface {
     Boolean addOrderItem(List<OrderItem> orderItems);
     Boolean updateAddressInOrder(int orderId, int addressId);
     Boolean payOrder(int orderId);
-    Boolean deliverOrders(List<Integer> orderIds, int employeeId);
+    void deliverOrder(int orderId);
     Boolean finishOrder(int orderId);
     Boolean cancelOrder(int orderID);
 }

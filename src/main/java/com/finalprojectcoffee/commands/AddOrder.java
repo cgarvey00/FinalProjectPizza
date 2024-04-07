@@ -39,6 +39,13 @@ public class AddOrder implements Command{
             OrderRepositories orderRep = new OrderRepositories(factory);
             ProductRepositories productRep = new ProductRepositories(factory);
 
+            if (session.getAttribute("order") != null) {
+                session.removeAttribute("order");
+            }
+            if (session.getAttribute("orderId") != null) {
+                session.removeAttribute("orderId");
+            }
+
             //Get default address
             Address defaultAddress = userRep.getDefaultAddress(activeUserId);
             int addressId = defaultAddress.getId();
@@ -63,11 +70,12 @@ public class AddOrder implements Command{
             if(!orderItemsInOrder.isEmpty() && isAdded){
                 order = orderRep.findOrderById(order.getId());
                 session.setAttribute("orderItemsInOrder", orderItemsInOrder);
-                session.setAttribute("addressInorder", defaultAddress);
+                session.setAttribute("addressInOrder", order.getAddress());
                 session.setAttribute("order", order);
                 session.setAttribute("orderId", order.getId());
                 session.setAttribute("userType", "customer");
                 session.removeAttribute("orderItems");
+                session.removeAttribute("addressEcho");
                 terminus = "order-page.jsp";
             } else {
                 session.setAttribute("errorMessage", "Failed to add order. Please try again later.");

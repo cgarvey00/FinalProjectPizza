@@ -6,8 +6,8 @@ import jakarta.persistence.*;
 @Table(name = "employees")
 @DiscriminatorValue("Employee")
 public class Employee extends User {
-    @Column(name = "salary")
-    private Float salary;
+    @Column(name = "current_order_count")
+    private int currentOrderCount = 0;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "status")
@@ -17,38 +17,43 @@ public class Employee extends User {
 
     }
 
+    public Employee(int currentOrderCount, Status status) {
+        this.currentOrderCount = currentOrderCount;
+        this.status = status;
+    }
+
     public Employee(String username, String password, String phoneNumber, String email) {
         super(username, password, phoneNumber, email);
     }
 
-    public Employee(String username, String password, String phoneNumber, String email, Float salary) {
+    public Employee(String username, String password, String phoneNumber, String email, int currentOrderCount) {
         super(username, password, phoneNumber, email);
-        this.salary = salary;
+        this.currentOrderCount = currentOrderCount;
     }
 
-    public Employee(String username, String password, String phoneNumber, String email, Float salary, Status status) {
+    public Employee(String username, String password, String phoneNumber, String email, int currentOrderCount, Status status) {
         super(username, password, phoneNumber, email);
-        this.salary = salary;
+        this.currentOrderCount = currentOrderCount;
         this.status = status;
     }
 
-    public Employee(int id, String username, String password, String phoneNumber, String email, Float salary) {
+    public Employee(int id, String username, String password, String phoneNumber, String email, int currentOrderCount) {
         super(id, username, password, phoneNumber, email);
-        this.salary = salary;
+        this.currentOrderCount = currentOrderCount;
     }
 
-    public Employee(int id, String username, String password, String phoneNumber, String email, Float salary, Status status) {
+    public Employee(int id, String username, String password, String phoneNumber, String email, int currentOrderCount, Status status) {
         super(id, username, password, phoneNumber, email);
-        this.salary = salary;
+        this.currentOrderCount = currentOrderCount;
         this.status = status;
     }
 
-    public Float getSalary() {
-        return salary;
+    public int getCurrentOrderCount() {
+        return currentOrderCount;
     }
 
-    public void setSalary(Float salary) {
-        this.salary = salary;
+    public void setCurrentOrderCount(int currentOrderCount) {
+        this.currentOrderCount = currentOrderCount;
     }
 
     public Status getStatus() {
@@ -62,7 +67,7 @@ public class Employee extends User {
     @Override
     public String toString() {
         return "Employee{" +
-                "salary=" + salary +
+                "currentOrderCount=" + currentOrderCount +
                 "} " + super.toString();
     }
 }

@@ -38,6 +38,8 @@ public class CancelOrder implements Command{
                 if(userType.equals("customer")){
                     List<Order> orderListCustomer = orderRep.getAllOrdersByCustomerId(activeCustomerId);
                     session.setAttribute("orderListCustomer", orderListCustomer);
+                    session.removeAttribute("order");
+                    session.removeAttribute("orderId");
                     terminus = "view-order-customer.jsp";
                 }
                 if(userType.equals("admin")){

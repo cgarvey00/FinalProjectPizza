@@ -57,6 +57,7 @@ public class Login implements Command {
                                 break;
                             case "Employee":
                                 terminus = "employee-home.jsp";
+                                session.setAttribute("userType", "employee");
                                 break;
                             case "Admin":
                                 terminus = "admin-dashboard.jsp";

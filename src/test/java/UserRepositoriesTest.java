@@ -1,5 +1,4 @@
 import com.finalprojectcoffee.entities.Address;
-import com.finalprojectcoffee.entities.Customer;
 import com.finalprojectcoffee.entities.Employee;
 import com.finalprojectcoffee.entities.User;
 import com.finalprojectcoffee.repositories.UserRepositories;
@@ -19,7 +18,7 @@ public class UserRepositoriesTest {
 
     @BeforeEach
     public void setUp(){
-        factory = Persistence.createEntityManagerFactory("testpizzashop");
+        factory = Persistence.createEntityManagerFactory("test_pizza_shop");
         userRep = new UserRepositories(factory);
     }
 
@@ -55,7 +54,7 @@ public class UserRepositoriesTest {
 
     @Test
     public void addUserTest(){
-        Employee employee = new Employee("tom666","kDk3(wed_5","+1-666-123-1111x483","tomcat123@outlook.com",332344.26F);
+        Employee employee = new Employee("tom666","kDk3(wed_5","+1-666-123-1111x483","tomcat123@outlook.com");
         Boolean expectedResult = userRep.addUser(employee);
         assertTrue(expectedResult);
     }

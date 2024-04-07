@@ -3,17 +3,16 @@ package com.finalprojectcoffee.repositories;
 import com.finalprojectcoffee.entities.*;
 import jakarta.persistence.*;
 
-import javax.security.auth.kerberos.EncryptionKey;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 public class OrderRepositories implements OrderRepositoriesInterface {
     private EntityManagerFactory factory;
     public OrderRepositories(EntityManagerFactory factory){this.factory = factory;}
 
-    public OrderRepositories(){};
+    public OrderRepositories(){}
     @Override
     public Order findOrderById(int orderId) {
         EntityManager entityManager = factory.createEntityManager();
@@ -205,32 +204,39 @@ public class OrderRepositories implements OrderRepositoriesInterface {
     }
 
     @Override
-    public Boolean deliverOrders(List<Integer> orderIds, int employeeId) {
+    public void deliverOrder(int orderId) {
         EntityManager entityManager = factory.createEntityManager();
         EntityTransaction transaction = entityManager.getTransaction();
 
         try {
             transaction.begin();
 
-            Employee employee = entityManager.find(Employee.class, employeeId);
+            TypedQuery<Employee> query = entityManager.createQuery("SELECT e FROM Employee e WHERE e.status = :status", Employee.class);
+            query.setParameter("status", Status.Available);
 
-            for(Integer orderId : orderIds){
-                Order order = entityManager.find(Order.class, orderId);
-
-                if(order != null && order.getPaymentStatus() == Status.Paid){
-                    order.setEmployee(employee);
-                    order.setStatus(Status.Delivering);
-                    order.setUpdateTime(LocalDateTime.now());
+            List<Employee> employees = query.getResultList();
+            if (!employees.isEmpty()) {
+                //Get the employee which id is the minimum
+                Employee employeeWithMinId = employees.stream()
+                        .min(Comparator.comparing(Employee::getId))
+                        .orElse(null);
+                //Calculate current employee's order count
+                employeeWithMinId.setCurrentOrderCount(employeeWithMinId.getCurrentOrderCount() + 1);
+                if(employeeWithMinId.getCurrentOrderCount() == 5){
+                    employeeWithMinId.setStatus(Status.Unavailable);
                 }
+                entityManager.merge(employeeWithMinId);
+                //Get the order, and allocate employee for the order
+                Order order = entityManager.find(Order.class, orderId);
+                order.setEmployee(employeeWithMinId);
+                order.setStatus(Status.Delivering);
                 entityManager.merge(order);
             }
 
             transaction.commit();
-            return true;
         } catch (PersistenceException e) {
             transaction.rollback();
             System.out.println("A PersistenceException occurred while merging: " + e.getMessage());
-            return false;
         } finally {
             entityManager.close();
         }

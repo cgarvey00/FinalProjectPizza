@@ -1,6 +1,7 @@
 <%@ page import="com.finalprojectcoffee.entities.Address" %>
 <%@ page import="java.util.List" %>
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%
     @SuppressWarnings("unchecked")
     List<Address> addressList = (List<Address>) request.getSession().getAttribute("addressList");
@@ -22,7 +23,17 @@
     <link rel="stylesheet" href="${pageContext.request.contextPath}/stylesheets/styles.css">
 </head>
 <body>
-<%@include file="customer-nav.jsp" %>
+<c:choose>
+    <c:when test="${sessionScope.userType == 'customer'}">
+        <jsp:include page="customer-nav.jsp"/>
+    </c:when>
+    <c:when test="${sessionScope.userType == 'admin'}">
+        <jsp:include page="admin-nav.jsp"/>
+    </c:when>
+    <c:when test="${sessionScope.userType == 'employee'}">
+        <jsp:include page="employee-nav.jsp"/>
+    </c:when>
+</c:choose>
 <br><br><br><br><br><br><br><br><br><br>
 <!-- home section starts  -->
 <section class="products" style="padding-top: 0; min-height:100vh;">
@@ -70,7 +81,7 @@
     </div>
 </section>
 
-<%@include file="footer.jsp" %>
+<jsp:include page="footer.jsp"/>
 <script>
     <%
     Boolean addAddressSuccess= (Boolean)request.getSession().getAttribute("add-address-success");

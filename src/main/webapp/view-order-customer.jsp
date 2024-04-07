@@ -111,6 +111,11 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css">
 <script src="${pageContext.request.contextPath}/scripts/menu.js" type="text/javascript"></script>
 </body>
+
+<c:if test="${not empty sessionScope.posMessage}">
+    <c:remove var="posMessage" scope="session"/>
+</c:if>
+
 <style>
     table {
         table-layout: fixed;

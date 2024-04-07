@@ -15,7 +15,7 @@ import java.io.IOException;
 @WebServlet(name = "Controller",urlPatterns = {"/controller"})
 public class Controller extends HttpServlet {
     private EntityManagerFactory factory;
-    public void init(){factory = Persistence.createEntityManagerFactory("pizzashop");}
+    public void init(){factory = Persistence.createEntityManagerFactory("pizza_shop");}
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

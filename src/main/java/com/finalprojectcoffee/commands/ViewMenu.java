@@ -29,7 +29,7 @@ public class ViewMenu implements Command {
         try {
             ProductRepositories productRepos = new ProductRepositories(factory);
             List<Product> productList = productRepos.getAllProducts();
-
+            session.removeAttribute("order");
             if(productList != null && !productList.isEmpty()){
                 session.setAttribute("productList", productList);
             } else {

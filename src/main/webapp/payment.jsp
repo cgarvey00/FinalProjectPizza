@@ -19,73 +19,69 @@
     <link rel="stylesheet" href="${pageContext.request.contextPath}/stylesheets/styles.css">
 </head>
 <body>
-<%@include file="customer-nav.jsp" %>
+<jsp:include page="customer-nav.jsp"/>
 <br><br><br><br><br><br><br><br><br><br>
 <h1 style="text-align: center;">Payment</h1>
+<c:if test="${not empty sessionScope.posMessage}">
+    <div style="text-align: center;">
+        <br><h1>${sessionScope.posMessage}</h1><br>
+    </div>
+    <div style="text-align: center;">
+        <h2>You will be redirected in 3 second...</h2>
+    </div>
+    <script>
+        setTimeout(function () {
+            window.location.href = "view-order-customer.jsp";
+        }, 3000)
+    </script>
+</c:if>
 <c:if test="${not empty sessionScope.order}">
-    <c:choose>
-        <c:when test="${not empty sessionScope.posMessage}">
-            <div style="text-align: center;">
-                <br><h1>${sessionScope.posMessage}</h1><br>
-            </div>
-            <div style="text-align: center;">
-                <h2>You will be redirected in 3 second...</h2>
-            </div>
-            <script>
-                setTimeout(function () {
-                    window.location.href = "view-order-customer.jsp";
-                }, 3000)
-            </script>
-        </c:when>
-        <c:otherwise>
-            <div class="show-products">
-                <div class="box-container">
-                    <div class="box bg-light">
-                        <div class="content text-dark">
-                            <h1 style="text-align: center;">Balance: <c:out value="${sessionScope.order.getBalance()}"/>&euro;</h1>
-                            <input type="hidden" id="balance" value="${sessionScope.order.getBalance()}">
-                            <br>
-                            <form action="controller" method="post" id="paymentForm">
-                                <div style="text-align: center;">
-                                    <label>
-                                        <input type="text" name="amount" id="paymentInput" required
-                                               style="width: 200px; height: 25px; font-size: 16px; border: 1px solid black;"
-                                               placeholder="Enter amount">
-                                    </label>
-                                </div>
-                                <br>
-                                <div style="text-align: center;">
-                                    <button type="submit" name="action" value="pay-order" class="pay-btn">Pay</button>
-                                    <input type="hidden" name="orderId" value="${sessionScope.order.getId()}">
-                                </div>
-                            </form>
-                            <script>
-                                document.getElementById('paymentForm').onsubmit = function (event) {
-                                    var paymentInputValue = document.getElementById('paymentInput').value;
-                                    var balance = document.getElementById('balance').value;
-                                    var paymentInput = parseFloat(paymentInputValue);
-
-                                    if(isNaN(paymentInput) || paymentInput === ''){
-                                        alert('Please enter a valid number.')
-                                        event.preventDefault();
-                                    } else if( paymentInput < 0){
-                                        alert('Please enter a valid number.')
-                                        event.preventDefault();
-                                    } else if( paymentInput < balance){
-                                        alert('Payment amount is insufficient.')
-                                        event.preventDefault();
-                                    }
-                                }
-                            </script>
+    <div class="show-products">
+        <div class="box-container">
+            <div class="box bg-light">
+                <div class="content text-dark">
+                    <h1 style="text-align: center;">Balance: <c:out value="${sessionScope.order.getBalance()}"/>&euro;</h1>
+                    <input type="hidden" id="balance" value="${sessionScope.order.getBalance()}">
+                    <br>
+                    <form action="controller" method="post" id="paymentForm">
+                        <div style="text-align: center;">
+                            <label>
+                                <input type="text" name="amount" id="paymentInput" required
+                                       style="width: 200px; height: 25px; font-size: 16px; border: 1px solid black;"
+                                       placeholder="Enter amount">
+                            </label>
                         </div>
-                    </div>
+                        <br>
+                        <div style="text-align: center;">
+                            <button type="submit" name="action" value="pay-order" class="pay-btn">Pay</button>
+                            <input type="hidden" name="orderId" value="${sessionScope.order.getId()}">
+                        </div>
+                    </form>
+                    <script>
+                        document.getElementById('paymentForm').onsubmit = function (event) {
+                            var paymentInputValue = document.getElementById('paymentInput').value;
+                            var balance = document.getElementById('balance').value;
+                            var paymentInput = parseFloat(paymentInputValue);
+
+                            if(isNaN(paymentInput) || paymentInput === ''){
+                                alert('Please enter a valid number.')
+                                event.preventDefault();
+                            } else if( paymentInput < 0){
+                                alert('Please enter a valid number.')
+                                event.preventDefault();
+                            } else if( paymentInput < balance){
+                                alert('Payment amount is insufficient.')
+                                event.preventDefault();
+                            }
+                        }
+                    </script>
                 </div>
             </div>
-        </c:otherwise>
-    </c:choose>
+        </div>
+    </div>
 </c:if>
 
-<%@include file="footer.jsp" %>
+<jsp:include page="footer.jsp"/>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js"></script>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">

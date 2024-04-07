@@ -1,9 +1,6 @@
 package com.finalprojectcoffee.commands;
 
-import com.finalprojectcoffee.entities.Address;
-import com.finalprojectcoffee.entities.Customer;
-import com.finalprojectcoffee.entities.Order;
-import com.finalprojectcoffee.entities.User;
+import com.finalprojectcoffee.entities.*;
 import com.finalprojectcoffee.repositories.OrderRepositories;
 import com.finalprojectcoffee.repositories.UserRepositories;
 import jakarta.persistence.EntityManagerFactory;
@@ -44,10 +41,12 @@ public class PayOrder implements Command{
 
                 Boolean isPaid = orderRep.payOrder(order.getId());
                 if(isPaid){
+                    orderRep.deliverOrder(orderId);
                     List<Order> orderListCustomer = orderRep.getAllOrdersByCustomerId(activeCustomer.getId());
                     session.setAttribute("orderListCustomer", orderListCustomer);
                     session.setAttribute("addressList", addressList);
                     session.setAttribute("posMessage", "Pay successfully!");
+                    session.removeAttribute("order");
                     terminus = "payment.jsp";
                 } else {
                     session.setAttribute("errorMessage", "Failed to go to payment page. Please try again later.");

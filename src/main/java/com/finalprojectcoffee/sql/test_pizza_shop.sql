@@ -1,6 +1,6 @@
-CREATE DATABASE `pizzashop`;
+CREATE DATABASE `test_pizza_shop`;
 
-USE `pizzashop`;
+USE `test_pizza_shop`;
 
 CREATE TABLE `users`
 (
@@ -22,7 +22,7 @@ CREATE TABLE `customers`
 CREATE TABLE `employees`
 (
     `id`      INT NOT NULL,
-    `salary`  DOUBLE DEFAULT 0.0,
+    `current_order_count` INT DEFAULT 0,
     `status`  VARCHAR(255) DEFAULT 'Available',
     FOREIGN KEY (`id`) REFERENCES `users` (`id`)
 );
@@ -38,48 +38,40 @@ CREATE TABLE `products`
     `image`    VARCHAR(255)
 );
 
-CREATE TABLE `review` (
-    `id` INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
-    `user_id` INT,
-    `comment` VARCHAR(255),
-    `comment_date` DATE,
-    FOREIGN KEY (`user_id`) REFERENCES `users`(`id`)
-) ;
-
 CREATE TABLE `addresses`(
-    `id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    `is_default` TINYINT(1) DEFAULT 0,
-    `user_id` INT,
-    `street` VARCHAR(255),
-    `town` VARCHAR(255),
-    `county` VARCHAR(255),
-    `eir_code` VARCHAR(255),
-    FOREIGN KEY (`user_id`) REFERENCES `users` (`id`)
+                            `id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+                            `is_default` TINYINT(1) DEFAULT 0,
+                            `user_id` INT,
+                            `street` VARCHAR(255),
+                            `town` VARCHAR(255),
+                            `county` VARCHAR(255),
+                            `eir_code` VARCHAR(255),
+                            FOREIGN KEY (`user_id`) REFERENCES `users` (`id`)
 );
 
 CREATE TABLE `orders` (
-    `id` INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
-    `customer_id` INT,
-    `employee_id` INT,
-    `address_id` INT,
-    `balance` DOUBLE DEFAULT 0.0,
-    `payment_status` VARCHAR(255) NOT NULL DEFAULT 'Pending',
-    `status` VARCHAR(255) NOT NULL DEFAULT 'Pending',
-    `create_time` DATETIME NOT NULL,
-    `update_time` DATETIME,
-    FOREIGN KEY (`customer_id`) REFERENCES `customers`(`id`),
-    FOREIGN KEY (`employee_id`) REFERENCES `employees`(`id`),
-    FOREIGN KEY (`address_id`) REFERENCES `addresses`(`id`)
+                          `id` INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+                          `customer_id` INT,
+                          `employee_id` INT,
+                          `address_id` INT,
+                          `balance` DOUBLE DEFAULT 0.0,
+                          `payment_status` VARCHAR(255) NOT NULL DEFAULT 'Pending',
+                          `status` VARCHAR(255) NOT NULL DEFAULT 'Pending',
+                          `create_time` DATETIME NOT NULL,
+                          `update_time` DATETIME,
+                          FOREIGN KEY (`customer_id`) REFERENCES `customers`(`id`),
+                          FOREIGN KEY (`employee_id`) REFERENCES `employees`(`id`),
+                          FOREIGN KEY (`address_id`) REFERENCES `addresses`(`id`)
 );
 
 CREATE TABLE `order_items`(
-    `id` INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
-    `order_id` INT,
-    `product_id` INT,
-    `quantity` INT DEFAULT 0,
-    `cost` DOUBLE DEFAULT 0.0,
-    FOREIGN KEY (`order_id`) REFERENCES `orders`(`id`),
-    FOREIGN KEY (`product_id`) REFERENCES `products`(`id`)
+                              `id` INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+                              `order_id` INT,
+                              `product_id` INT,
+                              `quantity` INT DEFAULT 0,
+                              `cost` DOUBLE DEFAULT 0.0,
+                              FOREIGN KEY (`order_id`) REFERENCES `orders`(`id`),
+                              FOREIGN KEY (`product_id`) REFERENCES `products`(`id`)
 );
 
 CREATE TRIGGER UpdateBalanceAfterInsert
@@ -110,11 +102,11 @@ CREATE TRIGGER UpdateStockOnOrderCancel
     AFTER UPDATE ON orders FOR EACH ROW
 BEGIN
     IF OLD.status != 'Cancelled' AND NEW.status = 'Cancelled' THEN
-        UPDATE products p
+    UPDATE products p
         JOIN order_items oi ON p.id = oi.product_id
         SET p.stock = p.stock + oi.quantity
-        WHERE oi.order_id = NEW.id;
-    END IF;
+    WHERE oi.order_id = NEW.id;
+END IF;
 END;
 
 CREATE TRIGGER UpdateLoyaltyPoints

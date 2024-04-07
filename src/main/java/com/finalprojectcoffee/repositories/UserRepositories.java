@@ -101,7 +101,7 @@ public class UserRepositories implements UserRepositoryInterfaces {
             TypedQuery<Employee> query = entityManager.createQuery("SELECT u FROM User u WHERE u.userType = 'Employee'", Employee.class);
             return  query.getResultList();
         } catch (NoResultException e) {
-            System.err.println("A NoresultException occurred while getting add employees: " + e.getMessage());
+            System.err.println("A NoResultException occurred while getting add employees: " + e.getMessage());
             return Collections.emptyList();
         } finally {
             entityManager.close();

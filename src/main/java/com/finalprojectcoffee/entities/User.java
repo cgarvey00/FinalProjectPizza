@@ -36,6 +36,7 @@ public class User {
     public User() {
     }
 
+
     public User(String username, String password, String phoneNumber, String email) {
         this.username = username;
         this.password = password;
