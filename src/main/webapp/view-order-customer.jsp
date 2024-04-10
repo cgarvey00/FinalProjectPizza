@@ -22,7 +22,7 @@
 <jsp:include page="customer-nav.jsp"/>
 <br><br><br><br><br><br><br><br><br><br>
 <div class="box-container">
-    <h1 style="text-align: center;">Orders</h1>
+    <h1 class="heading">Orders</h1>
     <c:if test="${not empty sessionScope.orderListCustomer}">
         <table class="table table-bordered">
             <thead>
@@ -94,14 +94,18 @@
 
 <script>
     function checkAddressId(index) {
-        var initialAddressId = document.getElementById('addressSelect' + index).getAttribute('data-initial-id');
-        var selectedAddressId = document.getElementById('addressSelect' + index).value;
-        var updateBtn = document.getElementById('updateBtn' + index);
+        if (index >= 0) {
+            var initialAddressId = document.getElementById('addressSelect' + index).getAttribute('data-initial-id');
+            var selectedAddressId = document.getElementById('addressSelect' + index).value;
+            var updateBtn = document.getElementById('updateBtn' + index);
 
-        if (initialAddressId !== selectedAddressId) {
-            updateBtn.style.display = 'inline';
+            if (initialAddressId !== selectedAddressId) {
+                updateBtn.style.display = 'inline';
+            } else {
+                updateBtn.style.display = 'none';
+            }
         } else {
-            updateBtn.style.display = 'none';
+            console.error('Invalid index value');
         }
     }
 </script>
@@ -144,21 +148,6 @@
 
     .detail-btn:hover {
         background-color: #017fbd;
-    }
-
-    .cancelled-btn {
-        background-color: #ff4d4d;
-        color: white;
-        padding: 5px 10px;
-        font-size: 16px;
-        border: none;
-        cursor: not-allowed;
-        border-radius: 5px;
-        transition: background-color 0.3s;
-        display: block;
-        width: 100%;
-        box-sizing: border-box;
-        margin: 0;
     }
 
     .update-address {

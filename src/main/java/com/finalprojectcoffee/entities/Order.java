@@ -136,13 +136,12 @@ public class Order {
         return status;
     }
 
-    //Check if cancelled
     public boolean isCancelled() {
         return this.status == Status.Cancelled;
     }
 
-    //Check if pending
     public boolean isPending(){return this.paymentStatus == Status.Pending;}
+    public boolean isFinished(){return this.status == Status.Finished;}
 
     public void setStatus(Status status) {
         this.status = status;

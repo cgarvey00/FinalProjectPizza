@@ -2,23 +2,16 @@
 <%@ page import="com.finalprojectcoffee.entities.Product" %>
 <%@ page import="java.util.List" %>
 <%@ page import="com.finalprojectcoffee.entities.User" %>
-<%@ page import="com.finalprojectcoffee.entities.Order" %>
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" language="java" %>
 <%
     User loggedInUser = (User) request.getSession().getAttribute("loggedInUser");
     @SuppressWarnings("unchecked")
     List<Product> productList = (List<Product>) request.getSession().getAttribute("productList");
-    @SuppressWarnings("unchecked")
-    List<User> userList = (List<User>) request.getSession().getAttribute("userList");
-    @SuppressWarnings("unchecked")
-    List<Order> orderList = (List<Order>) request.getSession().getAttribute("orderList");
 
     //Checking to ensure the User is logged in or not
     if (request.getSession(false) == null || productList == null || loggedInUser == null || !"Admin".equals(loggedInUser.getUserType())) {
         response.sendRedirect("index.jsp");
     }
-
-
 %>
 <html lang="en">
 <head>

@@ -5,6 +5,7 @@
             <nav class="nav">
                 <a href="controller?action=admin-dashboard">Dashboard</a>
                 <a href="controller?action=view-orderList-admin">View Orders</a>
+                <a href="controller?action=view-all-employees">View Employees</a>
                 <a href="controller?action=view-products">View Products</a>
             </nav>
             <div class="icons">

@@ -19,10 +19,10 @@
     <link rel="stylesheet" href="${pageContext.request.contextPath}/stylesheets/styles.css">
 </head>
 <body>
-<jsp:include page="admin-nav.jsp" />
+<jsp:include page="admin-nav.jsp"/>
 <br><br><br><br><br><br><br><br><br><br>
 <div class="box-container">
-    <h1 style="text-align: center;">Orders</h1>
+    <h1 class="heading">Order List</h1>
     <c:if test="${not empty sessionScope.orderList}">
         <table class="table table-bordered">
             <thead>
@@ -33,7 +33,7 @@
                 <th>Status</th>
                 <th>Payment Status</th>
                 <th>Customer ID</th>
-                <th>Employee ID</th>
+                <th style="width: 170px">Employee</th>
                 <th>Address</th>
                 <th>Balance</th>
                 <th class="action-column">Action</th>
@@ -57,26 +57,36 @@
                             </c:otherwise>
                         </c:choose>
                     </td>
-                    <td>
+                    <td style="width: 170px">
                         <c:choose>
                             <c:when test="${order.getStatus() != 'Finished' && order.getStatus() != 'Cancelled'}">
-                            <label>
-                                <select id="employee${status.index}" name="selectedEmployeeId" data-initial-id="${order.getEmployee().getId()}" onchange="checkEmployeeId(${status.index})">
-                                    <option value="${order.getEmployee().getId()}" selected>
-                                        <c:out value="${order.getEmployee().getId()}"/>
-                                    </option>
-                                        <c:if test="${not empty sessionScope.employeeList}">
-                                            <c:forEach var="employee" items="${sessionScope.employeeList}">
-                                                <c:if test="${employee.getStatus() != 'Available'}">
-                                                    <option value="${employee.getId()}"><c:out value="${employee.getId()}"/></option>
-                                                </c:if>
-                                            </c:forEach>
-                                        </c:if>
-                                </select>
-                            </label>
+                                    <label>
+                                        <select id="employeeSelect${status.index}" name="selectedEmployeeId"
+                                                data-initial-id="${order.getEmployee().getId()}"
+                                                onchange="checkEmployeeId(${status.index})">
+                                            <option value="${order.getEmployee().getId()}" selected>
+                                                <c:choose>
+                                                    <c:when test="${order.getEmployee() != null}">
+                                                        <c:out value="${order.getEmployee().getUsername()}"/>
+                                                    </c:when>
+                                                    <c:otherwise>
+                                                        Select
+                                                    </c:otherwise>
+                                                </c:choose>
+                                            </option>
+                                            <c:if test="${not empty sessionScope.employeeList}">
+                                                <c:forEach var="employee" items="${sessionScope.employeeList}">
+                                                    <c:if test="${employee.getStatus() == 'Available' && employee.getId() ne order.getEmployee().getId()}">
+                                                        <option value="${employee.getId()}"><c:out
+                                                                value="${employee.getUsername()}"/></option>
+                                                    </c:if>
+                                                </c:forEach>
+                                            </c:if>
+                                        </select>
+                                    </label>
                             </c:when>
                             <c:otherwise>
-                                <c:out value="${order.getEmployee().getId()}"/>
+                                <c:out value="${order.getEmployee().getUsername()}"/>
                             </c:otherwise>
                         </c:choose>
                     </td>
@@ -85,6 +95,11 @@
                     <td>
                         <form action="controller" method="post">
                             <button type="submit" name="action" value="view-order" class="detail-btn">Detail</button>
+                            <button type="submit" name="action" value="update-employee-in-order"
+                                    id="update-btn${status.index}" class="update-btn" style="display: none">
+                                Update
+                            </button>
+                            <input type="hidden" id="selectedEmployeeId${status.index}" name="selectedEmployeeId"/>
                             <input type="hidden" name="orderId" value="${order.getId()}"/>
                             <input type="hidden" name="userType" value="admin">
                         </form>
@@ -99,17 +114,32 @@
 <jsp:include page="footer.jsp"/>
 
 <script>
+    //Check employee id and show update button if it's changed
     function checkEmployeeId(index) {
-        var initialEmployeeId = document.getElementById('employeeSelect' + index).getAttribute('data-initial-id');
-        var selectedEmployeeId = document.getElementById('employeeSelect' + index).value;
-        var updateBtn = document.getElementById('updateBtn' + index);
+        if (index >= 0) {
+            var initialEmployeeId = document.getElementById('employeeSelect' + index).getAttribute('data-initial-id');
+            var selectedEmployeeId = document.getElementById('employeeSelect' + index).value;
+            var updateBtn = document.getElementById('update-btn' + index);
+            var detailBtn = document.getElementsByClassName('detail-btn')[index];
+            var hiddenInput = document.getElementById('selectedEmployeeId' + index);
 
-        if (initialEmployeeId !== selectedEmployeeId) {
-            updateBtn.style.display = 'inline';
+            hiddenInput.value = selectedEmployeeId;
+
+            if (initialEmployeeId !== selectedEmployeeId) {
+                updateBtn.style.display = 'inline';
+                detailBtn.style.display = 'none';
+            } else {
+                updateBtn.style.display = 'none';
+                detailBtn.style.display = 'inline';
+            }
         } else {
-            updateBtn.style.display = 'none';
+            console.error('Invalid index value');
         }
     }
+    //Auto refresh page every 10 seconds
+    setTimeout(function() {
+        window.location.reload(1);
+    }, 10000);
 </script>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js"></script>
@@ -128,7 +158,7 @@
         max-width: 120px;
     }
 
-    .detail-btn {
+    .detail-btn, .update-btn {
         background-color: #109acb;
         color: white;
         padding: 5px 10px;
@@ -143,32 +173,48 @@
         margin: 0;
     }
 
+    .detail-btn {
+        background-color: #109acb;
+    }
+
     .detail-btn:hover {
         background-color: #017fbd;
     }
 
-    .cancelled-btn {
-        background-color: #ff4d4d;
-        color: white;
-        padding: 5px 10px;
-        font-size: 16px;
-        border: none;
-        cursor: not-allowed;
-        border-radius: 5px;
-        transition: background-color 0.3s;
-        display: block;
-        width: 100%;
-        box-sizing: border-box;
-        margin: 0;
+    .update-btn {
+        background-color: #4CAF50;
     }
 
-    .update-employee {
-        background-color: #109acb;
-        color: white;
-        padding: 3px 6px;
-        margin-left: 10px;
-        border-radius: 3px;
-        font-size: 0.8em;
+    .update-btn:hover {
+        background-color: #3e8e41;
     }
+
+    /*.detail-btn {*/
+    /*    background-color: #109acb;*/
+    /*    color: white;*/
+    /*    padding: 5px 10px;*/
+    /*    font-size: 16px;*/
+    /*    border: none;*/
+    /*    cursor: pointer;*/
+    /*    border-radius: 5px;*/
+    /*    transition: background-color 0.3s;*/
+    /*    display: block;*/
+    /*    width: 100%;*/
+    /*    box-sizing: border-box;*/
+    /*    margin: 0;*/
+    /*}*/
+
+    /*.detail-btn:hover {*/
+    /*    background-color: #017fbd;*/
+    /*}*/
+
+    /*.update-employee {*/
+    /*    background-color: #4CAF50;*/
+    /*    color: white;*/
+    /*    padding: 3px 6px;*/
+    /*    margin-left: 10px;*/
+    /*    border-radius: 3px;*/
+    /*    font-size: 0.8em;*/
+    /*}*/
 </style>
 </html>

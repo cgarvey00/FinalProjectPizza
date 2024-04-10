@@ -164,6 +164,7 @@ public class OrderRepositories implements OrderRepositoriesInterface {
 
             if (order != null && address != null) {
                 order.setAddress(address);
+                order.setUpdateTime(LocalDateTime.now());
                 entityManager.merge(order);
             }
 
@@ -177,6 +178,42 @@ public class OrderRepositories implements OrderRepositoriesInterface {
             entityManager.close();
         }
     }
+
+    @Override
+    public Boolean updateEmployeeInOrder(int orderId, int employeeId) {
+        EntityManager entityManager = factory.createEntityManager();
+        EntityTransaction transaction = entityManager.getTransaction();
+
+        try {
+            transaction.begin();
+
+            Order order = entityManager.find(Order.class, orderId);
+            Employee employee = entityManager.find(Employee.class, employeeId);
+
+            if (order != null && employee != null) {
+                order.setEmployee(employee);
+                order.setUpdateTime(LocalDateTime.now());
+                order.setStatus(Status.Delivering);
+                entityManager.merge(order);
+
+                employee.setCurrentOrderCount(employee.getCurrentOrderCount() + 1);
+                if(employee.getCurrentOrderCount() >= 5){
+                    employee.setStatus(Status.Unavailable);
+                }
+                entityManager.merge(employee);
+            }
+
+            transaction.commit();
+            return true;
+        } catch (PersistenceException e) {
+            System.err.println("A PersistenceException occurred while merging: " + e.getMessage());
+            transaction.rollback();
+            return false;
+        } finally {
+            entityManager.close();
+        }
+    }
+
 
     @Override
     public Boolean payOrder(int orderId) {
@@ -230,6 +267,7 @@ public class OrderRepositories implements OrderRepositoriesInterface {
                 Order order = entityManager.find(Order.class, orderId);
                 order.setEmployee(employeeWithMinId);
                 order.setStatus(Status.Delivering);
+                order.setUpdateTime(LocalDateTime.now());
                 entityManager.merge(order);
             }
 
@@ -251,9 +289,12 @@ public class OrderRepositories implements OrderRepositoriesInterface {
             transaction.begin();
 
             Order order = entityManager.find(Order.class, orderId);
-            order.setStatus(Status.Finished);
+            if(order != null){
+                order.setStatus(Status.Finished);
+                order.setUpdateTime(LocalDateTime.now());
+                entityManager.merge(order);
+            }
 
-            entityManager.merge(order);
             transaction.commit();
             return true;
         } catch (PersistenceException e) {

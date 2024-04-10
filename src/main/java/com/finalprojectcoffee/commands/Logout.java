@@ -20,7 +20,7 @@ public class Logout implements Command{
     public String execute() {
         String terminus = "index.jsp";
         HttpSession session = request.getSession(true);
-        session.removeAttribute("LoggedInUser");
+        session.invalidate();
         return terminus;
     }
 }

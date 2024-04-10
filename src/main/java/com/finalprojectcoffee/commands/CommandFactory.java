@@ -109,6 +109,9 @@ public class CommandFactory {
                 case "update-address-in-order":
                     command = new UpdateAddressInOrder(request, response, factory);
                     break;
+                case "update-employee-in-order":
+                    command = new UpdateEmployeeInOrder(request, response, factory);
+                    break;
                 case "to-payment":
                     command = new ToPayment(request, response, factory);
                     break;

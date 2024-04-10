@@ -66,7 +66,7 @@
                                 </div>
                             </form>
                         </c:when>
-                        <c:when test="${sessionScope.order.pending && sessionScope.userType == 'admin'}">
+                        <c:when test="${!sessionScope.order.cancelled && !sessionScope.order.finished && sessionScope.userType == 'admin'}">
                             <form action="controller" method="post">
                                 <div class="button-container">
                                     <button type="submit" name="action" value="cancel-order" class="btn cancel-btn">Cancel</button>
