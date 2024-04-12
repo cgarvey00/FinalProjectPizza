@@ -33,7 +33,7 @@
                 <th>Status</th>
                 <th>Payment Status</th>
                 <th>Customer ID</th>
-                <th style="width: 170px">Employee</th>
+                <th style="width: 150px">Employee</th>
                 <th>Address</th>
                 <th>Balance</th>
                 <th class="action-column">Action</th>
@@ -57,7 +57,7 @@
                             </c:otherwise>
                         </c:choose>
                     </td>
-                    <td style="width: 170px">
+                    <td style="width: 150px">
                         <c:choose>
                             <c:when test="${order.getStatus() != 'Finished' && order.getStatus() != 'Cancelled'}">
                                     <label>
@@ -136,10 +136,6 @@
             console.error('Invalid index value');
         }
     }
-    //Auto refresh page every 10 seconds
-    setTimeout(function() {
-        window.location.reload(1);
-    }, 10000);
 </script>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js"></script>
@@ -174,7 +170,7 @@
     }
 
     .detail-btn {
-        background-color: #109acb;
+        background-color: #017fbd;
     }
 
     .detail-btn:hover {
@@ -188,33 +184,5 @@
     .update-btn:hover {
         background-color: #3e8e41;
     }
-
-    /*.detail-btn {*/
-    /*    background-color: #109acb;*/
-    /*    color: white;*/
-    /*    padding: 5px 10px;*/
-    /*    font-size: 16px;*/
-    /*    border: none;*/
-    /*    cursor: pointer;*/
-    /*    border-radius: 5px;*/
-    /*    transition: background-color 0.3s;*/
-    /*    display: block;*/
-    /*    width: 100%;*/
-    /*    box-sizing: border-box;*/
-    /*    margin: 0;*/
-    /*}*/
-
-    /*.detail-btn:hover {*/
-    /*    background-color: #017fbd;*/
-    /*}*/
-
-    /*.update-employee {*/
-    /*    background-color: #4CAF50;*/
-    /*    color: white;*/
-    /*    padding: 3px 6px;*/
-    /*    margin-left: 10px;*/
-    /*    border-radius: 3px;*/
-    /*    font-size: 0.8em;*/
-    /*}*/
 </style>
 </html>

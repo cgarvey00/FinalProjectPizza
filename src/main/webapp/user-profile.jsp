@@ -97,7 +97,7 @@
 </div>
 
 <script>
-    var modal = document.getElementById('deleteAccountModal');
+    var modal = document.getElementById('deleteAccountModal')
     var confirmBtn = document.getElementById('confirmDeleteBtn')
     var deleteConfirmInput = document.getElementById('deleteConfirm')
 

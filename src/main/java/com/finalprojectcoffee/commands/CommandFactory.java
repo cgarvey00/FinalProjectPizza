@@ -37,6 +37,15 @@ public class CommandFactory {
                 case "view-all-employees":
                     command = new ViewAllEmployees(request, response, factory);
                     break;
+                case "switch-employee-status":
+                    command = new SwitchEmployeeStatus(request, response, factory);
+                    break;
+                case "set-all-employees-available":
+                    command = new SetAllEmployeesAvailable(request, response, factory);
+                    break;
+                case "set-all-employees-unavailable":
+                    command = new SetAllEmployeesUnavailable(request, response, factory);
+                    break;
                 case "to-update-employee":
                     command = new ToUpdateEmployee(request, response, factory);
                     break;
@@ -46,8 +55,14 @@ public class CommandFactory {
                 case "view-products-category":
                     command = new ViewProductByCategory(request, response, factory);
                     break;
+                case "to-add-product":
+                    command = new ToAddProduct(request, response, factory);
+                    break;
                 case "add-product":
                     command = new AddProduct(request, response, factory);
+                    break;
+                case "to-update-product":
+                    command = new ToUpdateProduct(request, response, factory);
                     break;
                 case "update-product":
                     command = new UpdateProduct(request, response, factory);

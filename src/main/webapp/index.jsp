@@ -51,7 +51,6 @@
 <section class="home" id="home">
 
     <div class="container">
-
         <div class="row align-items-center text-center text-md-left min-vh-100">
             <div class="col-md-6">
                 <span>Welcome to the Pizza Shop</span>
@@ -59,7 +58,6 @@
                 <a href="controller?action=view-menu" class="link-btn">Get Started</a>
             </div>
         </div>
-
     </div>
 
 </section>

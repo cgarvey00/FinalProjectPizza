@@ -1,6 +1,4 @@
-<%@ page import="com.finalprojectcoffee.entities.Product" %>
-<%@ page import="java.util.List" %>
-<%@ page import="com.finalprojectcoffee.entities.User" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" language="java" %>
 <html lang="en">
 <head>
@@ -20,168 +18,179 @@
 </head>
 
 <body>
-<%@include file="admin-nav.jsp" %>
-<section class="add-products">
-    <br>
-    <br>
-    <br>
-    <h1 class="heading">Add Product</h1>
-    <form action="controller" method="POST">
-        <input type="hidden" name="action" value="add-product">
-        <div class="flex">
-            <div class="inputBox">
-                <span>Product Name (required)</span>
-                <input type="text" class="box" required maxlength="100" placeholder="enter product name" name="name">
-            </div>
-            <div class="inputBox">
-                <span>Product Price (required)</span>
-                <input type="number" min="0" class="box" required max="9999999999" placeholder="Enter product price"
-                       onkeypress="if(this.value.length == 10) return false;" name="price">
-            </div>
-            <div class="inputBox">
-                <span>Quantity (required)</span>
-                <input type="number" min="0" class="box" required max="9999999999" placeholder="Enter the Stock"
-                       onkeypress="if(this.value.length == 10) return false;" name="stock">
-            </div>
-            <div class="inputBox">
-                <span>Image</span>
-                <textarea name="image" type="text" placeholder="Enter Product Image" class="box" required
-                          maxlength="500"
-                          cols="30" rows="10"></textarea>
-            </div>
-            <div class="inputBox">
-                <span>Product Details (required)</span>
-                <textarea name="details" type="text" placeholder="Enter Product Details" class="box" required
-                          maxlength="500"
-                          cols="30" rows="10"></textarea>
-            </div>
-            <div class="inputBox">
-                <span>Category</span>
-                <select name="category" class="box" required>
-                    <option value="" selected disabled>Select category</option>
-                    <option value="Sides">Sides</option>
-                    <option value="Meal_Deals">Meal Deals</option>
-                    <option value="Pizzas">Pizzas</option>
-                    <option value="Drinks">Drinks</option>
-                    <option value="Desserts">Desserts</option>
-                </select>
-            </div>
-        </div>
-        <input type="submit" value="add product" class="btn" name="add-product">
-    </form>
-
-</section>
-
+<jsp:include page="admin-nav.jsp"/>
+<br><br><br><br><br><br><br><br><br><br>
+<form action="controller" method="post">
+    <button type="submit" name="action" value="to-add-product" class="add-btn">Add</button>
+</form>
 <section class="show-products">
-    </br>
-    </br>
-    </br>
-    </br>
-
-    <h1 class="heading">Products </h1>
-
+    <h1 class="heading">Product List</h1>
     <div class="box-container">
-
-        <%
-            List<Product> productList = (List<Product>) request.getSession().getAttribute("productList");
-            if (productList != null && !productList.isEmpty()) {
-                for (Product product : productList) {
-        %>
-        <div class="box">
-            <form action="controller" method='POST'>
-                <input type='hidden' name='product_id' value='<%= product.getId() %>'>
-
-                <img src="../uploaded-images/<%= product.getImage() %>" alt="">
-                <div class="name">
-                    <%= product.getName() %>
-                </div>
-                <div class="details">Category: <span>
-                        <%= product.getCategory() %>
-                </div>
-                <div class="price">&euro;<span>
-                         <%= product.getPrice() %>
+        <c:if test="${not empty sessionScope.productList}">
+            <c:forEach var="product" items="${sessionScope.productList}">
+                <div class="box">
+                    <img src="${pageContext.request.contextPath}/images/${product.image}" alt="Product Image">
+                    <div class="name">
+                        <c:out value="${product.getName()}"/>
+                    </div>
+                    <div class="details">Category: <span>
+                        <c:out value="${product.getCategory()}"/></span>
+                    </div>
+                    <div class="price">&euro;<span>
+                        <c:out value="${product.getPrice()}"/>
                         </span>
-                </div>
-                <div class="details">Details: <span>
-                          <%= product.getDetails() %>
+                    </div>
+                    <div class="details">Details: <span>
+                          <c:out value="${product.getDetails()}"/>
                         </span>
-                </div>
-                <div class="stock">Stock: <span>
-                            <%= product.getStock() %>
+                    </div>
+                    <div class="stock">Stock: <span>
+                            <c:out value="${product.getStock()}"/>
                         </span>
+                    </div>
+                    <form action="controller" method="post">
+                        <button type="submit" name="action" value="to-update-product" class="option-btn">Update</button>
+                        <input type="hidden" name="productId" value="${product.getId()}">
+                    </form>
+                    <form action="controller" method="post" id="deleteProductForm-${product.getId()}">
+                        <button type="button" value="delete-product" class="delete-btn"
+                                onclick="showDeleteModal('${product.getName()}', '${product.getId()}')">Delete
+                        </button>
+                        <input type="hidden" name="action" value="delete-product">
+                        <input type="hidden" name="productId" value="${product.getId()}">
+                    </form>
                 </div>
-                <div class="flex-btn">
-                    <input type='hidden' name='action' value='view-update-product'>
-
-                    <button type="submit" name="view-update-product" class="option-btn">Update</button>
-                </div>
-            </form>
-            <form action="controller" method='POST'>
-                <input type='hidden' name='product_id' value='<%=product.getId() %>'>
-                <input type='hidden' name='action' value='delete-product'>
-                <button type="submit" name="delete-product" class="delete-btn"
-                        onclick="return confirm('delete this product?');">delete
-                </button>
-            </form>
-        </div>
-        <% } %>
-        <% } else { %>
-        <p class="empty">No Products Added Yet!</p>
-        <% } %>
+            </c:forEach>
+        </c:if>
     </div>
-    <%--    </div>--%>
-
 </section>
-<%@include file="footer.jsp" %>
+
+<jsp:include page="footer.jsp"/>
+
+<div id="deleteProductModal" class="modal">
+    <div class="modal-content">
+        <span class="close">&times;</span>
+        <p style="text-align: center; font-size: 20px">Confirm you are sure to delete <span id="productNameToDelete"></span>.</p>
+        <button id="confirmDeleteBtn" onclick="confirmProductDeletion()">Confirm</button>
+        <input type="hidden" id="productIdToDelete">
+    </div>
+</div>
+
 <script>
-    <%
-    Boolean addProductSuccess= (Boolean)request.getSession().getAttribute("add-product-success");
-    String addProductError=(String) request.getSession().getAttribute("ape-message");
-    Boolean updateProductSuccess= (Boolean)request.getSession().getAttribute("update-product-success");
-    String updateProductError=(String) request.getSession().getAttribute("pue-message");
-    Boolean deleteProductSuccess= (Boolean)request.getSession().getAttribute("delete-product-success");
-    String deleteProductError=(String) request.getSession().getAttribute("pde-message");
+    var modal = document.getElementById('deleteProductModal');
+    var confirmBtn = document.getElementById('confirmDeleteBtn');
 
+    function showDeleteModal(productName, productId) {
+        document.getElementById('productIdToDelete').value = productId;
+        document.getElementById('productNameToDelete').textContent = productName;
+        modal.style.display = 'block';
+    }
 
-       if(addProductSuccess !=null){ %>
-    <% if(addProductSuccess ){ %>
-    alert("Product has been added Successfully!");
-    <% }else if(addProductError !=null)  {%>
-    alert("Failure to add Product ");
-    <%} %>
-    <%} %>
+    function closeModal() {
+        modal.style.display = 'none';
+    }
 
+    var span = document.getElementsByClassName("close")[0];
+    span.onclick = function () {
+        closeModal();
+    }
 
-    <% if(updateProductSuccess !=null){ %>
-    <% if(updateProductSuccess ){ %>
-    alert("Product has been updated Successfully!");
-    <% }else if(updateProductError !=null)  {%>
-    alert("Failed to Update Product ");
-    <%} %>
-    <%} %>
+    window.onclick = function (event) {
+        if (event.target === modal) {
+            closeModal();
+        }
+    }
 
-    <% if(deleteProductSuccess !=null){ %>
-    <% if(deleteProductSuccess ){ %>
-    alert("Product has been Deleted Successfully!");
-    <% }else if(deleteProductError !=null)  {%>
-    alert("Failed to Delete Product ");
-    <%} %>
-    <%} %>
+    function confirmProductDeletion() {
+        var productId = document.getElementById('productIdToDelete').value;
+        var form = document.getElementById('deleteProductForm-' + productId);
 
-
-    <% request.getSession().removeAttribute("update-product-success");
-        request.getSession().removeAttribute("ape-message"); %>
-    <% request.getSession().removeAttribute("add-product-success");
-        request.getSession().removeAttribute("pue-message"); %>
-    <% request.getSession().removeAttribute("delete-product-success");
-     request.getSession().removeAttribute("pde-message"); %>
-
-
+        if(form) {
+            form.submit();
+        } else {
+            console.error('Form not found for product ID: ' + productId);
+        }
+    }
 </script>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js"></script>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css">
 <script src="${pageContext.request.contextPath}/scripts/menu.js" type="text/javascript"></script>
+</body>
 
+<style>
+    .add-btn {
+        background-color: #109acb;
+        color: white;
+        padding: 8px 20px;
+        font-size: 18px;
+        border: none;
+        float: right;
+        cursor: pointer;
+        min-width: 60px;
+        border-radius: 5px;
+        margin-top: 20px;
+        margin-right: 40px;
+    }
+
+    .add-btn:hover {
+        background-color: #017fbd;
+    }
+
+    .modal {
+        display: none;
+        position: fixed;
+        z-index: 1;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        overflow: auto;
+        background-color: rgb(0, 0, 0);
+        background-color: rgba(0, 0, 0, 0.4);
+        padding-top: 60px;
+    }
+
+
+    .modal-content {
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        background-color: #fefefe;
+        margin: 5% auto;
+        padding: 20px;
+        border: 1px solid #888;
+        width: 80%;
+    }
+
+    .close {
+        position: absolute;
+        top: 0;
+        right: 0;
+        color: #aaa;
+        font-size: 28px;
+        font-weight: bold;
+        padding: 10px;
+        cursor: pointer;
+    }
+
+    .close:hover,
+    .close:focus {
+        color: black;
+        text-decoration: none;
+        cursor: pointer;
+    }
+
+    #confirmDeleteBtn {
+        width: 300px;
+        height: 25px;
+        margin-top: 20px;
+        font-size: 16px;
+        border: 1px solid black;
+        text-align: center;
+    }
+</style>
 </html>

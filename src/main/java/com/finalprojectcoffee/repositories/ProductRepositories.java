@@ -17,14 +17,12 @@ public class ProductRepositories implements ProductRepositoriesInterface {
         this.factory = factory;
     }
 
-
     @Override
     public Product findProductByID(int productId) {
         EntityManager entityManager = factory.createEntityManager();
 
         try {
-            Product product = entityManager.find(Product.class, productId);
-            return product;
+            return entityManager.find(Product.class, productId);
         } catch (Exception e) {
             System.err.println("There has been an Exception when Searching for a Product " + e.getMessage());
             return null;
@@ -81,29 +79,26 @@ public class ProductRepositories implements ProductRepositoriesInterface {
     }
 
     @Override
-    public boolean addProducts(List<Product> products) {
+    public boolean addProduct(Product product) {
         EntityManager entityManager = factory.createEntityManager();
         EntityTransaction transaction = entityManager.getTransaction();
 
         try {
             transaction.begin();
 
-            for(Product product : products){
-                TypedQuery<Product> query = entityManager.createQuery("SELECT p FROM Product p WHERE p.name = :name", Product.class);
-                query.setParameter("name", product.getName());
+            Query query = entityManager.createQuery("SELECT p FROM Product p WHERE p.name = :name");
+            query.setParameter("name", product.getName());
 
-                List<Product> existingProducts = query.getResultList();
-                if(existingProducts.isEmpty()){
-                    entityManager.persist(product);
-                } else {
-                    System.err.println("Product exists: " + product.getName());
-                }
+            try {
+                query.getSingleResult();
+            } catch (NoResultException e) {
+                entityManager.persist(product);
             }
 
             transaction.commit();
             return true;
         } catch (PersistenceException e) {
-            System.err.println("A PersistenceException occurred while Adding the Product: " + e.getMessage());
+            System.err.println("A PersistenceException occurred while Adding product: " + e.getMessage());
             transaction.rollback();
             return false;
         } finally {
@@ -132,31 +127,25 @@ public class ProductRepositories implements ProductRepositoriesInterface {
     }
 
     @Override
-    public boolean deleteProduct(List<Product> products) {
+    public boolean deleteProduct(int productId) {
         EntityManager entityManager = factory.createEntityManager();
         EntityTransaction transaction = entityManager.getTransaction();
 
         try {
             transaction.begin();
 
-            for(Product product : products){
-                TypedQuery<Product> query = entityManager.createQuery("SELECT p FROM Product p WHERE p.id = :id", Product.class);
-                query.setParameter("id", product.getId());
-
-                try {
-                    Product deleteProduct = query.getSingleResult();
-                    entityManager.remove(deleteProduct);
-                } catch (NoResultException e) {
-                    System.err.println(e.getMessage());
-                    System.err.println("Product doesn't exist");
-                }
+            try {
+                Product product = entityManager.find(Product.class, productId);
+                entityManager.remove(product);
+            } catch (NoResultException e) {
+                System.err.println("Product doesn't exist: " + e.getMessage());
+                return false;
             }
 
             transaction.commit();
             return true;
         } catch (PersistenceException e) {
-            System.err.println(e.getMessage());
-            System.err.println("A Persistence Exception occurred while Deleting the Product\n\t" + e);
+            System.err.println("A PersistenceException occurred while Deleting the Product:" + e.getMessage());
             transaction.rollback();
             return false;
         } finally {

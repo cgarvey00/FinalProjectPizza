@@ -154,6 +154,7 @@
         cursor: pointer;
         min-width: 60px;
         border-radius: 5px;
+        margin-bottom: 5px;
     }
 
     .add-address-btn:hover {

@@ -99,10 +99,107 @@ public class UserRepositories implements UserRepositoryInterfaces {
 
         try {
             TypedQuery<Employee> query = entityManager.createQuery("SELECT u FROM User u WHERE u.userType = 'Employee'", Employee.class);
-            return  query.getResultList();
+            return query.getResultList();
         } catch (NoResultException e) {
             System.err.println("A NoResultException occurred while getting add employees: " + e.getMessage());
             return Collections.emptyList();
+        } finally {
+            entityManager.close();
+        }
+    }
+
+    @Override
+    public Boolean switchEmployeeStatus(int employeeId) {
+        EntityManager entityManager = factory.createEntityManager();
+        EntityTransaction transaction = entityManager.getTransaction();
+
+        try {
+            transaction.begin();
+
+            try {
+                Employee employee = entityManager.find(Employee.class, employeeId);
+
+                if(employee.getStatus() == Status.Available){
+                    employee.setStatus(Status.Unavailable);
+                } else {
+                    employee.setCurrentOrderCount(0);
+                    employee.setStatus(Status.Available);
+                }
+                entityManager.merge(employee);
+            } catch (NoResultException e) {
+                System.err.println("Employee doesn't exist");
+                return false;
+            }
+
+            transaction.commit();
+            return true;
+        } catch (PersistenceException e) {
+            System.err.println("A PersistenceException occurred while merging: " + e.getMessage());
+            transaction.rollback();
+            return false;
+        } finally {
+            entityManager.close();
+        }
+    }
+
+    @Override
+    public Boolean setAllEmployeeAvailable() {
+        EntityManager entityManager = factory.createEntityManager();
+        EntityTransaction transaction = entityManager.getTransaction();
+
+        try {
+            transaction.begin();
+
+            try {
+                TypedQuery<Employee> query = entityManager.createQuery("SELECT u FROM User u WHERE u.userType = 'Employee'", Employee.class);
+                List<Employee> employees = query.getResultList();
+                for(Employee employee : employees){
+                    employee.setCurrentOrderCount(0);
+                    employee.setStatus(Status.Available);
+                    entityManager.merge(employee);
+                }
+            } catch (NoResultException e) {
+                System.err.println("Employee list is empty");
+                return false;
+            }
+
+            transaction.commit();
+            return true;
+        } catch (PersistenceException e) {
+            System.err.println("A PersistenceException occurred while merging: " + e.getMessage());
+            transaction.rollback();
+            return false;
+        } finally {
+            entityManager.close();
+        }
+    }
+
+    @Override
+    public Boolean setAllEmployeesUnavailable() {
+        EntityManager entityManager = factory.createEntityManager();
+        EntityTransaction transaction = entityManager.getTransaction();
+
+        try {
+            transaction.begin();
+
+            try {
+                TypedQuery<Employee> query = entityManager.createQuery("SELECT u FROM User u WHERE u.userType = 'Employee'", Employee.class);
+                List<Employee> employees = query.getResultList();
+                for(Employee employee : employees){
+                    employee.setStatus(Status.Unavailable);
+                    entityManager.merge(employee);
+                }
+            } catch (NoResultException e) {
+                System.err.println("Employee list is empty");
+                return false;
+            }
+
+            transaction.commit();
+            return true;
+        } catch (PersistenceException e) {
+            System.err.println("A PersistenceException occurred while merging: " + e.getMessage());
+            transaction.rollback();
+            return false;
         } finally {
             entityManager.close();
         }

@@ -15,7 +15,7 @@ public class Product {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @Column(name = "name")
+    @Column(name = "name", nullable = false)
     private String name;
 
     @Enumerated(EnumType.STRING)
@@ -26,9 +26,9 @@ public class Product {
     private String details;
 
     @Column(name = "stock")
-    private int stock;
+    private int stock = 0;
     @Column(name = "price")
-    private double price;
+    private double price = 0.0;
 
     @Column(name = "image")
     private String image;

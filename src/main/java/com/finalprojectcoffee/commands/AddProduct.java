@@ -2,18 +2,14 @@ package com.finalprojectcoffee.commands;
 
 import com.finalprojectcoffee.entities.Product;
 import com.finalprojectcoffee.entities.ProductCategory;
-import com.finalprojectcoffee.entities.User;
 import com.finalprojectcoffee.repositories.ProductRepositories;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import java.util.Objects;
-import java.util.stream.Collectors;
+
 
 public class AddProduct implements Command {
     private final HttpServletRequest request;
@@ -28,13 +24,21 @@ public class AddProduct implements Command {
 
     @Override
     public String execute() {
-        String terminus = "product-page.jsp";
+        String terminus;
         HttpSession session = request.getSession(true);
 
         ProductCategory category = ProductCategory.valueOf(request.getParameter("category"));
         String details = request.getParameter("details");
-        double price = Double.parseDouble(request.getParameter("price"));
-        int stock = Integer.parseInt(request.getParameter("stock"));
+        String priceStr = request.getParameter("price");
+        double price = 0.0;
+        if(priceStr != null && !priceStr.isEmpty()){
+            price = Double.parseDouble(priceStr);
+        }
+        String stockStr = request.getParameter("stock");
+        int stock = 0;
+        if(stockStr != null && !stockStr.isEmpty()){
+            stock = Integer.parseInt(stockStr);
+        }
         String name = request.getParameter("name");
         String image = request.getParameter("image");
 
@@ -42,23 +46,18 @@ public class AddProduct implements Command {
             ProductRepositories productRep = new ProductRepositories(factory);
 
             Product product = new Product(name, category, details, price, stock, image);
-            List<Product> products = new ArrayList<>();
-            products.add(product);
-
-            boolean isAdded = productRep.addProducts(products);
+            boolean isAdded = productRep.addProduct(product);
             if (isAdded) {
-                session.setAttribute("aps-message", "Add product successfully");
+                List<Product> productList = productRep.getAllProducts();
+                session.setAttribute("productList", productList);
+                terminus = "product-page.jsp";
             } else {
-                session.setAttribute("ape-message", "Failed to add product");
-            }
-
-            if (session.getAttribute("aps-message") != null) {
-                session.setAttribute("add-product-success", true);
-            } else {
-                session.setAttribute("add-product-success", false);
+                session.setAttribute("errorMessage", "Failed to add product, please try again later");
+                terminus = "error.jsp";
             }
         } catch (Exception e) {
             System.err.println("An Exception occurred while adding products: " + e.getMessage());
+            terminus = "error.jsp";
         }
         return terminus;
     }

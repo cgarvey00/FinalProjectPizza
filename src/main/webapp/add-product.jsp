@@ -22,55 +22,52 @@
 <jsp:include page="admin-nav.jsp"/>
 <br><br><br><br><br><br><br><br><br><br>
 <section class="add-products">
-    <h1 class="heading">Update Product</h1>
-    <c:if test="${not empty sessionScope.product}">
+    <h1 class="heading">Add Product</h1>
         <form action="controller" method="post">
             <div class="flex">
                 <div class="inputBox">
-                    <span>Name</span>
+                    <span>Name (Required)</span>
                     <input type="text" class="box" maxlength="100"
-                           placeholder="${not empty sessionScope.product ? sessionScope.product.getName() : 'Enter Name'}"
-                           name="name">
+                           placeholder="Enter Name"
+                           name="name" required>
                 </div>
                 <div class="inputBox">
-                    <span>Category</span>
-                    <select name="category" class="box">
-                        <option value="" disabled selected>${sessionScope.product.getCategory()}</option>
-                    <c:forEach var="category" items="${sessionScope.categories}">
-                        <option value="${category}">${category}</option>
-                    </c:forEach>
+                    <span>Category (Required)</span>
+                    <select name="category" class="box" required>
+                        <option value="" disabled selected></option>
+                        <c:forEach var="category" items="${sessionScope.categories}">
+                            <option value="${category}">${category}</option>
+                        </c:forEach>
                     </select>
                 </div>
                 <div class="inputBox">
                     <span>Price</span>
                     <input type="text" minlength="0" class="box" maxlength="100"
-                           placeholder="${not empty sessionScope.product ? sessionScope.product.getPrice() : 'Enter Price'}"
+                           placeholder="Enter Price"
                            name="price">
                 </div>
                 <div class="inputBox">
                     <span>Stock</span>
                     <input type="text" minlength="0" class="box" maxlength="100"
-                           placeholder="${not empty sessionScope.product ? sessionScope.product.getStock() : 'Enter Stock'}"
+                           placeholder="Enter Stock"
                            name="stock">
                 </div>
                 <div class="inputBox">
                     <span>Image</span>
                     <input type="text" minlength="0" class="box" maxlength="100"
-                           placeholder="${not empty sessionScope.product ? sessionScope.product.getImage() : 'Enter Image'}"
+                           placeholder="Enter Image"
                            name="image">
                 </div>
                 <div class="inputBox">
                     <span>Detail</span>
                     <input type="text" minlength="0" class="box" maxlength="100"
-                           placeholder="${not empty sessionScope.product ? sessionScope.product.getDetails() : 'Enter Details'}"
+                           placeholder="Enter Detail"
                            name="details">
                 </div>
             </div>
-            <br>
-            <button type="submit" name="action" value="update-product" class="update-btn">Update</button>
-            <input type="hidden" name="productId" value="${sessionScope.product.getId()}">
+            <br><br>
+            <button type="submit" name="action" value="add-product" class="add-btn">Add</button>
         </form>
-    </c:if>
 </section>
 
 <jsp:include page="footer.jsp"/>
@@ -82,10 +79,10 @@
 <script src="${pageContext.request.contextPath}/scripts/menu.js" type="text/javascript"></script>
 
 <style>
-    .update-btn {
+    .add-btn {
         background-color: #109acb;
         color: white;
-        padding: 10px 295px;
+        padding: 10px 310px;
         font-size: 18px;
         border: none;
         cursor: pointer;
@@ -95,7 +92,7 @@
         margin: 0 auto;
     }
 
-    .update-btn:hover {
+    .add-btn:hover {
         background-color: #017fbd;
     }
 </style>

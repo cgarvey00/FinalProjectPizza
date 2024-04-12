@@ -13,6 +13,9 @@ public interface UserRepositoryInterfaces {
     Boolean findExistingPhoneNumber(String phoneNumber);
     List<User> getAllUsers();
     List<Employee> getAllEmployees();
+    Boolean switchEmployeeStatus(int employeeId);
+    Boolean setAllEmployeeAvailable();
+    Boolean setAllEmployeesUnavailable();
     Boolean addUser(User user);
     Boolean updateUser(int userId, String phoneNumber, String email);
     Boolean changePassword(int userId, String password);

@@ -23,9 +23,15 @@
 <section class="products" style="padding-top: 0; min-height:100vh;">
     <div class="box-container">
         <h2 class="heading">Employee List</h2>
-        <form action="employee-register.jsp" method="get">
-            <button type="submit" class="add-employee-btn">Add</button>
-        </form>
+        <div class="button-container">
+            <form action="controller" method="post">
+                <button type="submit" name="action" value="set-all-employees-available" class="all-available-btn">All Available</button>
+                <button type="submit" name="action" value="set-all-employees-unavailable" class="all-unavailable-btn">All Unavailable</button>
+            </form>
+            <form action="employee-register.jsp" method="get">
+                <button type="submit" class="add-employee-btn">Add</button>
+            </form>
+        </div>
         <table class="table table-bordered">
             <thead>
             <tr>
@@ -34,7 +40,7 @@
                 <th>Phone Number</th>
                 <th style="width: 230px">Email</th>
                 <th>Status</th>
-                <th>Action</th>
+                <th class="action-column">Action</th>
             </tr>
             </thead>
             <tbody>
@@ -48,8 +54,20 @@
                         <td><c:out value="${employee.getStatus()}"/></td>
                         <td>
                             <form action="controller" method="post" class="action-buttons">
-                                <button type="submit" name="action" value="#" class="update-btn">Detail</button>
-                                <input type="hidden" name="employeeId" value="${employee.getId()}" />
+                                <c:choose>
+                                    <c:when test="${employee.getStatus() == 'Unavailable'}">
+                                        <button type="submit" name="action" value="switch-employee-status"
+                                                class="available-btn">Available
+                                        </button>
+                                    </c:when>
+                                    <c:otherwise>
+                                        <button type="submit" name="action" value="switch-employee-status"
+                                                class="unavailable-btn">
+                                            Unavailable
+                                        </button>
+                                    </c:otherwise>
+                                </c:choose>
+                                <input type="hidden" name="employeeId" value="${employee.getId()}"/>
                             </form>
                         </td>
                     </tr>
@@ -74,72 +92,80 @@
     }
 
     th.action-column, td.action-column {
-        width: 120px;
-        max-width: 120px;
+        width: 130px;
+        max-width: 130px;
     }
 
-    .add-employee-btn {
-        background-color: #109acb;
+    .button-container {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 5px;
+    }
+
+    .add-employee-btn, .all-available-btn, .all-unavailable-btn {
         color: white;
         padding: 8px 20px;
         font-size: 18px;
         border: none;
-        float: right;
         cursor: pointer;
         min-width: 60px;
         border-radius: 5px;
+        margin: 0 5px 5px 0;
+        display: inline-block;
+    }
+
+    .add-employee-btn {
+        background-color: #109acb;
     }
 
     .add-employee-btn:hover {
         background-color: #017fbd;
     }
 
-    .action-buttons {
-        display: flex;
-        justify-content: space-between;
-        width: 50%;
-        gap: 15px;
-
-        .update-btn, .delete-btn {
-            font-size: 14px;
-            padding: 6px 12px;
-            border: none;
-            cursor: pointer;
-            border-radius: 5px;
-            line-height: 1.2;
-            margin: 0;
-            flex: none;
-            width: 80px;
-            height: 30px;
-        }
-
-        .update-btn {
-            background-color: #109acb;
-            color: white;
-        }
-
-        .update-btn:hover {
-            background-color: #017fbd;
-        }
-
-        .delete-btn {
-            background-color: #ff4d4d;
-            color: white;
-            transition: background-color 0.3s;
-        }
-
-        .delete-btn:hover {
-            background-color: #cc0000;
-        }
+    .all-available-btn {
+        background-color: #4ce800;
     }
 
-    .default-address-label {
-        background-color: #4CAF50;
+    .all-available-btn:hover {
+        background-color: #3e8e41;
+    }
+
+    .all-unavailable-btn {
+        background-color: #ff0000;
+    }
+
+    .all-unavailable-btn:hover {
+        background-color: #c20000;
+    }
+
+    .available-btn, .unavailable-btn {
+        padding: 5px 10px;
         color: white;
-        padding: 2px 5px;
-        margin-left: 10px;
-        border-radius: 3px;
-        font-size: 0.8em;
+        font-size: 16px;
+        border: none;
+        cursor: pointer;
+        border-radius: 5px;
+        transition: background-color 0.3s;
+        display: block;
+        width: 100%;
+        box-sizing: border-box;
+        margin: 0;
+    }
+
+    .available-btn {
+        background-color: #4ce800;
+    }
+
+    .available-btn:hover {
+        background-color: #3e8e41;
+    }
+
+    .unavailable-btn {
+        background-color: #ff0000;
+    }
+
+    .unavailable-btn:hover {
+        background-color: #c20000;
     }
 </style>
 </html>

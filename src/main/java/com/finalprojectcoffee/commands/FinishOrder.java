@@ -1,6 +1,5 @@
 package com.finalprojectcoffee.commands;
 
-
 import com.finalprojectcoffee.entities.Order;
 import com.finalprojectcoffee.repositories.OrderRepositories;
 import jakarta.persistence.EntityManagerFactory;
@@ -31,12 +30,15 @@ public class FinishOrder implements Command{
 
             Boolean isFinished = orderRep.finishOrder(orderId);
             if (isFinished) {
-                session.setAttribute("ofs-message", "Order finished");
+                Order order = orderRep.findOrderById(orderId);
+                session.setAttribute("order", order);
             } else {
-                session.setAttribute("ofe_message", "Failed to finish order");
+                session.setAttribute("errorMessage", "Failed to finish order, please try again later");
+                terminus = "error.jsp";
             }
         } catch (Exception e) {
             System.err.println("An Exception occurred while finishing order: " + e.getMessage());
+            terminus = "error.jsp";
         }
         return terminus;
     }

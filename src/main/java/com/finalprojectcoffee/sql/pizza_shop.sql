@@ -31,7 +31,7 @@ CREATE TABLE `products`
 (
     `id`       INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
     `name`     VARCHAR(255) NOT NULL,
-    `category` ENUM('Sides','Pizzas','Drinks','Meal_Deals','Desserts'),
+    `category` ENUM('Sides','Pizzas','Drinks','Meal_Deals','Desserts') NOT NULL,
     `details`  VARCHAR(500),
     `price`    DOUBLE DEFAULT 0.0,
     `stock`    INT DEFAULT 0,

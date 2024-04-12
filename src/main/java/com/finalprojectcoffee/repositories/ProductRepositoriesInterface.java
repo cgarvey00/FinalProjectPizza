@@ -13,7 +13,7 @@ public interface ProductRepositoriesInterface {
      List<Product> getAllProducts();
      List<Product> findProductsByCategory(ProductCategory category);
      List<Product> findProductsByKeyword(String keyword);
-     boolean addProducts(List<Product> products);
+     boolean addProduct(Product product);
      boolean updateProduct(Product product);
-     boolean deleteProduct(List<Product> products);
+     boolean deleteProduct(int productId);
 }
