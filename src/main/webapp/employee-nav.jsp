@@ -3,14 +3,12 @@
         <div class="row align-items-center">
             <a href="#" class="logo mr-auto"> <i class="fa-solid fa-pizza-slice"></i> Pizza Shop </a>
             <nav class="nav">
-                <a href="controller?action=admin-page">Dashboard</a>
-                <a href="controller?action=admin-product">View Orders</a>
-                <a href="controller?action=admin-product">Accept Order</a>
-                <a href="controller?action=logout">Logout</a>
+                <a href="controller?action=view-employee-home">Home</a>
+                <a href="controller?action=view-orderList-employee">View Orders</a>
+                <a href="controller?action=view-user-profile">Profile</a>
             </nav>
             <div class="icons">
-                <div class="fas fa-bars" id="menu-btn"></div>
-                <a href="?action=user-options"><div id="login-btn" class="fas fa-user"></div></a>
+                <a href="controller?action=logout"><div class="fas fa-sign-out-alt"></div></a>
             </div>
         </div>
     </div>

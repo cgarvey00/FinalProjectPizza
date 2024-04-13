@@ -44,20 +44,21 @@ public class Login implements Command {
                                 terminus = "customer-home.jsp";
 
                                 List<Address> addressList = userRep.getAddressesByUserId(user.getId());
-                                boolean addressed;
 
                                 if(addressList.isEmpty()){
-                                    addressed = false;
-                                    session.setAttribute("addressed", addressed);
+                                    session.setAttribute("addressed", false);
                                 } else {
-                                    addressed = true;
-                                    session.setAttribute("addressed", addressed);
+                                    session.setAttribute("addressed", true);
                                 }
                                 session.setAttribute("userType", "customer");
                                 break;
                             case "Employee":
-                                terminus = "employee-home.jsp";
+                                int employeeId = user.getId();
+                                List<Order> currentOrdersForEmployee = orderRep.getCurrentOrdersForEmployee(employeeId);
+
+                                session.setAttribute("currentOrdersForEmployee", currentOrdersForEmployee);
                                 session.setAttribute("userType", "employee");
+                                terminus = "employee-home.jsp";
                                 break;
                             case "Admin":
                                 terminus = "admin-dashboard.jsp";

@@ -69,10 +69,25 @@
                         <c:when test="${!sessionScope.order.cancelled && !sessionScope.order.finished && sessionScope.userType == 'admin'}">
                             <form action="controller" method="post">
                                 <div class="button-container">
-                                    <button type="submit" name="action" value="cancel-order" class="btn cancel-btn">Cancel</button>
-                                    <button type="submit" name="action" value="finish-order" class="btn finish-btn">Finish</button>
+                                    <button type="submit" name="action" value="cancel-order" class="btn cancel-btn">
+                                        Cancel
+                                    </button>
+                                    <button type="submit" name="action" value="finish-order" class="btn finish-btn">
+                                        Finish
+                                    </button>
                                     <input type="hidden" name="orderId" value="${sessionScope.order.getId()}">
                                     <input type="hidden" name="userType" value="admin">
+                                </div>
+                            </form>
+                        </c:when>
+                        <c:when test="${sessionScope.order.delivering && !sessionScope.order.cancelled && !sessionScope.order.finished && sessionScope.userType == 'employee'}">
+                            <form action="controller" method="post">
+                                <div class="button-container single-button">
+                                    <button type="submit" name="action" value="finish-order" class="btn finish-btn">
+                                        Finish
+                                    </button>
+                                    <input type="hidden" name="orderId" value="${sessionScope.order.getId()}">
+                                    <input type="hidden" name="userType" value="employee">
                                 </div>
                             </form>
                         </c:when>
@@ -104,6 +119,10 @@
         margin-bottom: 20px;
     }
 
+    .button-container.single-button {
+        justify-content: center;
+    }
+
     .btn {
         color: white;
         padding: 10px 20px;
@@ -116,11 +135,11 @@
         margin-inside: 6%;
     }
 
-    .cancel-btn{
+    .cancel-btn {
         background-color: #ff4d4d;
     }
 
-    .cancel-btn:hover{
+    .cancel-btn:hover {
         background-color: #cc0000;
     }
 

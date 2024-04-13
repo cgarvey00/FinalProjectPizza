@@ -140,6 +140,7 @@ public class Order {
         return this.status == Status.Cancelled;
     }
 
+    public boolean isDelivering(){return this.status == Status.Delivering;}
     public boolean isPending(){return this.paymentStatus == Status.Pending;}
     public boolean isFinished(){return this.status == Status.Finished;}
 

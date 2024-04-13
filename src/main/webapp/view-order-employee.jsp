@@ -23,7 +23,7 @@
 <br><br><br><br><br><br><br><br><br><br>
 <div class="box-container">
     <h1 class="heading">Order List</h1>
-    <c:if test="${not empty sessionScope.currentOrdersForEmployee}">
+    <c:if test="${not empty sessionScope.orderListEmployee}">
         <table class="table table-bordered">
             <thead>
             <tr>
@@ -37,7 +37,7 @@
             </tr>
             </thead>
             <tbody>
-            <c:forEach var="order" items="${sessionScope.currentOrdersForEmployee}" varStatus="status">
+            <c:forEach var="order" items="${sessionScope.orderListEmployee}" varStatus="status">
                 <tr>
                     <td><c:out value="${order.getId()}"/></td>
                     <td>${my:formatLocalDateTime(order.getCreateTime(), "yyyy-MM-dd HH:mm:ss")}</td>

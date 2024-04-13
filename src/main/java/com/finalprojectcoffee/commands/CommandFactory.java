@@ -49,6 +49,9 @@ public class CommandFactory {
                 case "to-update-employee":
                     command = new ToUpdateEmployee(request, response, factory);
                     break;
+                case "view-employee-home":
+                    command = new ViewEmployeeHome(request, response, factory);
+                    break;
                 case "view-products":
                     command = new ViewProducts(request, response, factory);
                     break;
@@ -120,6 +123,9 @@ public class CommandFactory {
                     break;
                 case "view-orderList-admin":
                     command = new ViewOrderListAdmin(request, response, factory);
+                    break;
+                case "view-orderList-employee":
+                    command = new ViewOrderListEmployee(request, response, factory);
                     break;
                 case "update-address-in-order":
                     command = new UpdateAddressInOrder(request, response, factory);

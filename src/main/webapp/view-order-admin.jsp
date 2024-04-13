@@ -53,37 +53,40 @@
                                 <c:out value="${order.getCustomer().getId()}"/>
                             </c:when>
                             <c:otherwise>
-                                <c:out value="Deletd Customer"/>
+                                <c:out value="Deleted Customer"/>
                             </c:otherwise>
                         </c:choose>
                     </td>
                     <td style="width: 150px">
                         <c:choose>
                             <c:when test="${order.getStatus() != 'Finished' && order.getStatus() != 'Cancelled'}">
-                                    <label>
-                                        <select id="employeeSelect${status.index}" name="selectedEmployeeId"
-                                                data-initial-id="${order.getEmployee().getId()}"
-                                                onchange="checkEmployeeId(${status.index})">
-                                            <option value="${order.getEmployee().getId()}" selected>
-                                                <c:choose>
-                                                    <c:when test="${order.getEmployee() != null}">
-                                                        <c:out value="${order.getEmployee().getUsername()}"/>
-                                                    </c:when>
-                                                    <c:otherwise>
-                                                        Select
-                                                    </c:otherwise>
-                                                </c:choose>
-                                            </option>
-                                            <c:if test="${not empty sessionScope.employeeList}">
-                                                <c:forEach var="employee" items="${sessionScope.employeeList}">
-                                                    <c:if test="${employee.getStatus() == 'Available' && employee.getId() ne order.getEmployee().getId()}">
-                                                        <option value="${employee.getId()}"><c:out
-                                                                value="${employee.getUsername()}"/></option>
-                                                    </c:if>
-                                                </c:forEach>
-                                            </c:if>
-                                        </select>
-                                    </label>
+                                <label>
+                                    <select id="employeeSelect${status.index}" name="selectedEmployeeId"
+                                            data-initial-id="${order.getEmployee().getId()}"
+                                            onchange="checkEmployeeId(${status.index})">
+                                        <option value="${order.getEmployee().getId()}" selected>
+                                            <c:choose>
+                                                <c:when test="${order.getEmployee() != null}">
+                                                    <c:out value="${order.getEmployee().getUsername()}"/>
+                                                </c:when>
+                                                <c:otherwise>
+                                                    Select
+                                                </c:otherwise>
+                                            </c:choose>
+                                        </option>
+                                        <c:if test="${not empty sessionScope.employeeList}">
+                                            <c:forEach var="employee" items="${sessionScope.employeeList}">
+                                                <c:if test="${employee.getStatus() == 'Available' && employee.getId() ne order.getEmployee().getId()}">
+                                                    <option value="${employee.getId()}"><c:out
+                                                            value="${employee.getUsername()}"/></option>
+                                                </c:if>
+                                            </c:forEach>
+                                        </c:if>
+                                    </select>
+                                </label>
+                            </c:when>
+                            <c:when test="${order.getEmployee() == null}">
+                                <c:out value="Deleted Employee"/>
                             </c:when>
                             <c:otherwise>
                                 <c:out value="${order.getEmployee().getUsername()}"/>

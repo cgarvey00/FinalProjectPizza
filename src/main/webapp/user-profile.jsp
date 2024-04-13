@@ -61,9 +61,6 @@
                             </h2><br>
                             <h2>Loyalty Point: <c:out value="${sessionScope.loyaltyPoints}"/></h2>
                         </c:when>
-                        <c:when test="${sessionScope.userType == 'employee'}">
-                            <h2>Status: <c:out value="${sessionScope.activeEmployee.getStatus()}"/></h2>
-                        </c:when>
                     </c:choose>
                     <div class="button-container">
                         <a href="update-profile.jsp" class="btn update-btn">Update Profile</a>

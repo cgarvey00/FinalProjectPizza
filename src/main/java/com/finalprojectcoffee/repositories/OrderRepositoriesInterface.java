@@ -11,6 +11,7 @@ public interface OrderRepositoriesInterface {
     List<Order> getAllOrdersByCustomerId(int customerId);
     List<Order> getAllOrdersByEmployeeId(int employeeId);
     List<OrderItem> getOrderItemByOrderId(int orderId);
+    List<Order> getCurrentOrdersForEmployee(int employeeId);
     Order addOrder(int customerId, int addressId);
     Boolean addOrderItem(List<OrderItem> orderItems);
     Boolean updateAddressInOrder(int orderId, int addressId);

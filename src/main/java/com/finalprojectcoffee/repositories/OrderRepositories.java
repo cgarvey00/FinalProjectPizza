@@ -3,6 +3,7 @@ package com.finalprojectcoffee.repositories;
 import com.finalprojectcoffee.entities.*;
 import jakarta.persistence.*;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.Comparator;
@@ -86,6 +87,29 @@ public class OrderRepositories implements OrderRepositoriesInterface {
             return query.getResultList();
         } catch (Exception e) {
             System.err.println("An Exception occurred while searching: " + e.getMessage());
+            return Collections.emptyList();
+        } finally {
+            entityManager.close();
+        }
+    }
+
+    @Override
+    public List<Order> getCurrentOrdersForEmployee(int employeeId) {
+        EntityManager entityManager = factory.createEntityManager();
+
+        try {
+            LocalDate today = LocalDate.now();
+            LocalDateTime startOfDay = today.atStartOfDay();
+            LocalDateTime endOfDay = today.plusDays(1).atStartOfDay();
+
+            TypedQuery<Order> query = entityManager.createQuery("SELECT o FROM Order o WHERE o.employee.id = :employeeId AND o.createTime >= :startOfDay AND o.createTime <= :endOfDay AND o.status != :finished", Order.class);
+            query.setParameter("employeeId", employeeId);
+            query.setParameter("startOfDay", startOfDay);
+            query.setParameter("endOfDay", endOfDay);
+            query.setParameter("finished", Status.Finished);
+            return query.getResultList();
+        } catch (Exception e) {
+            System.err.println("An Exception occurred while getting order: " + e.getMessage());
             return Collections.emptyList();
         } finally {
             entityManager.close();

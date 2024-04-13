@@ -68,6 +68,9 @@
 <c:if test="${not empty sessionScope.errorMessage}">
     <c:remove var="errorMessage" scope="session"/>
 </c:if>
+<c:if test="${not empty sessionScope.loginMessage}">
+    <c:remove var="loginMessage" scope="session"/>
+</c:if>
 
 </body>
 <script src="${pageContext.request.contextPath}/scripts/login.js" type="text/javascript"></script>

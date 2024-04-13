@@ -20,7 +20,7 @@ public class DeleteUser implements Command{
 
     @Override
     public String execute() {
-        String terminus;
+        String terminus = "login.jsp";
 
         HttpSession session = request.getSession(true);
         User activeUser = (User) session.getAttribute("loggedInUser");
@@ -32,7 +32,6 @@ public class DeleteUser implements Command{
             Boolean isDeleted = userRep.deleteUser(activeUserId);
             if (isDeleted) {
                 session.removeAttribute("loggedInUser");
-                terminus = "login.jsp";
             } else {
                 session.setAttribute("errorMessage", "Failed to delete account, please try again later");
                 terminus = "error.jsp";
