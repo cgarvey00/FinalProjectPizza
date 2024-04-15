@@ -24,6 +24,15 @@
 <div class="box-container">
     <h1 class="heading">Orders</h1>
     <c:if test="${not empty sessionScope.orderListCustomer}">
+        <div class="filter-container">
+            <form action="controller" method="post">
+                <label for="startDate" style="font-size: 16px">Start Date:</label>
+                <input type="date" id="startDate" name="startDate" onchange="updateEndDate()" required>
+                <label for="endDate" style="font-size: 16px">End Date:</label>
+                <input type="date" id="endDate" name="endDate" required>
+                <button type="submit" name="action" value="filter-order-date">Filter</button>
+            </form>
+        </div>
         <table class="table table-bordered">
             <thead>
             <tr>
@@ -108,6 +117,16 @@
             console.error('Invalid index value');
         }
     }
+
+    function updateEndDate(){
+        let startDate = document.getElementById('startDate');
+        let endDate = document.getElementById('endDate');
+        let today = new Date().toISOString().split('T')[0];
+        if (startDate.value === today) {
+            endDate.value = startDate.value;
+        }
+    }
+    document.getElementById('startDate').addEventListener('change', updateEndDate);
 </script>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js"></script>
@@ -157,6 +176,34 @@
         margin-left: 10px;
         border-radius: 3px;
         font-size: 0.8em;
+    }
+
+    .filter-container {
+        width: 100%;
+        text-align: center;
+        margin: 20px 0;
+    }
+
+    .filter-container form {
+        display: inline-block;
+    }
+
+    .filter-container input[type="date"],
+    .filter-container button {
+        height: 36px;
+        font-size: 16px;
+        margin: 0 5px;
+        vertical-align: middle;
+    }
+
+    .filter-container button {
+        background-color: #4CAF50;
+        color: white;
+        padding: 0 15px;
+        border: none;
+        cursor: pointer;
+        border-radius: 5px;
+        margin-left: 50px;
     }
 </style>
 </html>

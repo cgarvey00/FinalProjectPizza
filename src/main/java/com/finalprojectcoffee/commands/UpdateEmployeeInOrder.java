@@ -24,7 +24,7 @@ public class UpdateEmployeeInOrder implements Command{
 
     @Override
     public String execute() {
-        String terminus = "view-order-admin.jsp";
+        String terminus = "view-order-today-admin.jsp";
 
         HttpSession session = request.getSession(true);
         int employeeId = Integer.parseInt(request.getParameter("selectedEmployeeId"));

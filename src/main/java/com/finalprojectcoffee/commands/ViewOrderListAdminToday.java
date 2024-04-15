@@ -11,12 +11,12 @@ import jakarta.servlet.http.HttpSession;
 
 import java.util.List;
 
-public class ViewOrderListAdmin implements Command{
+public class ViewOrderListAdminToday implements Command{
     private final HttpServletRequest request;
     private final HttpServletResponse response;
     private final EntityManagerFactory factory;
 
-    public ViewOrderListAdmin(HttpServletRequest request, HttpServletResponse response, EntityManagerFactory factory) {
+    public ViewOrderListAdminToday(HttpServletRequest request, HttpServletResponse response, EntityManagerFactory factory) {
         this.request = request;
         this.response = response;
         this.factory = factory;
@@ -24,16 +24,18 @@ public class ViewOrderListAdmin implements Command{
 
     @Override
     public String execute() {
-        String terminus = "view-order-admin.jsp";
+        String terminus = "view-today-order-admin.jsp";
         HttpSession session = request.getSession(true);
 
         try {
             OrderRepositories orderRep = new OrderRepositories(factory);
             UserRepositories userRep = new UserRepositories(factory);
 
-            List<Order> orderList = orderRep.getAllOrders();
-            if(!orderList.isEmpty()){
-                session.setAttribute("orderList", orderList);
+            List<Order> orderListByToday = orderRep.getAllOrdersToday();
+            List<Employee> employeeList = userRep.getAllEmployees();
+            if(orderListByToday != null){
+                session.setAttribute("orderListByToday", orderListByToday);
+                session.setAttribute("employeeList", employeeList);
             } else {
                 session.setAttribute("errorMessage", "Order list is empty");
                 terminus = "error.jsp";

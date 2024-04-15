@@ -3,11 +3,13 @@ package com.finalprojectcoffee.repositories;
 import com.finalprojectcoffee.entities.Order;
 import com.finalprojectcoffee.entities.OrderItem;
 
+import java.time.LocalDate;
 import java.util.List;
 
 public interface OrderRepositoriesInterface {
     Order findOrderById(int orderId);
     List<Order> getAllOrders();
+    List<Order> getAllOrdersToday();
     List<Order> getAllOrdersByCustomerId(int customerId);
     List<Order> getAllOrdersByEmployeeId(int employeeId);
     List<OrderItem> getOrderItemByOrderId(int orderId);
@@ -19,5 +21,6 @@ public interface OrderRepositoriesInterface {
     Boolean payOrder(int orderId);
     void deliverOrder(int orderId);
     Boolean finishOrder(int orderId);
-    Boolean cancelOrder(int orderID);
+    Boolean cancelOrder(int orderId);
+    List<Order> filterOrderByDate(LocalDate startDate, LocalDate endDate, int userId);
 }

@@ -2,7 +2,7 @@
 <%@ page import="com.finalprojectcoffee.entities.Product" %>
 <%@ page import="java.util.List" %>
 <%@ page import="com.finalprojectcoffee.entities.User" %>
-<%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" language="java" %>
+<%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%
     User loggedInUser = (User) request.getSession().getAttribute("loggedInUser");
     @SuppressWarnings("unchecked")
@@ -31,7 +31,7 @@
 </head>
 
 <body>
-<%@include file="admin-nav.jsp" %>
+<jsp:include page="admin-nav.jsp"/>
 <section class="dashboard">
     <br>br><br><br><br><br><br><br>
     <h1 class="heading">Admin Dashboard</h1>
@@ -48,17 +48,17 @@
         <!-- NUMBER OF TOTAL ORDERS-->
         <div class="box">
             <c:choose>
-                <c:when test="${not empty sessionScope.orderList}">
-                    <h3><c:out value="${sessionScope.orderList.size()}"/></h3>
+                <c:when test="${not empty sessionScope.orderListByToday}">
+                    <h3><c:out value="${sessionScope.orderListByToday.size()}"/></h3>
                 </c:when>
                 <c:otherwise>
                     <h3><c:out value="0"/></h3>
                 </c:otherwise>
             </c:choose>
             <p style="font-size: 16px">Handle Order</p>
-            <a href="controller?action=view-orderList-admin" class="btn" style="font-size: 18px">see orders</a>
+            <a href="controller?action=view-orderList-admin-today" class="btn" style="font-size: 18px">see orders</a>
         </div>
-
+        <!-- NUMBER OF TOTAL EMPLOYEES-->
         <div class="box">
             <c:choose>
                 <c:when test="${not empty sessionScope.employeeList}">
@@ -71,7 +71,7 @@
             <p style="font-size: 16px">Employees Present</p>
             <a href="controller?action=view-all-employees" class="btn" style="font-size: 18px">see employees</a>
         </div>
-
+        <!-- NUMBER OF TOTAL PRODUCTS-->
         <div class="box">
             <c:choose>
                 <c:when test="${not empty sessionScope.productList}">
@@ -84,23 +84,10 @@
             <p style="font-size: 16px">Handle Product</p>
             <a href="controller?action=view-products" class="btn" style="font-size: 18px">see products</a>
         </div>
-
-        <!-- NUMBER OF USERS-->
-        <div class="box">
-            <c:choose>
-                <c:when test="${not empty sessionScope.userList}">
-                    <h3><c:out value="${sessionScope.userList.size()}"/></h3>
-                </c:when>
-                <c:otherwise>
-                    <h3><c:out value="0"/></h3>
-                </c:otherwise>
-            </c:choose>
-            <p style="font-size: 16px">Users Present</p>
-            <a href="controller?action=view-users" class="btn" style="font-size: 18px">see users</a>
-        </div>
     </div>
 </section>
-<%@include file="footer.jsp" %>
+
+<jsp:include page="footer.jsp"/>
 
 <script src="https://cdn.misdeliver.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js"></script>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">

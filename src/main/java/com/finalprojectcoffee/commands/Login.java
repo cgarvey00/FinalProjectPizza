@@ -69,8 +69,8 @@ public class Login implements Command {
                                 List<Employee> employeeList = userRep.getAllEmployees();
                                 session.setAttribute("employeeList", employeeList);
 
-                                List<Order> orderList = orderRep.getAllOrders();
-                                session.setAttribute("orderList", orderList);
+                                List<Order> orderListByToday = orderRep.getAllOrdersToday();
+                                session.setAttribute("orderListByToday", orderListByToday);
 
                                 List<Product> productList = productRep.getAllProducts();
                                 session.setAttribute("productList", productList);

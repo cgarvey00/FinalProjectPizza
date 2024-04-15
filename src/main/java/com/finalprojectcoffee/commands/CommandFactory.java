@@ -127,6 +127,12 @@ public class CommandFactory {
                 case "view-orderList-employee":
                     command = new ViewOrderListEmployee(request, response, factory);
                     break;
+                case "view-orderList-admin-today":
+                    command = new ViewOrderListAdminToday(request, response, factory);
+                    break;
+                case "filter-order-date":
+                    command = new FilterOrderByDate(request, response, factory);
+                    break;
                 case "update-address-in-order":
                     command = new UpdateAddressInOrder(request, response, factory);
                     break;

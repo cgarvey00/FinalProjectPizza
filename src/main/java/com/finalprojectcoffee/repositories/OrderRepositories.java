@@ -44,6 +44,27 @@ public class OrderRepositories implements OrderRepositoriesInterface {
     }
 
     @Override
+    public List<Order> getAllOrdersToday() {
+        EntityManager entityManager = factory.createEntityManager();
+
+        try {
+            LocalDate today = LocalDate.now();
+            LocalDateTime startOfDay = today.atStartOfDay();
+            LocalDateTime endOfDay = today.plusDays(1).atStartOfDay();
+
+            TypedQuery<Order> query = entityManager.createQuery("SELECT o From Order o WHERE o.createTime >= :startOfDay AND o.createTime <= :endOfDay", Order.class);
+            query.setParameter("startOfDay", startOfDay);
+            query.setParameter("endOfDay", endOfDay);
+            return query.getResultList();
+        } catch (Exception e) {
+            System.err.println("An Exception occurred while getting order list for today: " + e.getMessage());
+            return Collections.emptyList();
+        } finally {
+            entityManager.close();
+        }
+    }
+
+    @Override
     public List<Order> getAllOrdersByCustomerId(int customerId) {
         EntityManager entityManager = factory.createEntityManager();
 
@@ -355,6 +376,51 @@ public class OrderRepositories implements OrderRepositoriesInterface {
             transaction.rollback();
             System.out.println("A PersistenceException occurred while merging: " + e.getMessage());
             return false;
+        } finally {
+            entityManager.close();
+        }
+    }
+
+    @Override
+    public List<Order> filterOrderByDate(LocalDate startDate, LocalDate endDate, int userId) {
+        EntityManager entityManager = factory.createEntityManager();
+
+        try {
+            User user = entityManager.find(User.class, userId);
+
+            if (user == null) {
+                System.err.println("User not found with ID: " + userId);
+                return Collections.emptyList();
+            }
+
+            LocalDateTime startDateTime = startDate.atStartOfDay();
+            LocalDateTime endDateTime = endDate.plusDays(1).atStartOfDay();
+
+            String userType = user.getUserType();
+            TypedQuery<Order> query;
+
+            switch (userType) {
+                case "Admin":
+                    query = entityManager.createQuery("SELECT o FROM Order o WHERE o.createTime >= :startDateTime AND o.createTime <= :endDateTime", Order.class);
+                    break;
+                case "Customer":
+                    query = entityManager.createQuery("SELECT o FROM Order o WHERE o.customer.id = :userId AND o.createTime >= :startDateTime AND o.createTime <= :endDateTime", Order.class);
+                    query.setParameter("userId", userId);
+                    break;
+                case "Employee":
+                    query = entityManager.createQuery("SELECT o FROM Order o WHERE o.employee.id = :userId AND o.createTime >= :startDateTime AND o.createTime <= :endDateTime", Order.class);
+                    query.setParameter("userId", userId);
+                    break;
+                default:
+                    return Collections.emptyList();
+            }
+
+            query.setParameter("startDateTime", startDateTime);
+            query.setParameter("endDateTime", endDateTime);
+            return query.getResultList();
+        } catch (Exception e) {
+            System.err.println("An Exception occurred while filtering order by date: " + e.getMessage());
+            return Collections.emptyList();
         } finally {
             entityManager.close();
         }
