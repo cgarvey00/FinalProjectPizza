@@ -48,6 +48,8 @@ public class AddProduct implements Command {
             boolean isAdded = productRep.addProducts(products);
             if (isAdded) {
                 session.setAttribute("aps-message", "Add product successfully");
+                List<Product> productList = productRep.getAllProducts();
+                session.setAttribute("productList",productList);
             } else {
                 session.setAttribute("ape-message", "Failed to add product");
             }
