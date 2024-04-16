@@ -1,25 +1,134 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
-    <title>Submit a Review</title>
+    <title>Review</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        label {
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        textarea,
+        select {
+            width: 100%;
+            padding: 10px;
+            margin: 5px 0 20px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            box-sizing: border-box;
+            font-size: 16px;
+        }
+
+        input[type="submit"] {
+            padding: 10px 20px;
+            background-color: #4caf50;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s;
+        }
+
+        input[type="submit"]:hover {
+            background-color: #45a049;
+        }
+
+        /* Rating system styles */
+        .rating {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+
+        .rating span {
+            font-size: 36px;
+            color: #ccc;
+            cursor: pointer;
+            transition: color 0.3s;
+        }
+
+        .rating span:hover,
+        .rating span:hover ~ span {
+            color: #ff9800;
+        }
+
+        .rating span.active {
+            color: #ff9800;
+        }
+    </style>
 </head>
 <body>
-<h2>Submit a Review</h2>
-<form action="submitReview" method="post">
-    <label for="username">Your Username:</label>
-    <input type="text" id="username" name="username"><br><br>
+<div class="container">
+    <h1>Write a Review</h1>
+    <form action="controller?action=add-review" method="post">
+        <label for="comment">Comment:</label><br>
+        <textarea id="comment" name="comment" rows="4" cols="50"></textarea><br>
+        <label for="stars">Stars:</label>
+        <div class="rating" id="ratingStars" data-rating="0">
+            <span data-value="5">&#x2605;</span>
+            <span data-value="4">&#x2605;</span>
+            <span data-value="3">&#x2605;</span>
+            <span data-value="2">&#x2605;</span>
+            <span data-value="1">&#x2605;</span>
+        </div>
+        <input type="hidden" id="stars" name="stars" value="0">
+        <input type="submit" value="Submit Review">
+    </form>
+</div>
 
-    <label>Star Rating:</label><br>
-    <input type="radio" id="star1" name="stars" value="1"><label for="star1">1</label>
-    <input type="radio" id="star2" name="stars" value="2"><label for="star2">2</label>
-    <input type="radio" id="star3" name="stars" value="3"><label for="star3">3</label>
-    <input type="radio" id="star4" name="stars" value="4"><label for="star4">4</label>
-    <input type="radio" id="star5" name="stars" value="5"><label for="star5">5</label><br><br>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const ratingStars = document.querySelectorAll('.rating > span');
 
-    <label for="comment">Your Review:</label><br>
-    <textarea id="comment" name="comment" rows="4" cols="50"></textarea><br><br>
+        ratingStars.forEach(function(star) {
+            star.addEventListener('click', function() {
+                const ratingValue = this.getAttribute('data-value');
+                const ratingContainer = this.parentElement;
+                const stars = ratingContainer.getAttribute('data-rating');
 
-    <input type="submit" value="Submit Review">
-</form>
+                document.getElementById('stars').value = ratingValue;
+
+                ratingStars.forEach(function(s) {
+                    s.classList.remove('active');
+                });
+
+                for (let i = 0; i < ratingValue; i++) {
+                    ratingStars[i].classList.add('active');
+                }
+
+                ratingContainer.setAttribute('data-rating', ratingValue);
+            });
+        });
+    });
+</script>
+
 </body>
 </html>
