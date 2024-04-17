@@ -34,7 +34,8 @@ public class Address {
     public Address() {
     }
 
-    public Address(String street, String town, String county, String eirCode) {
+    public Address(String street, int isDefault, String town, String county, String eirCode) {
+        this.isDefault = isDefault;
         this.street = street;
         this.town = town;
         this.county = county;

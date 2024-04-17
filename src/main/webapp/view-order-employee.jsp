@@ -23,16 +23,16 @@
 <br><br><br><br><br><br><br><br><br><br>
 <div class="box-container">
     <h1 class="heading">Order List</h1>
+    <div class="filter-container">
+        <form action="controller" method="post">
+            <label for="startDate" style="font-size: 16px">Start Date:</label>
+            <input type="date" id="startDate" name="startDate" onchange="updateEndDate()" required>
+            <label for="endDate" style="font-size: 16px">End Date:</label>
+            <input type="date" id="endDate" name="endDate" required>
+            <button type="submit" name="action" value="filter-order-date">Filter</button>
+        </form>
+    </div>
     <c:if test="${not empty sessionScope.orderListEmployee}">
-        <div class="filter-container">
-            <form action="controller" method="post">
-                <label for="startDate" style="font-size: 16px">Start Date:</label>
-                <input type="date" id="startDate" name="startDate" onchange="updateEndDate()" required>
-                <label for="endDate" style="font-size: 16px">End Date:</label>
-                <input type="date" id="endDate" name="endDate" required>
-                <button type="submit" name="action" value="filter-order-date">Filter</button>
-            </form>
-        </div>
         <table class="table table-bordered">
             <thead>
             <tr>
