@@ -66,6 +66,42 @@ public class ProductRepositories implements ProductRepositoriesInterface {
     }
 
     @Override
+    public Product getMostPopularProduct() {
+        EntityManager entityManager = factory.createEntityManager();
+
+        try {
+            String queryStr = "SELECT p FROM Product p JOIN OrdersItem oi ON p.id=oi.product.id " +
+                    "GROUP BY p.id ORDER BY SUM(oi.quantity) DESC";
+            TypedQuery<Product> query = entityManager.createQuery(queryStr, Product.class);
+            query.setMaxResults(1);
+            List<Product> result = query.getResultList();
+            return result.isEmpty() ? null : result.get(0);
+        } catch (Exception e) {
+            System.err.println("An Exception has occurred when Searching for the most popular product " + e.getMessage());
+            return null;
+        } finally {
+            entityManager.close();
+        }
+    }
+
+    @Override
+    public List<Object[]> getTopSellingCategories() {
+        EntityManager entityManager = factory.createEntityManager();
+
+        try {
+            String queryStr = "SELECT p.category, SUM(oi.quantity) AS totalQuantity"+
+                    " FROM OrdersItem oi JOIN oi.product p GROUP BY p.category ORDER BY totalQuantity DESC";
+            Query query=entityManager.createQuery(queryStr);
+            return query.getResultList();
+        } catch (Exception e) {
+            System.err.println("An Exception has occurred when Searching for the top selling category" + e.getMessage());
+            return Collections.emptyList();
+        } finally {
+            entityManager.close();
+        }
+    }
+
+    @Override
     public List<Product> findProductsByKeyword(String keyword) {
         EntityManager entityManager = factory.createEntityManager();
 
@@ -139,7 +175,7 @@ public class ProductRepositories implements ProductRepositoriesInterface {
 
         try {
 
-            if(products==null || products.isEmpty()){
+            if (products == null || products.isEmpty()) {
                 return false;
             }
 
@@ -177,7 +213,7 @@ public class ProductRepositories implements ProductRepositoriesInterface {
         try {
             transaction.begin();
 
-            entityManager.createNativeQuery("ALTER TABLE "+ tableName +" AUTO_INCREMENT=2").executeUpdate();
+            entityManager.createNativeQuery("ALTER TABLE " + tableName + " AUTO_INCREMENT=2").executeUpdate();
 
             transaction.commit();
         } catch (PersistenceException e) {
