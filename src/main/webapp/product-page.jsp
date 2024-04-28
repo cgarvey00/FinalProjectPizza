@@ -29,7 +29,7 @@
     <br>
     <br>
     <h1 class="heading">Add Product</h1>
-    <form action="controller" method="POST">
+    <form action="controller" method="POST" enctype="multipart/form-data">
         <input type="hidden" name="action" value="add-product">
         <div class="flex">
             <div class="inputBox">
@@ -47,10 +47,9 @@
                        onkeypress="if(this.value.length == 10) return false;" name="stock">
             </div>
             <div class="inputBox">
-                <span>Image</span>
-                <textarea name="image" type="text" placeholder="Enter Product Image" class="box" required
-                          maxlength="500"
-                          cols="30" rows="10"></textarea>
+                <span>Image (required)</span>
+                <input type="file" name="image" accept="image/jpg, image/jpeg, image/png, image/webp" class="box"
+                       required>
             </div>
             <div class="inputBox">
                 <span>Product Details (required)</span>
@@ -94,7 +93,7 @@
             <form action="controller" method='POST'>
                 <input type='hidden' name='product_id' value='<%= product.getId() %>'>
 
-                <img src="../uploaded-images/<%= product.getImage() %>" alt="">
+                <img src="${pageContext.request.contextPath}/uploaded-images/<%=product.getImage()%>" alt="">
                 <div class="name">
                     <%= product.getName() %>
                 </div>

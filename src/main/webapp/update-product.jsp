@@ -13,7 +13,6 @@
         response.sendRedirect("index.jsp");
     }
 
-
 %>
 <html lang="en">
 <head>
@@ -30,6 +29,7 @@
     <!-- styles css link  -->
     <link rel="stylesheet" href="${pageContext.request.contextPath}/stylesheets/styles2.css">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/stylesheets/styles.css">
+    <link rel="icon" type="image/x-icon" href='${pageContext.request.contextPath}/uploaded-images/favicon.ico'>
 </head>
 
 <body>
@@ -44,13 +44,13 @@
     </br>
     <h1 class="heading">update product</h1>
 
-    <form action="controller" method="post" >
+    <form action="controller" method="post" enctype="multipart/form-data">
         <input type="hidden" name="action" value="update-product">
-        <input type="hidden" name="product_id" value="<%=product.getId()%>">
+        <input type="hidden" name="productId" value="<%=product.getId()%>">
         <input type="hidden" name="old_image" value="<%=product.getImage()%>">
         <div class="image-container">
             <div class="main-image">
-                <center> <img src="../uploaded-images/<%=product.getImage()%>" alt=""style="height:300px;"> </center>
+                <center> <img src="${pageContext.request.contextPath}/uploaded-images/<%=product.getImage()%>" alt=""style="height:300px;"> </center>
             </div>
         </div>
         <span>Update Name</span>
@@ -78,9 +78,9 @@
         <span>update details</span>
         <textarea name="details" class="box" required cols="30" rows="10"><%=product.getDetails()%></textarea>
         <span>update image </span>
-        <input type="text" name="image" required class="box" maxlength="100" placeholder="enter product image"
-               value="<%=product.getImage()%>">
-        <%--        <input type="file" name="image" accept="image/jpg, image/jpeg, image/png, image/webp" class="box">--%>
+        <%--        <input type="text" name="image" required class="box" maxlength="100" placeholder="enter product image"--%>
+        <%--               value="<%=product.getImage()%>">--%>
+        <input type="file" name="image" accept="image/jpg, image/jpeg, image/png, image/webp" class="box">
         <div class="flex-btn">
             <input type="submit" name="update-product" class="btn" value="update">
             <a href="controller?action=view-stock" class="option-btn">go back</a>
