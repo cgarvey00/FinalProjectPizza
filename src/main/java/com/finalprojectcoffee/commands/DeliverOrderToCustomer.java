@@ -37,6 +37,7 @@ public class DeliverOrderToCustomer implements Command {
                 List<Order> orderListEmployee = orderRep.getAllOrdersByEmployeeId(activeUser.getId());
                 if (!orderListEmployee.isEmpty() && orderListEmployee != null) {
                     session.setAttribute("deliveredOrders", orderRep.getAllOrdersByEmployeeId(activeUser.getId()));
+                    session.setAttribute("orderDelivered", "Order List is empty");
                     terminus = "employee-order-history.jsp";
                 } else {
                     session.setAttribute("deliveredOrders", "Order List is empty");

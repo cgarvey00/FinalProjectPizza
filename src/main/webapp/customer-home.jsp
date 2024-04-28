@@ -228,7 +228,7 @@
 
 </div>
 <%
-        session.removeAttribute("aps-message");
+        session.removeAttribute("order-complete");
     }%>
 
 

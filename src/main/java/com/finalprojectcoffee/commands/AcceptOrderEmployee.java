@@ -38,9 +38,11 @@ public class AcceptOrderEmployee implements Command {
                 List<Order> orderListEmployee = orderRep.getAllOrdersByEmployeeId(activeUser.getId());
                 if (!orderListEmployee.isEmpty() && orderListEmployee != null) {
                     session.setAttribute("orderListEmployee", orderRep.getAllOrdersByEmployeeId(activeUser.getId()));
+                    session.setAttribute("orderAccepted", "Order List is empty");
                     terminus = "employee-view-orders.jsp";
                 } else {
                     session.setAttribute("employeeEmptyList", "Order List is empty");
+                    session.setAttribute("takenOrder", "Order List is empty");
                     terminus = "employee-order-list.jsp";
                 }
             } else {

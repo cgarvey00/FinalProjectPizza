@@ -36,7 +36,7 @@
 </head>
 <style>
   :root {
-    --main-color: #2980b9;
+    /*--main-color: #2980b9;*/
     --orange: #f39c12;
     --red: #e74c3c;
     --black: #333;

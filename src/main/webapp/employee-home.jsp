@@ -39,6 +39,30 @@
 </head>
 
 <body>
+<style>
+
+    .alert {
+        padding: 15px;
+        margin-bottom: 20px;
+        border: 1px solid transparent;
+        border-radius: 4px;
+        color: #a94442;
+        background-color: #f2dede;
+        border-color: #ebccd1;
+    }
+
+
+    .success {
+        padding: 15px;
+        margin-bottom: 20px;
+        border: 1px solid transparent;
+        border-radius: 4px;
+        color: #27942b;
+        background-color: #affdb2;
+        border-color: #b0ff93;
+    }
+
+</style>
 <%@include file="employee-nav.jsp" %>
 <section class="dashboard">
     <br>
@@ -50,6 +74,7 @@
     <br>
     <br>
     <h1 class="heading">Employee Dashboard</h1>
+
     <div class="box-container">
         <!-- EMPLOYEE NAME AND WELCOME-->
         <div class="box">
@@ -62,20 +87,7 @@
             </a>
             <%}%>
         </div>
-        <!-- NUMBER OF EMPLOYEE ORDERS-->
-        <div class="box">
-            <h3><%=orderList.size()%>
-            </h3>
-            <p>Current Orders</p>
-            <a href="controller?action=view-orders" class="btn">see orders</a>
-        </div>
-        <!-- NUMBER OF USERS-->
-        <div class="box">
-            <h3><%=userList.size()%>
-            </h3>
-            <p>Users Present</p>
-            <a href="controller?action=view-orders" class="btn">see users</a>
-        </div>
+
         <!-- NUMBER OF  ORDERS-->
         <div class="box">
             <h3><%=freeOrders.size() %></h3>

@@ -118,15 +118,7 @@
             <h3><%=orderList.size()%>
             </h3>
             <p>orders placed</p>
-            <a href="controller?action=view-orders" class="btn">see orders</a>
-        </div>
-
-        <!-- NUMBER OF PENDING ORDERS-->
-        <div class="box">
-            <h3><%=orderList.size()%>
-            </h3>
-            <p>pending orders placed</p>
-            <a href="controller?action=view-orders" class="btn">see orders</a>
+            <a href="controller?action=view-admin-orders" class="btn">see orders</a>
         </div>
 
         <div class="box">
@@ -141,7 +133,7 @@
             <h3><%=userList.size()%>
             </h3>
             <p>Users Present</p>
-            <a href="controller?action=view-users" class="btn">see users</a>
+            <a href="controller?action=view-admin-users" class="btn">see users</a>
         </div>
         <!-- PDF POPULAR PRODUCT-->
         <div class="box">

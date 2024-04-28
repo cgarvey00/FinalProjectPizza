@@ -1,6 +1,15 @@
 <%@ page import="com.finalprojectcoffee.entities.Product" %>
 <%@ page import="java.util.List" %>
+<%@ page import="com.finalprojectcoffee.entities.User" %>
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" language="java" %>
+<%
+    User loggedInUser = (User) request.getSession().getAttribute("loggedInUser");
+
+
+    if (request.getSession(false) == null || loggedInUser == null || !"Customer".equals(loggedInUser.getUserType())) {
+        response.sendRedirect("index.jsp");
+    }
+%>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -10,7 +19,7 @@
 
     <!-- font awesome cdn link  -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css">
-
+    <link rel="icon" type="image/x-icon" href='${pageContext.request.contextPath}/uploaded-images/favicon.ico'>
     <!-- bootstrap cdn link  -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/4.6.1/css/bootstrap.min.css">
     <!-- styles css link  -->
@@ -27,7 +36,7 @@
     }
 </style>
 <body>
-<%@include file="customer-nav.jsp"%>
+<%@include file="normal-nav.jsp"%>
 <!-- home section starts  -->
 <br><br><br><br><br><br><br><br><br><br><br><br>
 <div class="show-products" id="products">
@@ -37,7 +46,7 @@
             List<Product> productList = (List<Product>) request.getSession().getAttribute("productList");
             if (productList != null && !productList.isEmpty()) {
                 for (Product p : productList) { %>
-        <form action="." method="post">
+        <form action="controller" method="post">
             <input type="hidden" name="action" value="add-to-cart">
             <input type="hidden" name="product_id" value=<%=p.getId()%>>
             <input type="hidden" name="name" value=<%=p.getName()%>>

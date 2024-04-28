@@ -30,11 +30,41 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
     <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
 </head>
+<style>
 
+    .alert {
+        padding: 15px;
+        margin-bottom: 20px;
+        border: 1px solid transparent;
+        border-radius: 4px;
+        color: #a94442;
+        background-color: #f2dede;
+        border-color: #ebccd1;
+    }
+
+
+    .success {
+        padding: 15px;
+        margin-bottom: 20px;
+        border: 1px solid transparent;
+        border-radius: 4px;
+        color: #27942b;
+        background-color: #affdb2;
+        border-color: #b0ff93;
+    }
+</style>
 <body>
 <%@include file="employee-nav.jsp" %>
 <section class="products" style="padding-top: 0; min-height:100vh;">
     <br><br><br><br><br><br><br><br><br>
+    <%if (session.getAttribute("takenOrder") != null) { %>
+    <div class="alert alert-danger" role="alert">
+        <h3>The Order has been Taken Already</h3>
+
+    </div>
+    <%
+            session.removeAttribute("takenOrder");
+        }%>
     <div class="box-container">
         <h2 class="heading">Orders To Be Delivered</h2>
         <table class="table table-bordered">

@@ -30,11 +30,42 @@
     <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
     <link rel="icon" type="image/x-icon" href='${pageContext.request.contextPath}/uploaded-images/favicon.ico'>
 </head>
+<style>
 
+    .alert {
+        padding: 15px;
+        margin-bottom: 20px;
+        border: 1px solid transparent;
+        border-radius: 4px;
+        color: #a94442;
+        background-color: #f2dede;
+        border-color: #ebccd1;
+    }
+
+
+    .success {
+        padding: 15px;
+        margin-bottom: 20px;
+        border: 1px solid transparent;
+        border-radius: 4px;
+        color: #27942b;
+        background-color: #affdb2;
+        border-color: #b0ff93;
+    }
+</style>
 <body>
 <%@include file="employee-nav.jsp" %>
 <section class="products" style="padding-top: 0; min-height:100vh;">
     <br><br><br><br><br><br><br><br><br>
+    <%if (session.getAttribute("orderDelivered") != null) { %>
+    <div class="success success-danger" role="alert">
+        <h3>Your Order has been delivered!</h3>
+
+    </div>
+    <%
+            session.removeAttribute("orderDelivered");
+        }%>
+
     <div class="box-container">
         <h2 class="heading">Orders Delivered</h2>
         <table class="table table-bordered">

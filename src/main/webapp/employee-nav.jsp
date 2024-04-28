@@ -53,10 +53,6 @@
             </nav>
             <div class="icons">
                 <div class="fas fa-bars" id="menu-btn"></div>
-                <a href="controller?action=view-search">
-                    <div class="fas fa-search" id="search-btn"></div>
-                </a>
-
                 <a href="controller?action=viewcurrent-emp-orders">
                     <div class="fas fa-truck" id="cart-btn"><span>
                               <%=session.getAttribute("employeeDeliveryList") != null ? session.getAttribute("employeeDeliveryList") : "0"%>
@@ -72,12 +68,6 @@
             </div>
             <div class="profile">
                 <div class="flex-btn">
-                    <form action="controller" method="POST">
-                        <input type="hidden" name="action" value="view-user-profile">
-                        <a>
-                            <button type="submit" name="view-user-profile" class="option-btn">Profile</button>
-                        </a>
-                    </form>
                 </div>
                 <a href="controller?action=viewcurrent-emp-orders" class="option-btn">Orders</a>
                 <a href="controller?action=logout" class="delete-btn"
