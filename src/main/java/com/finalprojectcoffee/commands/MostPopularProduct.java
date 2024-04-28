@@ -38,7 +38,6 @@ public class MostPopularProduct implements Command {
 
                 ProductRepositories prodRepos = new ProductRepositories(factory);
                 Product popular = prodRepos.getMostPopularProduct();
-                popular = null;
                 if (popular != null) {
                     try (PDDocument document = new PDDocument()) {
                         isNull=false;

@@ -18,7 +18,7 @@
 
     <!-- font awesome cdn link  -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css">
-
+    <link rel="icon" type="image/x-icon" href='${pageContext.request.contextPath}/uploaded-images/favicon.ico'>
     <!-- bootstrap cdn link  -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/4.6.1/css/bootstrap.min.css">
     <!-- styles css link  -->
@@ -45,7 +45,7 @@
         <div class="box">
             <form action="controller" method='POST'>
                 <input type='hidden' name='action' value='update-cart'>
-                <img src="../uploaded-images/<%=cart.getProduct().getImage() %>" alt="">
+                <img src="${pageContext.request.contextPath}/uploaded-images/<%=cart.getProduct().getImage()%>" name="image" alt="image">
                 <div class="name" name="name">
                     <%=cart.getProduct().getName() %>
                 </div>
@@ -102,17 +102,9 @@
     </div>
 
 </section>
+
 <%@include file="footer.jsp" %>
-<%
-    String updateSuccessful = (String) request.getSession().getAttribute("pus-msg");
 
-    Boolean alertDisplayed = (Boolean) request.getSession().getAttribute("alertDisplayed");
-
-    if (updateSuccessful != null && alertDisplayed == null) { %>
-alert("New Quantity Selected!");
-<% request.getSession().setAttribute("alertDisplayed", true);
-
-} %>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js"></script>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css">

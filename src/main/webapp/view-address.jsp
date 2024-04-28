@@ -16,7 +16,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Home</title>
-
+    <link rel="icon" type="image/x-icon" href='${pageContext.request.contextPath}/uploaded-images/favicon.ico'>
     <!-- font awesome cdn link  -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css">
 
@@ -27,6 +27,18 @@
     <link rel="stylesheet" href="${pageContext.request.contextPath}/stylesheets/styles.css">
 </head>
 <body>
+<style>
+
+    .alert {
+        padding: 15px;
+        margin-bottom: 20px;
+        border: 1px solid transparent;
+        border-radius: 4px;
+        color: #a94442;
+        background-color: #f2dede;
+        border-color: #ebccd1;
+    }
+</style>
 <%@include file="customer-nav.jsp" %>
 <!-- home section starts  -->
 <section class="add-products">
@@ -36,6 +48,34 @@
     </br>  <br>
     <br>
     <br>
+
+    <%if (session.getAttribute("invalidAddress") != null) { %>
+    <div class="alert alert-danger" role="alert">
+        <h3>Address could not be verified</h3>
+
+    </div>
+    <%
+            session.removeAttribute("invalidAddress");
+        }%>
+
+    <%if (session.getAttribute("failedAddAddress") != null) { %>
+    <div class="alert alert-danger" role="alert">
+        <h3>Failed to update address. Please try again</h3>
+
+    </div>
+    <%
+            session.removeAttribute("failedAddAddress");
+        }%>
+
+    <%if (session.getAttribute("outOfRange") != null) { %>
+    <div class="alert alert-danger" role="alert">
+        <h3>Address is out of range. please try again</h3>
+
+    </div>
+    <%
+            session.removeAttribute("outOfRange");
+        }%>
+
     <h1 class="heading">Add Address</h1>
     <form action="controller" method="POST">
         <input type="hidden" name="action" value="add-address">
@@ -78,7 +118,7 @@
             </tr>
             </thead>
             <tbody>
-            <% if(addressList !=null && !addressList.isEmpty()){
+            <% if (addressList != null && !addressList.isEmpty()) {
                 for (Address address : addressList) {%>
             <tr>
                 <td><%=address.getStreet() %>
@@ -91,7 +131,10 @@
                 </td>
             </tr>
 
-            <%}} %>
+            <%
+                    }
+                }
+            %>
             </tbody>
         </table>
     </div>
@@ -100,29 +143,24 @@
 
 <%@include file="footer.jsp" %>
 <script>
-    <%
-    Boolean addAddressSuccess= (Boolean)request.getSession().getAttribute("add-address-success");
-    String addAddressError=(String) request.getSession().getAttribute("errorMessage");
+    function validateAddress() {
+        var street = document.forms["addressForm"]["street"].value;
+        var town = document.forms["addressForm"]["town"].value;
+        var county = document.forms["addressForm"]["county"].value;
+        var eirCode = document.forms["addressForm"]["eirCode"].value;
 
-       if(addAddressSuccess !=null){ %>
-    <% if(addAddressSuccess ){ %>
-    alert("Address has been added Successfully!");
-    <% }else if(addAddressError !=null)  {%>
-    alert("Failure to add Address! Try again ");
-    <%} %>
-    <%} %>
+        if (street.trim() === "" || town.trim() === "" || county.trim() === "") {
+            alert("Street, Town and County are required");
+            return false;
+        }
 
+        if (!eirCode.match(/^[A-Za-z0-9 ]+$/)) {
+            alert("Enter a valid EirCode");
+            return false;
+        }
 
-
-
-    <%--    <% request.getSession().removeAttribute("update-product-success");--%>
-    <%--        request.getSession().removeAttribute("ape-message"); %>--%>
-    <% request.getSession().removeAttribute("add-address-success");
-        request.getSession().removeAttribute("errorMessage"); %>
-    <%--    <% request.getSession().removeAttribute("delete-product-success");--%>
-    <%--     request.getSession().removeAttribute("pde-message"); %>--%>
-
-
+        return true;
+    }
 </script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js"></script>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">

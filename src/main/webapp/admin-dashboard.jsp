@@ -2,6 +2,7 @@
 <%@ page import="java.util.List" %>
 <%@ page import="com.finalprojectcoffee.entities.User" %>
 <%@ page import="com.finalprojectcoffee.entities.Order" %>
+<%@ page import="com.finalprojectcoffee.entities.Review" %>
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" language="java" %>
 <%
     User loggedInUser = (User) request.getSession().getAttribute("loggedInUser");
@@ -11,6 +12,8 @@
     List<User> userList = (List<User>) request.getSession().getAttribute("userList");
     @SuppressWarnings("unchecked")
     List<Order> orderList = (List<Order>) request.getSession().getAttribute("orderList");
+    @SuppressWarnings("unchecked")
+    List<Review> reviewList = (List<Review>) request.getSession().getAttribute("allReviews");
 
     boolean isError = (boolean) (request.getSession().getAttribute("errorPDF") != null ? request.getSession().getAttribute("errorPDF") : false);
     //
@@ -58,6 +61,27 @@
         justify-content: space-between;
         gap: 1.5rem;
         z-index: 1000;
+    }
+
+    .alert {
+        padding: 15px;
+        margin-bottom: 20px;
+        border: 1px solid transparent;
+        border-radius: 4px;
+        color: #a94442;
+        background-color: #f2dede;
+        border-color: #ebccd1;
+    }
+
+
+    .success {
+        padding: 15px;
+        margin-bottom: 20px;
+        border: 1px solid transparent;
+        border-radius: 4px;
+        color: #27942b;
+        background-color: #affdb2;
+        border-color: #b0ff93;
     }
 </style>
 <%@include file="admin-nav.jsp" %>
@@ -128,60 +152,16 @@
                 <button type="submit" class="btn"> Download</button>
             </form>
         </div>
-        <!-- PDF POPULAR PRODUCT-->
+        <!-- PDF LIST OF REVIEWS-->
         <div class="box">
             <form action="controller" method="get">
-                <input type="hidden" name="action" value="generate-popular-product-pdf">
-                <h3>1</h3>
-                <p>Weekly Popular Product</p>
+                <input type="hidden" name="action" value="view-all-reviews-admin">
+                <h3><%=reviewList.size()%></h3>
+                <p>List of Reviews</p>
                 <button type="submit" class="btn"> Download</button>
             </form>
         </div>
-        <!-- PDF POPULAR PRODUCT-->
-        <div class="box">
-            <form action="controller" method="get">
-                <input type="hidden" name="action" value="generate-popular-product-pdf">
-                <h3>1</h3>
-                <p>Weekly Popular Product</p>
-                <button type="submit" class="btn"> Download</button>
-            </form>
-        </div>
-        <!-- PDF POPULAR PRODUCT-->
-        <div class="box">
-            <form action="controller" method="get">
-                <input type="hidden" name="action" value="generate-popular-product-pdf">
-                <h3>1</h3>
-                <p>Weekly Popular Product</p>
-                <button type="submit" class="btn"> Download</button>
-            </form>
-        </div>
-        <!-- PDF POPULAR PRODUCT-->
-        <div class="box">
-            <form action="controller" method="get">
-                <input type="hidden" name="action" value="generate-popular-product-pdf">
-                <h3>1</h3>
-                <p>Weekly Popular Product</p>
-                <button type="submit" class="btn"> Download</button>
-            </form>
-        </div>
-        <!-- PDF POPULAR PRODUCT-->
-        <div class="box">
-            <form action="controller" method="get">
-                <input type="hidden" name="action" value="generate-popular-product-pdf">
-                <h3>1</h3>
-                <p>Weekly Popular Product</p>
-                <button type="submit" class="btn"> Download</button>
-            </form>
-        </div>
-        <!-- PDF POPULAR PRODUCT-->
-        <div class="box">
-            <form action="controller" method="get">
-                <input type="hidden" name="action" value="generate-popular-product-pdf">
-                <h3>1</h3>
-                <p>Weekly Popular Product</p>
-                <button type="submit" class="btn"> Download</button>
-            </form>
-        </div>
+
     </div>
 
 </section>
