@@ -213,6 +213,24 @@
 <%
         session.removeAttribute("addAddress");
     }%>
+<%if (session.getAttribute("aps-message") != null) { %>
+<div class="success success-danger" role="alert">
+    <h3>Item Added to Cart</h3>
+
+</div>
+<%
+        session.removeAttribute("aps-message");
+    }%>
+
+<%if (session.getAttribute("order-complete") != null) { %>
+<div class="success success-danger" role="alert">
+    <h3>Your Order has been completed!</h3>
+
+</div>
+<%
+        session.removeAttribute("aps-message");
+    }%>
+
 
 <!-- home section starts  -->
 <section class="home" id="home">

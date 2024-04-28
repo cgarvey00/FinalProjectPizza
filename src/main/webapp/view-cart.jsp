@@ -26,11 +26,59 @@
     <link rel="stylesheet" href="${pageContext.request.contextPath}/stylesheets/styles2.css">
 </head>
 <body>
+<style>
+    .alert {
+        padding: 15px;
+        margin-bottom: 20px;
+        border: 1px solid transparent;
+        border-radius: 4px;
+        color: #a94442;
+        background-color: #f2dede;
+        border-color: #ebccd1;
+    }
+
+
+    .success {
+        padding: 15px;
+        margin-bottom: 20px;
+        border: 1px solid transparent;
+        border-radius: 4px;
+        color: #27942b;
+        background-color: #affdb2;
+        border-color: #b0ff93;
+    }
+
+</style>
 <%@include file="customer-nav.jsp" %>
 <br>
 <br>
 <br>
 <section class="products" id="products">
+    <%if (session.getAttribute("aps-message") != null) { %>
+    <div class="success success-danger" role="alert">
+        <h3>Item Removed from Cart</h3>
+
+    </div>
+    <%
+            session.removeAttribute("aps-message");
+        }%>
+    <%if (session.getAttribute("ccs-msg") != null) { %>
+    <div class="success success-danger" role="alert">
+        <h3>Cart has been cleaned!</h3>
+
+    </div>
+    <%
+            session.removeAttribute("ccs-msg");
+        }%>
+
+    <%if (session.getAttribute("pus-msg") != null) { %>
+    <div class="success success-danger" role="alert">
+        <h3>Quantity Updated!</h3>
+
+    </div>
+    <%
+            session.removeAttribute("pus-msg");
+        }%>
     <h3 class="heading">Shopping Cart</h3>
 
     <div class="box-container">

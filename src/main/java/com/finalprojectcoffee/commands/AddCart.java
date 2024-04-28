@@ -1,7 +1,9 @@
 package com.finalprojectcoffee.commands;
 
+import com.finalprojectcoffee.entities.Product;
 import com.finalprojectcoffee.entities.User;
 import com.finalprojectcoffee.repositories.CartsRepositories;
+import com.finalprojectcoffee.repositories.ProductRepositories;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -28,18 +30,27 @@ public class AddCart implements Command {
 
         try {
             CartsRepositories cartRep = new CartsRepositories(factory);
+            ProductRepositories productRep = new ProductRepositories(factory);
+            User loggedInUser = (User) session.getAttribute("loggedInUser");
 
-            User loggedInUser=(User)session.getAttribute("loggedInUser");
+            if (loggedInUser != null) {
+                Product p = productRep.findProductByID(productID);
 
-            if (loggedInUser!=null) {
-                boolean isAdded = cartRep.addCartItem(loggedInUser.getId(),productID,quantity);
-                if (isAdded) {
-                    session.setAttribute("aps-message", "Item Added to Cart successfully");
+                if (p.getStock() > quantity) {
+
+
+                    boolean isAdded = cartRep.addCartItem(loggedInUser.getId(), productID, quantity);
+                    if (isAdded) {
+                        session.setAttribute("cartLists", cartRep.getCartsByCustomerId(loggedInUser.getId()).size());
+                        session.setAttribute("aps-message", "Item Added to Cart successfully");
+                    } else {
+                        session.setAttribute("ape-message", "Failed to add to Cart");
+                    }
                 } else {
-                    session.setAttribute("ape-message", "Failed to add to Cart");
+                    session.setAttribute("insufficientQty","Insufficient quantity input, please try again ");
                 }
-            }else{
-                session.setAttribute("log-message","User logged out");
+            } else {
+                session.setAttribute("log-message", "User logged out");
             }
         } catch (Exception e) {
             System.err.println("An Exception occurred while adding products: " + e.getMessage());

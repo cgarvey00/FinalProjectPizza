@@ -22,13 +22,10 @@ public class LoginAutomationTest {
 
     @BeforeEach
     public void setUp() {
-        //String persistenceUnit = System.getProperty("pizzashop.persistence.unit", "pizzashop");
-        System.setProperty("pizzashop.persistence.unit", "testpizzadeliveryshop");
         String projectPath = System.getProperty("user.dir");
         String chromeDriverPath = projectPath + File.separator + "src" + File.separator + "main" + File.separator + "resources" + File.separator + "chromedriver-win64" + File.separator + "chromedriver.exe";
         System.setProperty("webdriver.chrome.driver", chromeDriverPath);
         driver = new ChromeDriver();
-
     }
 
 

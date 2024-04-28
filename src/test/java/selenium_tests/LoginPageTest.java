@@ -11,6 +11,8 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 
+import java.io.File;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -21,9 +23,9 @@ public class LoginPageTest {
 
     @BeforeEach
     public void setUp() {
-        System.setProperty("webdriver.chrome.driver", "C:\\Users\\conor\\Documents\\college\\Year 3\\Project\\FinalProjectStage3\\src\\main\\resources\\chromedriver-win64\\chromedriver.exe");
-        factory = Persistence.createEntityManagerFactory("testpizzadeliveryshop");
-        userRep = new UserRepositories(factory);
+        String projectPath = System.getProperty("user.dir");
+        String chromeDriverPath = projectPath + File.separator + "src" + File.separator + "main" + File.separator + "resources" + File.separator + "chromedriver-win64" + File.separator + "chromedriver.exe";
+        System.setProperty("webdriver.chrome.driver", chromeDriverPath);
         driver = new ChromeDriver();
     }
 

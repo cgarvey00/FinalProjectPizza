@@ -33,6 +33,10 @@ public class CleanCart implements Command {
             User loggedInUser = (User) session.getAttribute("loggedInUser");
             Boolean isCleaned = cartRep.clearCart(cartId);
             if (isCleaned) {
+                // Update Cart Number
+                List<Carts> cartLists = cartRep.getCartsByCustomerId(loggedInUser.getId());
+                session.setAttribute("cartLists",cartLists.size());
+
                 List<Carts> cartsList = cartRep.getCartsByCustomerId(loggedInUser.getId());
                 session.setAttribute("cartList", cartsList);
                 session.setAttribute("ccs-msg", "Clean cart successfully");

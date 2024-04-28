@@ -40,6 +40,7 @@ public class DeleteCart implements Command {
                 if (isAdded) {
                     // Updating the Cart Items
                     List<Carts> cartList = cartRep.getCartsByCustomerId(loggedInUser.getId());
+                    session.setAttribute("cartLists",cartList.size());
                     session.setAttribute("cartList", cartList);
                     session.setAttribute("aps-message", "Item Deleted from Cart successfully");
                 } else {
