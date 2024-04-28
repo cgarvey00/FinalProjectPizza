@@ -10,7 +10,7 @@
         for (OrdersItem orderDet : orderDetailList) { %>
     <div class="box bg-light">
       <div class="image">
-        <img src="https://hips.hearstapps.com/hmg-prod/images/classic-cheese-pizza-recipe-2-64429a0cb408b.jpg?crop=0.8888888888888888xw:1xh;center,top&resize=1200:*" width="100px; "height="100px;" alt="image">
+        <img src="${pageContext.request.contextPath}/uploaded-images/<%=orderDet.getProduct().getImage()%>" width="100px; "height="100px;" alt="image">
       </div>
       <div class="content text-dark">
         <div class="text-dark" name="name">
