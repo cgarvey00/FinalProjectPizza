@@ -34,36 +34,36 @@
       List<Product> productList = (List<Product>) request.getSession().getAttribute("productList");
       if (productList != null && !productList.isEmpty()) {
         for (Product p : productList) { %>
-<%--    <form action="controller" method="post">--%>
-<%--      <input type="hidden" name="action" value="landing-view-calories">--%>
-<%--      <input type="hidden" name="productId" value=<%=p.getId()%>>--%>
-      <div class="box bg-light">
-        <div class="image">
-          <img src="${pageContext.request.contextPath}/uploaded-images/<%= p.getImage() %>" name="image" alt="image">
-        </div>
-        <div class="content text-dark">
-          <h3 class="text-dark" name="name">
-            <%=p.getName()  %>
-          </h3>
-          <h3 class="text-dark" style="font-size:10px;">
-            <%=p.getDetails()  %>
-          </h3>
-          <div class="price">
-            <p class="text-dark" step="0.01">&euro;
-              <%=String.format("%.2f", p.getPrice())  %>
-            </p>
-          </div>
-          <% if (p.getStock() <= 0) { %>
-          <h4 style="font-weight: bold;"class="text-red">Out Of Stock</h4>
-          <button type="submit" disabled name="view-product-customer" style="background-color:white;" class="cart-btn">View Item</button>
-          <% } else {%>
-          <button data-id="<%=p.getId()%>" style="background-color: #f3804e;"
-                  class="caloriesinfo btn btn-success">View Calories
-          </button>
-          <% }%>
-
-        </div>
+    <%--    <form action="controller" method="post">--%>
+    <%--      <input type="hidden" name="action" value="landing-view-calories">--%>
+    <%--      <input type="hidden" name="productId" value=<%=p.getId()%>>--%>
+    <div class="box bg-light">
+      <div class="image">
+        <img src="${pageContext.request.contextPath}/uploaded-images/<%= p.getImage() %>" name="image" alt="image">
       </div>
+      <div class="content text-dark">
+        <h3 class="text-dark" name="name">
+          <%=p.getName()  %>
+        </h3>
+        <h3 class="text-dark" style="font-size:10px;">
+          <%=p.getDetails()  %>
+        </h3>
+        <div class="price">
+          <p class="text-dark" step="0.01">&euro;
+            <%=String.format("%.2f", p.getPrice())  %>
+          </p>
+        </div>
+        <% if (p.getStock() <= 0) { %>
+        <h4 style="font-weight: bold;"class="text-red">Out Of Stock</h4>
+        <button type="submit" disabled name="view-product-customer" style="background-color:white;" class="cart-btn">View Item</button>
+        <% } else {%>
+        <button data-id="<%=p.getId()%>" style="background-color: #f3804e;"
+                class="caloriesinfo btn btn-success">View Calories
+        </button>
+        <% }%>
+
+      </div>
+    </div>
 
     <% } %>
   </div>
