@@ -18,30 +18,37 @@
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"
           integrity="sha512-Fo3rlrZj/k7ujTnHg4CGR2D7kSs0v4LLanw2qksYuRlEzO+tcaEPQogQ0KaoGN26/zrn20ImR1DfuLWnOo7aBA=="
-          crossorigin="anonymous" referrerpolicy="no-referrer" />
-
+          crossorigin="anonymous" referrerpolicy="no-referrer"/>
+    <link rel="icon" type="image/x-icon" href='${pageContext.request.contextPath}/uploaded-images/favicon.ico'>
     <script src="https://kit.fontawesome.com/2bbac3a66c.js" crossorigin="anonymous"></script>
 </head>
 
 <body>
 <style>
     .s-error {
-        color: rgb(243, 74, 74);
-        font-weight: bold;
+        color: red;
         position: absolute;
         top: 205px;
         margin-bottom: 0;
-        font-size: 13.5px;
+        font-size: 15px;
     }
+
+    /*.s-error {*/
+    /*    color: red;*/
+    /*    position: absolute;*/
+    /*    bottom: 5px;*/
+    /*    margin-top: 50px;*/
+    /*    font-size: 15px;*/
+    /*}*/
 
     .s-success {
         color: rgb(138, 255, 64);
-        font-weight: bold;
         position: absolute;
-        top: 165px;
+        top: 205px;
         margin-bottom: 0;
-        font-size: 13.5px;
+        font-size: 15px;
     }
+
     body {
         display: flex;
         justify-content: center;
@@ -55,13 +62,27 @@
 </style>
 <form id="login-form" action="controller" method="POST">
     <input type="hidden" name="action" value="login">
-    <c:if test="${not empty sessionScope.successmsg}">
-        <div class="s-success">${sessionScope.successmsg}</div>
-    </c:if>
-
-    <c:if test="${not empty sessionScope.errormsg}">
-        <div class="s-error">${sessionScope.errorMessage}</div>
-    </c:if>
+    <%
+        if (session.getAttribute("successMSG") != null) { %>
+    <div class="s-success">Registered successfully!! you can log in</div>
+    <%
+            session.removeAttribute("successMSG");
+        }
+    %>
+    <%
+        if (session.getAttribute("errorMessage1") != null) { %>
+    <div style="font-size: 13px;" class="s-error">Wrong password has been provided, please try again</div>
+    <%
+            session.removeAttribute("errorMessage1");
+        }
+    %>
+    <%
+        if (session.getAttribute("errorMessage2") != null) { %>
+    <div class="s-error">User Account does not exist, try register!!!</div>
+    <%
+            session.removeAttribute("errorMessage2");
+        }
+    %>
     <div class="title" style="text-align: center;">
         <h2>Login Here</h2>
     </div>
@@ -92,7 +113,26 @@
         </div>
     </div>
 </form>
+<!-- Error Modal -->
+<div class="modal fade" id="errorModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Login Error</h5>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <!-- Error message will be inserted here -->
+            </div>
+        </div>
+    </div>
+</div>
 </body>
 <script src="${pageContext.request.contextPath}/scripts/login.js" type="text/javascript"></script>
+<script>
+    // setTimeout(function(){
+    //     location.reload();
+    // },3000);
 
+</script>
 </html>

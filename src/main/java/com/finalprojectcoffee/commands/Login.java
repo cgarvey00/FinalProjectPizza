@@ -60,21 +60,21 @@ public class Login implements Command {
                                     session.setAttribute("addressed", addressed);
                                 }
                                 break;
-                            case "Employee":
-                                terminus = "employee-home.jsp";
-                                break;
-                            case "Admin":
-                                terminus = "admin-dashboard.jsp";
-
-                                List<User> userList = userRep.getAllUsers();
-                                session.setAttribute("userList", userList);
-
-                                List<Order> orderList = orderRep.getAllOrders();
-                                session.setAttribute("orderList", orderList);
-
-                                List<Product> productList = productRep.getAllProducts();
-                                session.setAttribute("productList", productList);
-                                break;
+//                            case "Employee":
+//                                terminus = "employee-home.jsp";
+//                                break;
+//                            case "Admin":
+//                                terminus = "admin-dashboard.jsp";
+//
+//                                List<User> userList = userRep.getAllUsers();
+//                                session.setAttribute("userList", userList);
+//
+//                                List<Order> orderList = orderRep.getAllOrders();
+//                                session.setAttribute("orderList", orderList);
+//
+//                                List<Product> productList = productRep.getAllProducts();
+//                                session.setAttribute("productList", productList);
+//                                break;
                         }
                         session.setAttribute("loggedInUser", user);
                     } else {
