@@ -1,4 +1,16 @@
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ page import="com.finalprojectcoffee.entities.Product" %>
+<%@ page import="java.util.List" %>
+<%@ page import="com.finalprojectcoffee.entities.User" %>
+<%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+
+<%
+    User loggedInUser = (User) request.getSession().getAttribute("loggedInUser");
+
+
+    if (request.getSession(false) == null || loggedInUser == null || !"Customer".equals(loggedInUser.getUserType())) {
+        response.sendRedirect("index.jsp");
+    }
+%>
 <html>
 <head>
     <title>Review</title>
@@ -105,29 +117,27 @@
 </div>
 
 <script>
-    document.addEventListener('DOMContentLoaded', function() {
+    document.addEventListener('DOMContentLoaded', function () {
         const ratingStars = document.querySelectorAll('.rating > span');
 
-        ratingStars.forEach(function(star) {
-            star.addEventListener('click', function() {
+        ratingStars.forEach(function (star) {
+            star.addEventListener('click', function () {
                 const ratingValue = this.getAttribute('data-value');
-                const ratingContainer = this.parentElement;
-                const stars = ratingContainer.getAttribute('data-rating');
-
+                // const ratingContainer = this.parentElement;
+                // const stars = ratingContainer.getAttribute('data-rating');
                 document.getElementById('stars').value = ratingValue;
 
-                ratingStars.forEach(function(s) {
-                    s.classList.remove('active');
-                });
+                // document.getElementById('stars').value = ratingValue;
 
-                for (let i = 0; i < ratingValue; i++) {
+                ratingStars.forEach(s => s.classList.remove('active'));
+                for (let i = ratingStars.length-ratingValue; i < ratingStars.length; i++) {
                     ratingStars[i].classList.add('active');
                 }
 
-                ratingContainer.setAttribute('data-rating', ratingValue);
             });
         });
-    });
+    })
+    ;
 </script>
 
 </body>

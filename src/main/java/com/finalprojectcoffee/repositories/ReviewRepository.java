@@ -1,5 +1,6 @@
 package com.finalprojectcoffee.repositories;
 
+import com.finalprojectcoffee.entities.Customer;
 import com.finalprojectcoffee.entities.Review;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
@@ -7,6 +8,7 @@ import jakarta.persistence.EntityTransaction;
 import jakarta.persistence.PersistenceException;
 
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 
 public class ReviewRepository implements ReviewRepositoryInterface {
@@ -18,11 +20,21 @@ public class ReviewRepository implements ReviewRepositoryInterface {
     }
 
     @Override
-    public boolean addReview(Review review, int stars) {
+    public boolean addReview(int customer_id, String comment, Date commentDate, int stars) {
         EntityManager entityManager = factory.createEntityManager();
         EntityTransaction transaction = entityManager.getTransaction();
         try {
+            if (customer_id <= 0 || comment == (null)  || stars < 0 || commentDate.equals(null)) {
+                return false;
+            }
             transaction.begin();
+
+            Customer customer = entityManager.find(Customer.class, customer_id);
+            Review review = new Review();
+            review.setUser(customer);
+            review.setComment(comment);
+            review.setCommentDate(commentDate);
+            review.setStars(stars);
             entityManager.persist(review);
             transaction.commit();
             return true;
