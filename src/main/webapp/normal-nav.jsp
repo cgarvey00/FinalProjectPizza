@@ -21,14 +21,14 @@
       </div>
       <div class="profile">
         <div class="flex-btn">
-          <a href="controller?action=view-login" class="option-btn">Login</a>
+          <a href="controller?action=view-login" id="loginID" class="option-btn">Login</a>
           <a href="controller?action=view-register" class="option-btn">Register</a>
         </div>
 
       </div>
     </div>
 
-    </div>
+  </div>
 
   </div>
 </header>

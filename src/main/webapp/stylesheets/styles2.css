@@ -16,6 +16,7 @@
     --main-color:#2980b9;
     --orange:#f39c12;
     --red:#e74c3c;
+    --bg: #010103;
     --black:#333;
     --white:#fff;
     --light-color:#666;
@@ -146,7 +147,7 @@ section {
 }
 
 .link-btn:hover {
-    background: #802e2e;
+    background: #FCC269FF;
     color: #fff;
 }
 
@@ -184,6 +185,8 @@ section {
 }
 
 .header .nav a:hover {
+    color:#fff;
+    background-color: #FCC269FF;
     text-decoration: underline !important;
     text-underline-offset: .5rem;
 }
@@ -386,6 +389,55 @@ section {
 }
 
 
+
+/*.contact .row {*/
+/*    display: flex;*/
+/*    background: var(--black);*/
+/*    flex-wrap: wrap;*/
+/*    gap: 1rem;*/
+/*}*/
+
+/*.contact .row .map {*/
+/*    flex: 1 1 45rem;*/
+/*    width: 100%;*/
+/*    object-fit: cover;*/
+/*}*/
+
+/*.contact .row form {*/
+/*    flex: 1 1 45rem;*/
+/*    padding: 5rem 2rem;*/
+/*    text-align: center;*/
+/*}*/
+
+/*.contact .row form h3 {*/
+/*    text-transform: uppercase;*/
+/*    font-size: 3.5rem;*/
+/*    color: #fff;*/
+/*}*/
+
+/*.contact .row form .inputBox {*/
+/*    display: flex;*/
+/*    align-items: center;*/
+/*    margin-top: 2rem;*/
+/*    margin-bottom: 2rem;*/
+/*    background: var(--bg);*/
+/*    border: var(--border);*/
+/*}*/
+
+/*.contact .row form .inputBox span {*/
+/*    color: #fff;*/
+/*    font-size: 2rem;*/
+/*    padding-left: 2rem;*/
+/*}*/
+
+/*.contact .row form .inputBox input {*/
+/*    width: 100%;*/
+/*    padding: 2rem;*/
+/*    font-size: 1.7rem;*/
+/*    color: #fff;*/
+/*    text-transform: none;*/
+/*    background: none;*/
+/*}*/
 .footer {
     text-align: center;
 }
