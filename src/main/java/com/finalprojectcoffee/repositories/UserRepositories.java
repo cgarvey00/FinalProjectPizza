@@ -6,7 +6,6 @@ import jakarta.persistence.*;
 
 import java.util.Collections;
 import java.util.List;
-
 public class UserRepositories implements UserRepositoryInterfaces {
     private EntityManagerFactory factory;
 
@@ -38,7 +37,38 @@ public class UserRepositories implements UserRepositoryInterfaces {
         try {
             Query query = entityManager.createQuery("SELECT u FROM User u WHERE u.username = :username");
             query.setParameter("username", username);
-            return (User) query.getSingleResult();
+
+            List<User> resultList = query.getResultList();
+            if (resultList.isEmpty()) {
+                return null;
+            } else {
+                return resultList.get(0);
+            }
+
+//            return (User) query.getSingleResult();
+        } catch (Exception e) {
+            System.err.println("An Exception occurred while searching " + e.getMessage());
+            return null;
+        } finally {
+            entityManager.close();
+        }
+    }
+
+    @Override
+    public User findUserByEmail(String email) {
+        EntityManager entityManager = factory.createEntityManager();
+
+        try {
+            Query query = entityManager.createQuery("SELECT u FROM User u WHERE u.email = :email");
+            query.setParameter("email", email);
+            List<User> resultList = query.getResultList();
+            if (resultList.isEmpty()) {
+                return null;
+            } else {
+                return resultList.get(0);
+            }
+
+//            return (User) query.getSingleResult();
         } catch (Exception e) {
             System.err.println("An Exception occurred while searching " + e.getMessage());
             return null;
@@ -66,7 +96,6 @@ public class UserRepositories implements UserRepositoryInterfaces {
     public Boolean addUser(User user) {
         EntityManager entityManager = factory.createEntityManager();
         EntityTransaction transaction = entityManager.getTransaction();
-
         try {
             transaction.begin();
 
@@ -184,7 +213,7 @@ public class UserRepositories implements UserRepositoryInterfaces {
     }
 
     @Override
-    public Boolean updateAddress(int addressId,int userId, String street, String town, String county, String eirCode) {
+    public Boolean updateAddress(int addressId, int userId, String street, String town, String county, String eirCode) {
         EntityManager entityManager = factory.createEntityManager();
         EntityTransaction transaction = entityManager.getTransaction();
 
@@ -251,6 +280,19 @@ public class UserRepositories implements UserRepositoryInterfaces {
         }
     }
 
+    public Address getAddressesByAddressId(int addressId) {
+        EntityManager entityManager = factory.createEntityManager();
+        try {
+            return entityManager.find(Address.class, addressId);
+        } catch (Exception e) {
+            System.err.println("An Exception occurred while searching " + e.getMessage());
+            return null;
+        } finally {
+            entityManager.close();
+        }
+
+    }
+
     public void resetAutoIncrement(String tableName) {
         EntityManager entityManager = factory.createEntityManager();
         EntityTransaction transaction = entityManager.getTransaction();
@@ -258,7 +300,7 @@ public class UserRepositories implements UserRepositoryInterfaces {
         try {
             transaction.begin();
 
-            entityManager.createNativeQuery("ALTER TABLE " + tableName + " AUTO_INCREMENT=10").executeUpdate();
+            entityManager.createNativeQuery("ALTER TABLE " + tableName + " AUTO_INCREMENT=4").executeUpdate();
 
             transaction.commit();
         } catch (PersistenceException e) {
@@ -278,7 +320,7 @@ public class UserRepositories implements UserRepositoryInterfaces {
         try {
             transaction.begin();
 
-            entityManager.createNativeQuery("ALTER TABLE "  + tableName + " AUTO_INCREMENT=2").executeUpdate();
+            entityManager.createNativeQuery("ALTER TABLE " + tableName + " AUTO_INCREMENT=2").executeUpdate();
 
             transaction.commit();
         } catch (PersistenceException e) {
