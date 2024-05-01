@@ -1,7 +1,6 @@
-<%@ page import="com.finalprojectcoffee.entities.Product" %>
-<%@ page import="java.util.List" %>
-<%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" language="java" %>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 
 <html lang="en">
 <head>
@@ -21,63 +20,78 @@
     <link rel="stylesheet" href="${pageContext.request.contextPath}/stylesheets/styles.css">
 </head>
 <body>
-<%@include file="customer-nav.jsp"%>
+<jsp:include page="customer-nav.jsp"/>
 <!-- home section starts  -->
 <br><br><br><br><br><br><br><br><br><br>
 <div id="toast-container" class="toast-container"></div>
 <div class="show-products" id="products">
-    <h1 style="text-align: center;">View Products On Menu</h1>
-    <div class="box-container">
-        <%
-            @SuppressWarnings("unchecked")
-            List<Product> productList = (List<Product>) request.getSession().getAttribute("productList");
-            if (productList != null && !productList.isEmpty()) {
-                for (Product product : productList) { %>
-        <form action="controller" method="POST">
-            <div class="box bg-light">
-                <div class="image">
-                    <img src="${pageContext.request.contextPath}/images/<%= product.getImage() %>" alt="image">
-                </div>
-                <div class="content text-dark">
-                    <h3 class="text-dark">
-                        <%=product.getName()%>
-                    </h3>
-                    <h3 class="text-dark" style="font-size:10px;">
-                        <%=product.getDetails()%>
-                    </h3>
-                    <div class="price">
-                        <p class="text-dark">&euro;
-                            <%=String.format("%.2f", product.getPrice())  %>
-                        </p>
-                    </div>
-                    <h4 class="text-dark">Place cart quantity</h4>
-                    <label>
-                        <input type="number" id="quantity<%= product.getId() %>" name="quantity" style="font-size:15px;" required class="box" min="1" max="<%= product.getStock() %>" placeholder="enter quantity" value="1"<% if (product.getStock() == 0) { %> disabled <% }%> >
-                    </label>
-                    <% if (product.getStock() > 0) { %>
-                    <button type="button" name="action" class="cart-btn" onclick="addToCart(<%= product.getId() %>)">Add to Cart</button>
-                    <% } else { %>
-                    <button type="button" name="action" class="cart-btn out-of-stock" disabled>Out of Stock</button>
-                    <% } %>
-                </div>
+    <h1 class="heading">Menu</h1>
+    <c:if test="${not empty sessionScope.productListByCategory}">
+        <c:forEach var="entry" items="${sessionScope.productListByCategory}">
+            <div class="category-title-container">
+                <h2 class="category-heading">${entry.key.name()}</h2>
             </div>
-        </form>
-        <% } %>
-    </div>
-    <% } else { %>
-    <p class="empty">No Products Added Yet!</p>
-    <% } %>
+            <div class="box-container">
+                <c:forEach var="product" items="${entry.value}">
+                    <form action="controller" method="POST">
+                        <div class="box bg-light" id="product-${product.id}">
+                            <div class="image">
+                                <img src="<c:url value='/images/${product.getImage()}' />" alt="image">
+                            </div>
+                            <div class="content text-dark">
+                                <h3 class="text-dark">
+                                    <c:out value="${product.getName()}"/>
+                                </h3>
+                                <h3 class="text-dark" style="font-size:10px;">
+                                    <c:out value="${product.getDetails()}"/>
+                                </h3>
+                                <div class="price">
+                                    <p class="text-dark">&euro;
+                                        <fmt:formatNumber value="${product.price}" pattern="0.00"/>
+                                    </p>
+                                </div>
+                                <h4 class="text-dark">Place cart quantity</h4>
+                                <label>
+                                    <input type="number" id="quantity${product.id}" name="quantity"
+                                           style="font-size:15px;"
+                                           required class="box" min="1" max="${product.stock}"
+                                           placeholder="enter quantity"
+                                           value="1" ${product.stock == 0 ? 'disabled' : ''}>
+                                </label>
+                                <c:choose>
+                                    <c:when test="${product.getStock() > 0}">
+                                        <button type="button" name="action" class="cart-btn"
+                                                onclick="addToCart(${product.getId()})">Add
+                                            to Cart
+                                        </button>
+                                    </c:when>
+                                    <c:otherwise>
+                                        <button type="button" name="action" class="cart-btn out-of-stock" disabled>
+                                            Out
+                                            of
+                                            Stock
+                                        </button>
+                                    </c:otherwise>
+                                </c:choose>
+                            </div>
+                        </div>
+                    </form>
+                </c:forEach>
+            </div>
+        </c:forEach>
+    </c:if>
 </div>
 
 <script>
     let cartQuantities = {};
-    function addToCart(productId){
-        var quantity = parseInt(document.getElementById("quantity" + productId).value)
-        var currentQuantity = cartQuantities[productId] || 0
-        var newQuantity = currentQuantity + quantity;
-        var stock = parseInt(document.getElementById("quantity" + productId).max);
 
-        if(newQuantity > stock){
+    function addToCart(productId) {
+        let quantity = parseInt(document.getElementById("quantity" + productId).value)
+        let currentQuantity = cartQuantities[productId] || 0
+        let newQuantity = currentQuantity + quantity;
+        let stock = parseInt(document.getElementById("quantity" + productId).max);
+
+        if (newQuantity > stock) {
             alert("Cannot add more items than available in stock.")
             return;
         }
@@ -93,8 +107,8 @@
                 productId: productId,
                 quantity: quantity
             },
-            success: function (response){
-                if(response.success) {
+            success: function (response) {
+                if (response.success) {
                     showToast(response.addCartMessage);
                 } else {
                     showToast(response.addCartMessage, true);
@@ -104,7 +118,7 @@
     }
 
     function showToast(message, isError) {
-        var toast = document.createElement("div");
+        let toast = document.createElement("div");
         toast.className = "toast-message";
         if (isError) {
             toast.classList.add("error");
@@ -115,20 +129,20 @@
         toast.style.display = 'block';
         toast.style.opacity = '1';
 
-        setTimeout(function() {
+        setTimeout(function () {
             toast.style.opacity = '0';
-            setTimeout(function() {
+            setTimeout(function () {
                 toast.remove();
             }, 600);
         }, 500);
     }
 
     document.querySelectorAll('input[type=number][name=quantity]').forEach(input => {
-        input.addEventListener('change', function (){
-            var max = parseInt(this.max, 10);
-            var value = parseInt(this.value, 10);
+        input.addEventListener('change', function () {
+            let max = parseInt(this.max, 10);
+            let value = parseInt(this.value, 10);
 
-            if(value > max){
+            if (value > max) {
                 alert("The quantity cannot exceed the stock");
                 this.value = max;
             } else if (value <= 0) {
@@ -138,7 +152,7 @@
     });
 </script>
 
-<%@include file="footer.jsp"%>
+<jsp:include page="footer.jsp"/>
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/4.6.1/css/bootstrap.min.css">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
@@ -186,14 +200,47 @@
     }
 
     @keyframes fadeInOut {
-        0%, 100% { opacity: 0; visibility: hidden; }
-        10%, 90% { opacity: 1; visibility: visible; }
+        0%, 100% {
+            opacity: 0;
+            visibility: hidden;
+        }
+        10%, 90% {
+            opacity: 1;
+            visibility: visible;
+        }
     }
 
     .out-of-stock {
         background-color: red;
         color: white;
         cursor: not-allowed;
+    }
+
+    .category-heading {
+        font-size: 28px;
+        font-weight: bold;
+        color: #5A3422;
+        padding: 10px 0;
+        margin: 20px 0;
+        text-align: center;
+        border-bottom: 3px dashed #FFA500;
+        text-transform: uppercase;
+        font-family: 'Brush Script MT', cursive;
+        letter-spacing: 1px;
+        word-spacing: 2px;
+        text-shadow: 2px 2px 3px #aaa;
+    }
+
+    @media (max-width: 768px) {
+        .category-heading {
+            font-size: 24px;
+        }
+    }
+
+    @media (max-width: 480px) {
+        .category-heading {
+            font-size: 20px;
+        }
     }
 </style>
 </html>

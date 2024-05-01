@@ -1,6 +1,5 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
 
 <html lang="en">
 <head>
@@ -57,24 +56,6 @@
                             <input type="hidden" name="orderId" value="${sessionScope.order.getId()}">
                         </div>
                     </form>
-                    <script>
-                        document.getElementById('paymentForm').onsubmit = function (event) {
-                            var paymentInputValue = document.getElementById('paymentInput').value;
-                            var balance = document.getElementById('balance').value;
-                            var paymentInput = parseFloat(paymentInputValue);
-
-                            if(isNaN(paymentInput) || paymentInput === ''){
-                                alert('Please enter a valid number.')
-                                event.preventDefault();
-                            } else if( paymentInput < 0){
-                                alert('Please enter a valid number.')
-                                event.preventDefault();
-                            } else if( paymentInput < balance){
-                                alert('Payment amount is insufficient.')
-                                event.preventDefault();
-                            }
-                        }
-                    </script>
                 </div>
             </div>
         </div>
@@ -87,6 +68,26 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css">
 <script src="${pageContext.request.contextPath}/scripts/menu.js" type="text/javascript"></script>
+
+<script>
+    document.getElementById('paymentForm').onsubmit = function (event) {
+        let paymentInputValue = document.getElementById('paymentInput').value;
+        let balance = document.getElementById('balance').value;
+        let paymentInput = parseFloat(paymentInputValue);
+
+        if(isNaN(paymentInput) || paymentInput === ''){
+            alert('Please enter a valid number.')
+            event.preventDefault();
+        } else if( paymentInput < 0){
+            alert('Please enter a valid number.')
+            event.preventDefault();
+        } else if( paymentInput < balance){
+            alert('Payment amount is insufficient.')
+            event.preventDefault();
+        }
+    }
+</script>
+
 </body>
 
 <style>

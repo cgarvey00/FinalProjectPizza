@@ -151,6 +151,11 @@
     }
 
 </script>
+
+<c:if test="${not empty sessionScope.toastMessage}">
+    <c:remove var="toastMessage" scope="session"/>
+</c:if>
+
 </body>
 <style>
     .button-container {

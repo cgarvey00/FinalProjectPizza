@@ -1,14 +1,14 @@
 package com.finalprojectcoffee.commands;
 
 import com.finalprojectcoffee.entities.Product;
+import com.finalprojectcoffee.entities.ProductCategory;
 import com.finalprojectcoffee.repositories.ProductRepositories;
-import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 
-import java.util.List;
+import java.util.*;
 
 public class ViewMenu implements Command {
     private final HttpServletRequest request;
@@ -27,16 +27,22 @@ public class ViewMenu implements Command {
         HttpSession session = request.getSession(true);
 
         try {
-            ProductRepositories productRepos = new ProductRepositories(factory);
-            List<Product> productList = productRepos.getAllProducts();
+            ProductRepositories productRep = new ProductRepositories(factory);
+            List<Product> productList = productRep.getAllProducts();
+            Map<ProductCategory, List<Product>> productListByCategory = new LinkedHashMap<>();
+            for (Product product : productList) {
+                productListByCategory
+                        .computeIfAbsent(product.getCategory(), k -> new ArrayList<>())
+                        .add(product);
+            }
             session.removeAttribute("order");
-            if(productList != null && !productList.isEmpty()){
-                session.setAttribute("productList", productList);
+            if (!productListByCategory.isEmpty()) {
+                session.setAttribute("productListByCategory", productListByCategory);
             } else {
                 session.setAttribute("errorMessage", "Product list is empty. Please try again later.\"");
                 terminus = "error.jsp";
             }
-        } catch (Exception e){
+        } catch (Exception e) {
             System.err.println("An Exception occurred while viewing menu: " + e.getMessage());
             session.setAttribute("errorMessage", "Something went wrong");
             terminus = "error.jsp";
@@ -45,5 +51,3 @@ public class ViewMenu implements Command {
         return terminus;
     }
 }
-
-

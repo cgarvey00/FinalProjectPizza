@@ -36,9 +36,6 @@ public class ViewOrderListEmployee implements Command{
 
                 if(orderListEmployee != null && !orderListEmployee.isEmpty()){
                     session.setAttribute("orderListEmployee", orderListEmployee);
-                } else {
-                    session.setAttribute("errorMessage", "Order list is empty.");
-                    terminus = "error.jsp";
                 }
             }
         } catch (Exception e) {

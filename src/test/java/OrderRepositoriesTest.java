@@ -4,14 +4,13 @@ import com.finalprojectcoffee.entities.Status;
 import com.finalprojectcoffee.repositories.OrderRepositories;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.Persistence;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 
 import java.time.LocalDate;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
+
 
 public class OrderRepositoriesTest {
     private EntityManagerFactory factory;
@@ -48,7 +47,7 @@ public class OrderRepositoriesTest {
     @Test
     public void getALLOrdersTodayTest(){
         List<Order> result = orderRep.getAllOrdersToday();
-        assertEquals(0, result.size());
+        assertEquals(1, result.size());
     }
 
     @Test
@@ -117,7 +116,7 @@ public class OrderRepositoriesTest {
 
     @Test
     public void getAllOrdersByEmployeeTest(){
-        List<Order> orders = orderRep.getAllOrdersByEmployeeId(2);
+        List<Order> orders = orderRep.getAllOrdersByEmployeeId(4);
         assertNotNull(orders);
         assertEquals(1, orders.size());
     }

@@ -82,7 +82,7 @@
         position: absolute;
         top: 205px;
         margin-bottom: 0;
-        font-size: 13.5px;
+        font-size: 14px;
     }
 
     .s-success {
@@ -91,7 +91,7 @@
         position: absolute;
         top: 165px;
         margin-bottom: 0;
-        font-size: 13.5px;
+        font-size: 14px;
     }
     body {
         display: flex;

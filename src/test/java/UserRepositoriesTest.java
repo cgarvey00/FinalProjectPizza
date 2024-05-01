@@ -5,14 +5,13 @@ import com.finalprojectcoffee.entities.User;
 import com.finalprojectcoffee.repositories.UserRepositories;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.Persistence;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class UserRepositoriesTest {
     private EntityManagerFactory factory;
     private UserRepositories userRep;
@@ -31,6 +30,7 @@ public class UserRepositoriesTest {
     }
 
     @Test
+    @Order(1)
     public void findUserByIdTest() {
         User expectedResult = userRep.findUserById(1);
         assertNotNull(expectedResult);
@@ -39,14 +39,16 @@ public class UserRepositoriesTest {
     }
 
     @Test
+    @Order(2)
     public void findUserByUsernameTest() {
         User expectedResult = userRep.findUserByUsername("test");
         assertNotNull(expectedResult);
-        User notExistResult = userRep.findUserByUsername("Tom123");
+        User notExistResult = userRep.findUserByUsername("Tom123456");
         assertNull(notExistResult);
     }
 
     @Test
+    @Order(3)
     public void findExistingEmailTest() {
         Boolean result = userRep.findExistingEmail("aguilarsara@hotmail.com");
         assertTrue(result);
@@ -55,6 +57,7 @@ public class UserRepositoriesTest {
     }
 
     @Test
+    @Order(4)
     public void findExistingPhoneNumberTest() {
         Boolean result = userRep.findExistingPhoneNumber("(842)795-0469");
         assertTrue(result);
@@ -63,18 +66,21 @@ public class UserRepositoriesTest {
     }
 
     @Test
+    @Order(5)
     public void getAllUsersTest() {
         List<User> users = userRep.getAllUsers();
         assertEquals(10, users.size());
     }
 
     @Test
+    @Order(6)
     public void getAllEmployeesTest() {
         List<Employee> employees = userRep.getAllEmployees();
         assertEquals(5, employees.size());
     }
 
     @Test
+    @Order(7)
     public void switchEmployeeStatusTest() {
         Boolean result1 = userRep.switchEmployeeStatus(2);
         assertTrue(result1);
@@ -94,6 +100,7 @@ public class UserRepositoriesTest {
     }
 
     @Test
+    @Order(8)
     public void setAllEmployeeAvailableTest(){
         Boolean result = userRep.setAllEmployeeAvailable();
         assertTrue(result);
@@ -110,6 +117,7 @@ public class UserRepositoriesTest {
     }
 
     @Test
+    @Order(9)
     public void setAllEmployeeUnavailableTest(){
         Boolean result = userRep.setAllEmployeesUnavailable();
         assertTrue(result);
@@ -126,6 +134,7 @@ public class UserRepositoriesTest {
     }
 
     @Test
+    @Order(10)
     public void addUserTest() {
         User user = new User("test", "123", "123", "test@email.com", "Test");
         Boolean result = userRep.addUser(user);
@@ -133,6 +142,7 @@ public class UserRepositoriesTest {
     }
 
     @Test
+    @Order(11)
     public void updateUserTest() {
         Boolean expectedResult = userRep.updateUser(9, "test123", "test@outlook.com");
         assertTrue(expectedResult);
@@ -142,12 +152,14 @@ public class UserRepositoriesTest {
     }
 
     @Test
+    @Order(12)
     public void changePasswordTest(){
         Boolean result = userRep.changePassword(9, "111");
         assertTrue(result);
     }
 
     @Test
+    @Order(13)
     public void addAddressTest() {
         Address address = new Address("Dublin Road", 0, "Dundalk", "Louth", "DY767P1");
         Boolean result = userRep.addAddress(9, address);
@@ -155,6 +167,7 @@ public class UserRepositoriesTest {
     }
 
     @Test
+    @Order(14)
     public void updateAddressTest() {
         Address address = userRep.getAddressById(4);
         address.setTown("test");
@@ -164,6 +177,7 @@ public class UserRepositoriesTest {
     }
 
     @Test
+    @Order(15)
     public void setDefaultAddress(){
         Address address = userRep.getAddressById(4);
         Boolean result = userRep.setDefaultAddress(address);
@@ -172,6 +186,7 @@ public class UserRepositoriesTest {
     }
 
     @Test
+    @Order(16)
     public void getAddressesByUserIdTest() {
         List<Address> result = userRep.getAddressesByUserId(3);
         assertNotNull(result);
@@ -179,6 +194,7 @@ public class UserRepositoriesTest {
     }
 
     @Test
+    @Order(17)
     public void getDefaultAddressTest() {
         Address result = userRep.getDefaultAddress(3);
         assertNotNull(result);
@@ -186,6 +202,7 @@ public class UserRepositoriesTest {
     }
 
     @Test
+    @Order(18)
     public void deleteAddressTest(){
         Boolean result = userRep.deleteAddress(9, 4);
         assertTrue(result);
@@ -194,6 +211,7 @@ public class UserRepositoriesTest {
     }
 
     @Test
+    @Order(19)
     public void deleteUserTest() {
         Boolean result = userRep.deleteUser(11);
         assertTrue(result);

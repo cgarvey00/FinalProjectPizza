@@ -3,14 +3,13 @@ import com.finalprojectcoffee.entities.ProductCategory;
 import com.finalprojectcoffee.repositories.ProductRepositories;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.Persistence;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class ProductRepositoriesTest {
     private EntityManagerFactory factory;
     private ProductRepositories productRep;
@@ -29,12 +28,14 @@ public class ProductRepositoriesTest {
     }
 
     @Test
+    @Order(1)
     public void findProductByIdTest(){
         Product result = productRep.findProductByID(1);
         assertNotNull(result);
     }
 
     @Test
+    @Order(2)
     public void getAllProducts(){
         List<Product> result = productRep.getAllProducts();
         assertNotNull(result);
@@ -42,6 +43,7 @@ public class ProductRepositoriesTest {
     }
 
     @Test
+    @Order(3)
     public void findProductsByCategory(){
         List<Product> result = productRep.findProductsByCategory(ProductCategory.Pizzas);
         assertNotNull(result);
@@ -49,6 +51,7 @@ public class ProductRepositoriesTest {
     }
 
     @Test
+    @Order(4)
     public void addProductTest(){
         Product product = new Product("test", ProductCategory.Pizzas, "testDetails", 1.0, 100, null);
         boolean result = productRep.addProduct(product);
@@ -58,6 +61,7 @@ public class ProductRepositoriesTest {
     }
 
     @Test
+    @Order(5)
     public void updateProductTest(){
         Product product = productRep.findProductByID(3);
         product.setCategory(ProductCategory.Drinks);
@@ -68,6 +72,7 @@ public class ProductRepositoriesTest {
     }
 
     @Test
+    @Order(6)
     public void deleteProductTest(){
         boolean result = productRep.deleteProduct(3);
         assertTrue(result);

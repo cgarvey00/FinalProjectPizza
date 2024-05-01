@@ -10,7 +10,10 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 public class Login implements Command {
     private final HttpServletRequest request;
@@ -39,6 +42,7 @@ public class Login implements Command {
 
                 if (user != null) {
                     if (JBCryptUtil.checkPw(user.getPassword(), password)) {
+                        List<Product> productList = productRep.getAllProducts();
                         switch (user.getUserType()) {
                             case "Customer":
                                 terminus = "customer-home.jsp";
@@ -50,6 +54,27 @@ public class Login implements Command {
                                 } else {
                                     session.setAttribute("addressed", true);
                                 }
+
+                                List<Product> recommendedProducts = new ArrayList<>();
+
+                                Product chicagoDD = productRep.findProductByID(12);
+                                Product family = productRep.findProductByID(11);
+                                Product strawberryCake = productRep.findProductByID(15);
+                                recommendedProducts.add(chicagoDD);
+                                recommendedProducts.add(family);
+                                recommendedProducts.add(strawberryCake);
+
+                                Map<ProductCategory, List<Product>> productListByCategory = new LinkedHashMap<>();
+                                for (Product product : productList) {
+                                    productListByCategory
+                                            .computeIfAbsent(product.getCategory(), k -> new ArrayList<>())
+                                            .add(product);
+                                }
+                                session.removeAttribute("order");
+                                if (!productList.isEmpty()) {
+                                    session.setAttribute("productListByCategory", productListByCategory);
+                                }
+                                session.setAttribute("recommendedProducts", recommendedProducts);
                                 session.setAttribute("userType", "customer");
                                 break;
                             case "Employee":
@@ -72,9 +97,7 @@ public class Login implements Command {
                                 List<Order> orderListByToday = orderRep.getAllOrdersToday();
                                 session.setAttribute("orderListByToday", orderListByToday);
 
-                                List<Product> productList = productRep.getAllProducts();
                                 session.setAttribute("productList", productList);
-
                                 session.setAttribute("userType", "admin");
                                 break;
                         }

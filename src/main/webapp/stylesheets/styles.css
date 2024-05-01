@@ -305,7 +305,7 @@ section {
 .contact form{
     margin:0 auto;
     max-width: 50rem;
-    padding:2rem;
+    padding: 2rem;
     text-align: center;
     border:var(--border);
     background-color: var(--white);
